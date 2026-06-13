@@ -18,11 +18,11 @@ export function initSphere({ canvas, onPick, onHover, reducedMotion }) {
   const rig = new THREE.Group();
   scene.add(rig);
   scene.add(new THREE.AmbientLight(0xffffff, 1.05));
-  const key = new THREE.PointLight(0xff6b35, 16, 40); key.position.set(0, 3, 0); scene.add(key);
+  const key = new THREE.PointLight(0xff8c42, 16, 40); key.position.set(0, 3, 0); scene.add(key);
 
   const dome = new THREE.Mesh(
     new THREE.SphereGeometry(15, 48, 32),
-    new THREE.MeshBasicMaterial({ color: 0x0a1430, side: THREE.BackSide, transparent: true, opacity: 0.5 })
+    new THREE.MeshBasicMaterial({ color: 0x1e160e, side: THREE.BackSide, transparent: true, opacity: 0.5 })
   );
   scene.add(dome);
 
@@ -53,7 +53,7 @@ export function initSphere({ canvas, onPick, onHover, reducedMotion }) {
 
       const frame = new THREE.Mesh(
         new THREE.PlaneGeometry(w + 0.14, h + 0.14),
-        new THREE.MeshBasicMaterial({ color: 0xff6b35, transparent: true, opacity: 0 })
+        new THREE.MeshBasicMaterial({ color: 0xff8c42, transparent: true, opacity: 0 })
       );
       frame.position.copy(pos.clone().multiplyScalar(1.004)); frame.lookAt(0, 0, 0);
       mesh.userData.frame = frame;

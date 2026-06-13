@@ -6,9 +6,9 @@
   <title>Abdulrahman S. Al-Batati — Robotics & Autonomous Intelligent Systems</title>
   <meta name="description" content="Abdulrahman S. Al-Batati — robotics researcher. UAV/UGV design, GPS-denied localization, reinforcement learning, ROS 2. 10 papers, 2 patents, 8 robots built.">
   <meta property="og:title" content="Abdulrahman S. Al-Batati — Robotics Researcher">
-  <meta property="og:description" content="I build robots that fly, drive, and find their way.">
+  <meta property="og:description" content="I build robots that fly, drive, and see.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="img/w960/hero-vtol.webp">
+  <meta property="og:image" content="img/w960/hero-cinematic.webp">
   <link rel="stylesheet" href="css/main.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -24,30 +24,31 @@
     <a href="#hero" class="brand">A<span>.</span>Al-Batati</a>
     <div class="nav-menu" id="navMenu">
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#research">Research</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#galleries">Gallery</a></li>
-        <li><a href="#experience-sec">Experience</a></li>
+        <li><a href="#about" data-i18n="nav_about">About</a></li>
+        <li><a href="#research" data-i18n="nav_research">Research</a></li>
+        <li><a href="#projects" data-i18n="nav_projects">Projects</a></li>
+        <li><a href="#galleries" data-i18n="nav_gallery">Gallery</a></li>
+        <li><a href="#experience-sec" data-i18n="nav_experience">Experience</a></li>
       </ul>
-      <a href="#contact" class="nav-cta magnetic">Get in touch</a>
+      <button id="langToggle" class="lang-toggle magnetic" data-i18n="lang_btn" aria-label="Switch language">ع</button>
+      <a href="#contact" class="nav-cta magnetic" data-i18n="nav_cta">Get in touch</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
 
   <!-- HERO -->
   <header class="hero" id="hero">
-    <div class="hero-bg"><img id="heroImg" src="img/w1600/hero-vtol.webp" alt="VTOL UAV"></div>
+    <div class="hero-bg"><img id="heroImg" src="img/w1600/hero-cinematic.webp" alt="Cinematic VTOL drones in a warm hangar"></div>
     <div class="hero-content">
-      <span class="hero-kicker">Robotics &amp; Autonomous Intelligent Systems</span>
+      <span class="hero-kicker" data-i18n="hero_kicker">Robotics &amp; Autonomous Intelligent Systems</span>
       <h1 class="hero-title">
-        <span class="line-mask"><span class="line">I build robots that</span></span>
-        <span class="line-mask"><span class="line"><em>fly</em>, <em>drive</em>, and <em>see</em>.</span></span>
+        <span class="line-mask"><span class="line" data-i18n="hero_l1">I build robots that</span></span>
+        <span class="line-mask"><span class="line accent" data-i18n="hero_l2">fly, drive, and see.</span></span>
       </h1>
-      <p class="hero-sub">Senior Research Assistant at PSU's Robotics &amp; IoT Lab — designing UAVs, ground robots, and the perception that keeps them located when GPS goes dark. Next stop: a PhD at KFUPM.</p>
+      <p class="hero-sub" data-i18n="hero_sub">Senior Research Assistant at PSU's Robotics &amp; IoT Lab — designing UAVs, ground robots, and the perception that keeps them located when GPS goes dark. Next stop: a PhD at KFUPM.</p>
       <div class="hero-cta-row">
-        <a href="#projects" class="btn btn-primary magnetic">Explore the work →</a>
-        <a href="#research" class="btn btn-ghost magnetic">Read the research</a>
+        <a href="#projects" class="btn btn-primary magnetic" data-i18n="hero_cta1">Explore the work →</a>
+        <a href="#research" class="btn btn-ghost magnetic" data-i18n="hero_cta2">Read the research</a>
       </div>
     </div>
     <div id="stats"></div>
@@ -57,15 +58,15 @@
     <!-- ABOUT -->
     <section class="section" id="about">
       <div class="reveal">
-        <span class="eyebrow">About</span>
-        <h2 class="section-title">From the CAD seed to the first flight.</h2>
+        <span class="eyebrow" data-i18n="eb_about">About</span>
+        <h2 class="section-title" data-i18n="t_about">From the CAD seed to the first flight.</h2>
       </div>
       <div class="about-grid">
         <div class="about-portrait reveal"><img src="img/w960/portrait.webp" alt="Abdulrahman S. Al-Batati"></div>
         <div class="about-body reveal">
-          <p>Six years turning mechanical design, UAV autonomy, and reinforcement learning into machines that work in the real world — drones, ground robots, and the perception kits that keep them located when GPS goes dark.</p>
-          <p class="origin">It started as a childhood dream of being an inventor — not an engineer. The machines just made it real.</p>
-          <p style="color:var(--mid);font-size:1rem">M.Sc. Robotics (KFUPM) · Senior Research Assistant at Prince Sultan University · heading to a PhD at KFUPM. Based in Riyadh, moving to Khobar.</p>
+          <p data-i18n="about_p1">Six years turning mechanical design, UAV autonomy, and reinforcement learning into machines that work in the real world — drones, ground robots, and the perception kits that keep them located when GPS goes dark.</p>
+          <p class="origin" data-i18n="about_origin"></p>
+          <p class="about-meta-line" data-i18n="about_meta">M.Sc. Robotics (KFUPM) · Senior Research Assistant at Prince Sultan University · heading to a PhD at KFUPM. Based in Riyadh, moving to Khobar.</p>
           <div class="about-meta" id="langs"></div>
         </div>
       </div>
@@ -74,9 +75,9 @@
     <!-- RESEARCH (P7 glowing path) -->
     <section class="section" id="research">
       <div class="reveal">
-        <span class="eyebrow">Research</span>
-        <h2 class="section-title">A path through the publications.</h2>
-        <p class="section-lead">Peer-reviewed work in UAV localization, trajectory prediction, ROS 2, and Arabic NLP — at ACM Computing Surveys, IEEE, Springer, and ACL.</p>
+        <span class="eyebrow" data-i18n="eb_research">Research</span>
+        <h2 class="section-title" data-i18n="t_research">A path through the publications.</h2>
+        <p class="section-lead" data-i18n="lead_research">Peer-reviewed work in UAV localization, trajectory prediction, ROS 2, and Arabic NLP — at ACM Computing Surveys, IEEE, Springer, and ACL.</p>
       </div>
       <div class="tl-wrap">
         <svg class="tl-svg" viewBox="0 0 60 1000" preserveAspectRatio="none" aria-hidden="true">
@@ -91,29 +92,29 @@
     <section class="section gallery-dark" id="projects">
       <div class="section-inner">
         <div class="reveal">
-          <span class="eyebrow">Projects</span>
-          <h2 class="section-title">Eight machines, built to leave the bench.</h2>
-          <p class="section-lead">Drag to orbit the gallery — tap any project to open it. VTOLs, warehouse and hotel robots, agricultural drones, and the sensor kits behind them.</p>
+          <span class="eyebrow" data-i18n="eb_projects">Projects</span>
+          <h2 class="section-title" data-i18n="t_projects">Eight machines, built to leave the bench.</h2>
+          <p class="section-lead" data-i18n="lead_projects">Drag to orbit the gallery — tap any project to open it.</p>
         </div>
         <div id="sphereWrap">
           <canvas id="sphereCanvas"></canvas>
           <div id="sphereTag"></div>
           <div id="projFallback"></div>
         </div>
-        <p class="sphere-hint">drag ⟲ to explore · tap to open</p>
+        <p class="sphere-hint" data-i18n="hint_sphere">drag ⟲ to explore · tap to open</p>
       </div>
     </section>
 
     <!-- GALLERIES -->
     <section class="section" id="galleries">
       <div class="reveal">
-        <span class="eyebrow">Gallery</span>
-        <h2 class="section-title">Hardware, in the metal.</h2>
+        <span class="eyebrow" data-i18n="eb_gallery">Gallery</span>
+        <h2 class="section-title" data-i18n="t_gallery">Hardware, in the metal.</h2>
       </div>
       <div class="gal-tabs">
-        <h3 class="gal-h reveal">Robots &amp; UAVs</h3>
+        <h3 class="gal-h reveal" data-i18n="gal_robots">Robots &amp; UAVs</h3>
         <div class="grid" id="robotsGrid"></div>
-        <h3 class="gal-h reveal">3D printing &amp; fabrication</h3>
+        <h3 class="gal-h reveal" data-i18n="gal_prints">3D printing &amp; fabrication</h3>
         <div class="grid" id="printsGrid"></div>
       </div>
     </section>
@@ -121,48 +122,49 @@
     <!-- PATENTS -->
     <section class="section" id="patents-sec">
       <div class="reveal">
-        <span class="eyebrow">Patents</span>
-        <h2 class="section-title">Two granted industrial designs.</h2>
+        <span class="eyebrow" data-i18n="eb_patents">Patents</span>
+        <h2 class="section-title" data-i18n="t_patents">Two granted industrial designs.</h2>
       </div>
       <div class="patent-grid" id="patents"></div>
     </section>
 
     <!-- EXPERIENCE + EDUCATION -->
     <section class="section" id="experience-sec">
-      <div class="reveal"><span class="eyebrow">Track record</span><h2 class="section-title">Experience &amp; education.</h2></div>
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_track">Track record</span><h2 class="section-title" data-i18n="t_track">Experience &amp; education.</h2></div>
       <div class="cols">
-        <div class="col reveal"><h3>Experience</h3><div id="experience"></div></div>
-        <div class="col reveal"><h3>Education</h3><div id="education"></div></div>
+        <div class="col reveal"><h3 data-i18n="h_exp">Experience</h3><div id="experience"></div></div>
+        <div class="col reveal"><h3 data-i18n="h_edu">Education</h3><div id="education"></div></div>
       </div>
     </section>
 
     <!-- SKILLS -->
     <section class="section" id="skills-sec">
-      <div class="reveal"><span class="eyebrow">Toolkit</span><h2 class="section-title">What I work with.</h2></div>
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_toolkit">Toolkit</span><h2 class="section-title" data-i18n="t_toolkit">What I work with.</h2></div>
       <div class="skill-grid" id="skills"></div>
     </section>
 
     <!-- REPOS -->
     <section class="section" id="repos-sec">
-      <div class="reveal"><span class="eyebrow">Open source</span><h2 class="section-title">Code on GitHub.</h2>
-        <p class="section-lead">ROS 2 stacks for UAV autonomy, drone-to-drone tracking, and simulation tooling.</p></div>
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_oss">Open source</span><h2 class="section-title" data-i18n="t_oss">Code on GitHub.</h2>
+        <p class="section-lead" data-i18n="lead_oss">ROS 2 stacks for UAV autonomy, drone-to-drone tracking, and simulation tooling.</p></div>
       <div class="repo-grid" id="repos"></div>
     </section>
 
     <!-- BEYOND WORK -->
     <section class="section beyond" id="beyond">
       <div class="reveal">
-        <span class="eyebrow">Beyond work</span>
-        <h2 class="section-title">Discipline, off the clock.</h2>
-        <p class="section-lead">When I'm not building robots, I train calisthenics — the same loop as engineering: small consistent reps, honest feedback, compounding gains. Faith, family, and fabrication keep the rest in balance.</p>
+        <span class="eyebrow" data-i18n="eb_beyond">Beyond work</span>
+        <h2 class="section-title" data-i18n="t_beyond">Discipline, off the clock.</h2>
+        <p class="section-lead" data-i18n="lead_beyond">When I'm not building robots, I train calisthenics — the same loop as engineering: small consistent reps, honest feedback, compounding gains.</p>
       </div>
     </section>
 
     <!-- CONTACT -->
     <section class="section contact" id="contact">
-      <div class="reveal">
-        <span class="eyebrow" style="justify-content:center">Contact</span>
-        <h2>Let's build something that flies.</h2>
+      <div class="hero-bg contact-bg"><img src="img/w1600/hero-fleet.webp" alt=""></div>
+      <div class="reveal contact-inner">
+        <span class="eyebrow" style="justify-content:center" data-i18n="eb_contact">Contact</span>
+        <h2 data-i18n="t_contact">Let's build something that flies.</h2>
         <div class="contact-links">
           <a id="cEmail" class="magnetic"></a>
           <a id="cGithub" class="magnetic" target="_blank" rel="noopener">GitHub ↗</a>
@@ -177,7 +179,7 @@
 
   <!-- project detail panel -->
   <div class="panel" id="projPanel" role="dialog" aria-modal="true">
-    <button class="pp-close" id="ppClose" aria-label="Close">✕</button>
+    <button class="pp-close" id="ppClose" data-i18n-aria="lb_close" aria-label="Close">✕</button>
     <div class="pp-inner">
       <img id="ppImg" src="" alt="">
       <div class="pp-text"><span class="pp-kind" id="ppKind"></span><h3 id="ppTitle"></h3><p id="ppBlurb"></p></div>
@@ -186,10 +188,10 @@
 
   <!-- lightbox -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
-    <button class="lb-close" aria-label="Close">✕</button>
-    <button class="lb-nav lb-prev" aria-label="Previous">‹</button>
+    <button class="lb-close" data-i18n-aria="lb_close" aria-label="Close">✕</button>
+    <button class="lb-nav lb-prev" data-i18n-aria="lb_prev" aria-label="Previous">‹</button>
     <img id="lbImg" src="" alt="">
-    <button class="lb-nav lb-next" aria-label="Next">›</button>
+    <button class="lb-nav lb-next" data-i18n-aria="lb_next" aria-label="Next">›</button>
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
