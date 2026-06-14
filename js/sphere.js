@@ -128,7 +128,7 @@ export function initSphere({ canvas, onPick, onHover, reducedMotion }) {
     if (hit !== hovered) {
       if (hovered) hovered.userData.tgt = 1;
       hovered = hit;
-      if (hovered) { hovered.userData.tgt = 1.12; canvas.style.cursor = "pointer"; onHover?.(hovered.userData.item.title); }
+      if (hovered) { hovered.userData.tgt = 1.12; canvas.style.cursor = "pointer"; onHover?.(hovered.userData.item); }
       else { canvas.style.cursor = "grab"; onHover?.(null); }
     }
     cards.forEach(c => {

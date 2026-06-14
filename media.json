@@ -1,0 +1,1577 @@
+[
+{
+"type": "game",
+"title": "The Divergent Series: Insurgent - Shatter Reality",
+"year": "2015",
+"genres": [
+"Short",
+"Action"
+],
+"rating": 6.2,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.imdb.com/title/tt4516496/"
+},
+{
+"type": "game",
+"title": "Castle Crashers",
+"year": "2008",
+"genres": [
+"Brawler"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/castle-crashers/3030-20733/"
+},
+{
+"type": "game",
+"title": "Crash Team Racing",
+"year": "1999",
+"genres": [
+"Driving/Racing",
+"Vehicular Combat"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/crash-team-racing/3030-6196/"
+},
+{
+"type": "game",
+"title": "Crash Twinsanity",
+"year": "2004",
+"genres": [
+"Platformer",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/crash-twinsanity/3030-14790/"
+},
+{
+"type": "game",
+"title": "Dark Souls",
+"year": "2011",
+"genres": [
+"Role-Playing",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/dark-souls/3030-32697/"
+},
+{
+"type": "game",
+"title": "Dark Souls II",
+"year": "2014",
+"genres": [
+"Role-Playing",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/dark-souls-ii/3030-40798/"
+},
+{
+"type": "game",
+"title": "Dark Souls II: Scholar of the First Sin",
+"year": "2015",
+"genres": [
+"Role-Playing",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/dark-souls-ii-scholar-of-the-first-sin/3030-49122/"
+},
+{
+"type": "game",
+"title": "Dark Souls III",
+"year": "2016",
+"genres": [
+"Role-Playing",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/dark-souls-iii/3030-49884/"
+},
+{
+"type": "game",
+"title": "God of War",
+"year": "2018",
+"genres": [
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/god-of-war/3030-54229/"
+},
+{
+"type": "game",
+"title": "God of War III",
+"year": "2010",
+"genres": [
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/god-of-war-iii/3030-20461/"
+},
+{
+"type": "game",
+"title": "God of War Ragnarök",
+"year": "2022",
+"genres": [
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/god-of-war-ragnarok/3030-80643/"
+},
+{
+"type": "game",
+"title": "Hollow Knight",
+"year": "2017",
+"genres": [
+"Platformer",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/hollow-knight/3030-48412/"
+},
+{
+"type": "game",
+"title": "Hollow Knight: Silksong",
+"year": "2025",
+"genres": [
+"Platformer",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/hollow-knight-silksong/3030-72161/"
+},
+{
+"type": "game",
+"title": "Sly 2: Band of Thieves",
+"year": "2004",
+"genres": [
+"Platformer",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/sly-2-band-of-thieves/3030-15573/"
+},
+{
+"type": "game",
+"title": "Sly 3: Honor Among Thieves",
+"year": "2005",
+"genres": [
+"Platformer"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/sly-3-honor-among-thieves/3030-16337/"
+},
+{
+"type": "game",
+"title": "Sly Cooper and the Thievius Raccoonus",
+"year": "2002",
+"genres": [
+"Platformer"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/sly-cooper-and-the-thievius-raccoonus/3030-15353/"
+},
+{
+"type": "game",
+"title": "Sly Cooper: Thieves in Time",
+"year": "2013",
+"genres": [
+"Platformer"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/sly-cooper-thieves-in-time/3030-35559/"
+},
+{
+"type": "game",
+"title": "The Last of Us Part I",
+"year": "2022",
+"genres": [
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/the-last-of-us-part-i/3030-86368/"
+},
+{
+"type": "game",
+"title": "Uncharted 2: Among Thieves",
+"year": "2009",
+"genres": [
+"Shooter",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/uncharted-2-among-thieves/3030-22420/"
+},
+{
+"type": "game",
+"title": "Uncharted 3: Drake's Deception",
+"year": "2011",
+"genres": [
+"Shooter",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/uncharted-3-drakes-deception/3030-32982/"
+},
+{
+"type": "game",
+"title": "Uncharted 4: A Thief's End",
+"year": "2016",
+"genres": [
+"Shooter",
+"Action-Adventure"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.giantbomb.com/uncharted-4-a-thiefs-end/3030-44507/"
+},
+{
+"type": "manga",
+"title": "One Piece",
+"year": "1997",
+"genres": [
+"Action",
+"Adventure",
+"Fantasy"
+],
+"rating": 9.22,
+"mine": 0.0,
+"poster": "media/manga/manga-one-piece.webp",
+"url": "https://myanimelist.net/manga/13/One_Piece"
+},
+{
+"type": "movie",
+"title": "The Dark Knight",
+"year": "2008",
+"genres": [
+"Action",
+"Crime",
+"Drama"
+],
+"rating": 9.1,
+"mine": 0.0,
+"poster": "media/movie/movie-the-dark-knight.webp",
+"url": "https://www.imdb.com/title/tt0468569/"
+},
+{
+"type": "movie",
+"title": "Divergent: Beyond the Initiation",
+"year": "2014",
+"genres": [
+"Documentary",
+"Short"
+],
+"rating": 8.8,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.imdb.com/title/tt5525148/"
+},
+{
+"type": "movie",
+"title": "The Good, the Bad and the Ugly",
+"year": "1966",
+"genres": [
+"Adventure",
+"Drama",
+"Western"
+],
+"rating": 8.8,
+"mine": 0.0,
+"poster": "media/movie/movie-the-good-the-bad-and-the-ugly.webp",
+"url": "https://www.imdb.com/title/tt0060196/"
+},
+{
+"type": "movie",
+"title": "Mind Hunter",
+"year": "2000",
+"genres": [
+"Action"
+],
+"rating": 8.7,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.imdb.com/title/tt6134640/"
+},
+{
+"type": "movie",
+"title": "Alien",
+"year": "1979",
+"genres": [
+"Horror",
+"Sci-Fi"
+],
+"rating": 8.5,
+"mine": 0.0,
+"poster": "media/movie/movie-alien.webp",
+"url": "https://www.imdb.com/title/tt0078748/"
+},
+{
+"type": "movie",
+"title": "Sneaky Pete",
+"year": "2015",
+"genres": [
+"Drama"
+],
+"rating": 8.5,
+"mine": 0.0,
+"poster": "media/movie/movie-sneaky-pete.webp",
+"url": "https://www.imdb.com/title/tt4200136/"
+},
+{
+"type": "movie",
+"title": "Project Hail Mary",
+"year": "2026",
+"genres": [
+"Adventure",
+"Comedy",
+"Sci-Fi"
+],
+"rating": 8.4,
+"mine": 9.9,
+"poster": "media/movie/movie-project-hail-mary.webp",
+"url": "https://www.imdb.com/title/tt12042730/"
+},
+{
+"type": "movie",
+"title": "The Dark Knight Rises",
+"year": "2012",
+"genres": [
+"Action",
+"Crime",
+"Drama"
+],
+"rating": 8.4,
+"mine": 0.0,
+"poster": "media/movie/movie-the-dark-knight-rises.webp",
+"url": "https://www.imdb.com/title/tt1345836/"
+},
+{
+"type": "movie",
+"title": "Divergent: Meet Four",
+"year": "2014",
+"genres": [
+"Short"
+],
+"rating": 8.3,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.imdb.com/title/tt5525178/"
+},
+{
+"type": "movie",
+"title": "Million Dollar Baby",
+"year": "2004",
+"genres": [
+"Drama",
+"Sport"
+],
+"rating": 8.1,
+"mine": 0.0,
+"poster": "media/movie/movie-million-dollar-baby.webp",
+"url": "https://www.imdb.com/title/tt0405159/"
+},
+{
+"type": "movie",
+"title": "They Shoot Horses, Don't They?",
+"year": "1969",
+"genres": [
+"Drama"
+],
+"rating": 7.8,
+"mine": 0.0,
+"poster": "media/movie/movie-they-shoot-horses-don-t-they.webp",
+"url": "https://www.imdb.com/title/tt0065088/"
+},
+{
+"type": "movie",
+"title": "Mission: Impossible - Fallout",
+"year": "2018",
+"genres": [
+"Action",
+"Adventure",
+"Thriller"
+],
+"rating": 7.7,
+"mine": 0.0,
+"poster": "media/movie/movie-mission-impossible-fallout.webp",
+"url": "https://www.imdb.com/title/tt4912910/"
+},
+{
+"type": "movie",
+"title": "The Maze Runner: Finding the Gang",
+"year": "2014",
+"genres": [
+"Documentary",
+"Short"
+],
+"rating": 7.7,
+"mine": 0.0,
+"poster": "media/movie/movie-the-maze-runner-finding-the-gang.webp",
+"url": "https://www.imdb.com/title/tt4206510/"
+},
+{
+"type": "movie",
+"title": "Mission: Impossible - Dead Reckoning Part One",
+"year": "2023",
+"genres": [
+"Action",
+"Adventure",
+"Thriller"
+],
+"rating": 7.6,
+"mine": 0.0,
+"poster": "media/movie/movie-mission-impossible-dead-reckoning-part-one.webp",
+"url": "https://www.imdb.com/title/tt9603212/"
+},
+{
+"type": "movie",
+"title": "The Boy and the Beast",
+"year": "2015",
+"genres": [
+"Animation",
+"Action",
+"Adventure"
+],
+"rating": 7.6,
+"mine": 0.0,
+"poster": "media/movie/movie-the-boy-and-the-beast.webp",
+"url": "https://www.imdb.com/title/tt4272866/"
+},
+{
+"type": "movie",
+"title": "Divergent: Faction Before Blood",
+"year": "2014",
+"genres": [
+"Documentary",
+"Short"
+],
+"rating": 7.5,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.imdb.com/title/tt5250456/"
+},
+{
+"type": "movie",
+"title": "Sherlock Holmes",
+"year": "2009",
+"genres": [
+"Action",
+"Adventure",
+"Mystery"
+],
+"rating": 7.5,
+"mine": 0.0,
+"poster": "media/movie/movie-sherlock-holmes.webp",
+"url": "https://www.imdb.com/title/tt0988045/"
+},
+{
+"type": "movie",
+"title": "The Conjuring",
+"year": "2013",
+"genres": [
+"Horror",
+"Mystery",
+"Thriller"
+],
+"rating": 7.5,
+"mine": 0.0,
+"poster": "media/movie/movie-the-conjuring.webp",
+"url": "https://www.imdb.com/title/tt1457767/"
+},
+{
+"type": "movie",
+"title": "The Hunger Games: Catching Fire",
+"year": "2013",
+"genres": [
+"Action",
+"Adventure",
+"Sci-Fi"
+],
+"rating": 7.5,
+"mine": 0.0,
+"poster": "media/movie/movie-the-hunger-games-catching-fire.webp",
+"url": "https://www.imdb.com/title/tt1951264/"
+},
+{
+"type": "movie",
+"title": "Weapons",
+"year": "2025",
+"genres": [
+"Horror",
+"Mystery"
+],
+"rating": 7.5,
+"mine": 0.0,
+"poster": "media/movie/movie-weapons.webp",
+"url": "https://www.imdb.com/title/tt26581740/"
+},
+{
+"type": "movie",
+"title": "Mission: Impossible - Ghost Protocol",
+"year": "2011",
+"genres": [
+"Action",
+"Adventure",
+"Thriller"
+],
+"rating": 7.4,
+"mine": 0.0,
+"poster": "media/movie/movie-mission-impossible-ghost-protocol.webp",
+"url": "https://www.imdb.com/title/tt1229238/"
+},
+{
+"type": "movie",
+"title": "Mission: Impossible - Rogue Nation",
+"year": "2015",
+"genres": [
+"Action",
+"Adventure",
+"Thriller"
+],
+"rating": 7.4,
+"mine": 0.0,
+"poster": "media/movie/movie-mission-impossible-rogue-nation.webp",
+"url": "https://www.imdb.com/title/tt2381249/"
+},
+{
+"type": "movie",
+"title": "Mission: Impossible - The Final Reckoning",
+"year": "2025",
+"genres": [
+"Action",
+"Adventure",
+"Thriller"
+],
+"rating": 7.4,
+"mine": 0.0,
+"poster": "media/movie/movie-mission-impossible-the-final-reckoning.webp",
+"url": "https://www.imdb.com/title/tt9603208/"
+},
+{
+"type": "movie",
+"title": "Sherlock Holmes: A Game of Shadows",
+"year": "2011",
+"genres": [
+"Action",
+"Adventure",
+"Mystery"
+],
+"rating": 7.4,
+"mine": 0.0,
+"poster": "media/movie/movie-sherlock-holmes-a-game-of-shadows.webp",
+"url": "https://www.imdb.com/title/tt1515091/"
+},
+{
+"type": "movie",
+"title": "The Conjuring 2",
+"year": "2016",
+"genres": [
+"Horror",
+"Mystery",
+"Thriller"
+],
+"rating": 7.3,
+"mine": 0.0,
+"poster": "media/movie/movie-the-conjuring-2.webp",
+"url": "https://www.imdb.com/title/tt3065204/"
+},
+{
+"type": "movie",
+"title": "The Long Walk",
+"year": "2025",
+"genres": [
+"Thriller"
+],
+"rating": 7.3,
+"mine": 0.0,
+"poster": "media/movie/movie-the-long-walk.webp",
+"url": "https://www.imdb.com/title/tt10374610/"
+},
+{
+"type": "movie",
+"title": "Mission: Impossible",
+"year": "1996",
+"genres": [
+"Action",
+"Adventure",
+"Thriller"
+],
+"rating": 7.2,
+"mine": 0.0,
+"poster": "media/movie/movie-mission-impossible.webp",
+"url": "https://www.imdb.com/title/tt0117060/"
+},
+{
+"type": "movie",
+"title": "The Hunger Games",
+"year": "2012",
+"genres": [
+"Action",
+"Adventure",
+"Sci-Fi"
+],
+"rating": 7.2,
+"mine": 0.0,
+"poster": "media/movie/movie-the-hunger-games.webp",
+"url": "https://www.imdb.com/title/tt1392170/"
+},
+{
+"type": "movie",
+"title": "Alien: Romulus",
+"year": "2024",
+"genres": [
+"Horror",
+"Sci-Fi",
+"Thriller"
+],
+"rating": 7.1,
+"mine": 0.0,
+"poster": "media/movie/movie-alien-romulus.webp",
+"url": "https://www.imdb.com/title/tt18412256/"
+},
+{
+"type": "movie",
+"title": "The White Tiger",
+"year": "2021",
+"genres": [
+"Crime",
+"Drama"
+],
+"rating": 7.1,
+"mine": 0.0,
+"poster": "media/movie/movie-the-white-tiger.webp",
+"url": "https://www.imdb.com/title/tt6571548/"
+},
+{
+"type": "movie",
+"title": "Civil War",
+"year": "2024",
+"genres": [
+"Action",
+"Thriller"
+],
+"rating": 7.0,
+"mine": 0.0,
+"poster": "media/movie/movie-civil-war.webp",
+"url": "https://www.imdb.com/title/tt17279496/"
+},
+{
+"type": "movie",
+"title": "Million Dollar Arm",
+"year": "2014",
+"genres": [
+"Biography",
+"Drama",
+"Family"
+],
+"rating": 7.0,
+"mine": 0.0,
+"poster": "media/movie/movie-million-dollar-arm.webp",
+"url": "https://www.imdb.com/title/tt1647668/"
+},
+{
+"type": "movie",
+"title": "The Maze Runner",
+"year": "2014",
+"genres": [
+"Action",
+"Mystery",
+"Sci-Fi"
+],
+"rating": 6.8,
+"mine": 0.0,
+"poster": "media/movie/movie-the-maze-runner.webp",
+"url": "https://www.imdb.com/title/tt1790864/"
+},
+{
+"type": "movie",
+"title": "Safe House",
+"year": "2012",
+"genres": [
+"Action",
+"Thriller"
+],
+"rating": 6.7,
+"mine": 0.0,
+"poster": "media/movie/movie-safe-house.webp",
+"url": "https://www.imdb.com/title/tt1599348/"
+},
+{
+"type": "movie",
+"title": "The Conjuring: Last Rites",
+"year": "2025",
+"genres": [
+"Horror",
+"Mystery",
+"Thriller"
+],
+"rating": 6.7,
+"mine": 0.0,
+"poster": "media/movie/movie-the-conjuring-last-rites.webp",
+"url": "https://www.imdb.com/title/tt22898462/"
+},
+{
+"type": "movie",
+"title": "Divergent",
+"year": "2014",
+"genres": [
+"Action",
+"Adventure",
+"Drama"
+],
+"rating": 6.6,
+"mine": 0.0,
+"poster": "media/movie/movie-divergent.webp",
+"url": "https://www.imdb.com/title/tt1840309/"
+},
+{
+"type": "movie",
+"title": "Pirates of the Caribbean: On Stranger Tides",
+"year": "2011",
+"genres": [
+"Action",
+"Adventure",
+"Fantasy"
+],
+"rating": 6.6,
+"mine": 0.0,
+"poster": "media/movie/movie-pirates-of-the-caribbean-on-stranger-tides.webp",
+"url": "https://www.imdb.com/title/tt1298650/"
+},
+{
+"type": "movie",
+"title": "The Hunger Games: Mockingjay - Part 1",
+"year": "2014",
+"genres": [
+"Action",
+"Adventure",
+"Sci-Fi"
+],
+"rating": 6.6,
+"mine": 0.0,
+"poster": "media/movie/movie-the-hunger-games-mockingjay-part-1.webp",
+"url": "https://www.imdb.com/title/tt1951265/"
+},
+{
+"type": "movie",
+"title": "The Hunger Games: Mockingjay - Part 2",
+"year": "2015",
+"genres": [
+"Action",
+"Adventure",
+"Sci-Fi"
+],
+"rating": 6.6,
+"mine": 0.0,
+"poster": "media/movie/movie-the-hunger-games-mockingjay-part-2.webp",
+"url": "https://www.imdb.com/title/tt1951266/"
+},
+{
+"type": "movie",
+"title": "The Hunger Games: The Ballad of Songbirds & Snakes",
+"year": "2023",
+"genres": [
+"Action",
+"Adventure",
+"Drama"
+],
+"rating": 6.6,
+"mine": 0.0,
+"poster": "media/movie/movie-the-hunger-games-the-ballad-of-songbirds-snakes.webp",
+"url": "https://www.imdb.com/title/tt10545296/"
+},
+{
+"type": "movie",
+"title": "Alien: Covenant",
+"year": "2017",
+"genres": [
+"Horror",
+"Sci-Fi",
+"Thriller"
+],
+"rating": 6.4,
+"mine": 0.0,
+"poster": "media/movie/movie-alien-covenant.webp",
+"url": "https://www.imdb.com/title/tt2316204/"
+},
+{
+"type": "movie",
+"title": "Alien³",
+"year": "1992",
+"genres": [
+"Action",
+"Horror",
+"Sci-Fi"
+],
+"rating": 6.4,
+"mine": 0.0,
+"poster": "media/movie/movie-alien.webp",
+"url": "https://www.imdb.com/title/tt0103644/"
+},
+{
+"type": "movie",
+"title": "Good News",
+"year": "2025",
+"genres": [
+"Action",
+"Comedy",
+"Crime"
+],
+"rating": 6.4,
+"mine": 0.0,
+"poster": "media/movie/movie-good-news.webp",
+"url": "https://www.imdb.com/title/tt33550069/"
+},
+{
+"type": "movie",
+"title": "Maze Runner: The Death Cure",
+"year": "2018",
+"genres": [
+"Action",
+"Adventure",
+"Sci-Fi"
+],
+"rating": 6.3,
+"mine": 0.0,
+"poster": "media/movie/movie-maze-runner-the-death-cure.webp",
+"url": "https://www.imdb.com/title/tt4500922/"
+},
+{
+"type": "movie",
+"title": "Maze Runner: The Scorch Trials",
+"year": "2015",
+"genres": [
+"Action",
+"Adventure",
+"Sci-Fi"
+],
+"rating": 6.3,
+"mine": 0.0,
+"poster": "media/movie/movie-maze-runner-the-scorch-trials.webp",
+"url": "https://www.imdb.com/title/tt4046784/"
+},
+{
+"type": "movie",
+"title": "The Conjuring: The Devil Made Me Do It",
+"year": "2021",
+"genres": [
+"Horror",
+"Mystery",
+"Thriller"
+],
+"rating": 6.3,
+"mine": 0.0,
+"poster": "media/movie/movie-the-conjuring-the-devil-made-me-do-it.webp",
+"url": "https://www.imdb.com/title/tt7069210/"
+},
+{
+"type": "movie",
+"title": "Alien: Resurrection",
+"year": "1997",
+"genres": [
+"Action",
+"Horror",
+"Sci-Fi"
+],
+"rating": 6.2,
+"mine": 0.0,
+"poster": "media/movie/movie-alien-resurrection.webp",
+"url": "https://www.imdb.com/title/tt0118583/"
+},
+{
+"type": "movie",
+"title": "The Boy",
+"year": "2016",
+"genres": [
+"Horror",
+"Mystery",
+"Thriller"
+],
+"rating": 6.0,
+"mine": 0.0,
+"poster": "media/movie/movie-the-boy.webp",
+"url": "https://www.imdb.com/title/tt3882082/"
+},
+{
+"type": "movie",
+"title": "X-Men: Dark Phoenix",
+"year": "2019",
+"genres": [
+"Action",
+"Adventure",
+"Sci-Fi"
+],
+"rating": 5.7,
+"mine": 0.0,
+"poster": "media/movie/movie-x-men-dark-phoenix.webp",
+"url": "https://www.imdb.com/title/tt6565702/"
+},
+{
+"type": "movie",
+"title": "Apex",
+"year": "2021",
+"genres": [
+"Action",
+"Drama",
+"Sci-Fi"
+],
+"rating": 3.0,
+"mine": 0.0,
+"poster": "media/movie/movie-apex.webp",
+"url": "https://www.imdb.com/title/tt13265876/"
+},
+{
+"type": "movie",
+"title": "Apex (2026 film)",
+"year": "[]",
+"genres": [],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://en.wikipedia.org/wiki/Apex_(2026_film)"
+},
+{
+"type": "movie",
+"title": "Divergent: Faction Fashions",
+"year": "2014",
+"genres": [
+"Documentary",
+"Short"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.imdb.com/title/tt5525156/"
+},
+{
+"type": "movie",
+"title": "Divergent: Setting the Score",
+"year": "2014",
+"genres": [
+"Documentary",
+"Short"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "",
+"url": "https://www.imdb.com/title/tt5525168/"
+},
+{
+"type": "movie",
+"title": "One Battle After Another",
+"year": "2025",
+"genres": [
+"Action",
+"Crime",
+"Drama"
+],
+"rating": 0.0,
+"mine": 0.0,
+"poster": "media/movie/movie-one-battle-after-another.webp",
+"url": "https://www.imdb.com/title/tt30144839/"
+},
+{
+"type": "series",
+"title": "Breaking Bad",
+"year": "2008–2013",
+"genres": [
+"Crime",
+"Drama",
+"Thriller"
+],
+"rating": 9.5,
+"mine": 0.0,
+"poster": "media/series/series-breaking-bad.webp",
+"url": "https://www.imdb.com/title/tt0903747/"
+},
+{
+"type": "series",
+"title": "Game of Thrones",
+"year": "2011–2019",
+"genres": [
+"Action",
+"Adventure",
+"Drama"
+],
+"rating": 9.2,
+"mine": 0.0,
+"poster": "media/series/series-game-of-thrones.webp",
+"url": "https://www.imdb.com/title/tt0944947/"
+},
+{
+"type": "series",
+"title": "Attack on Titan",
+"year": "2013–2023",
+"genres": [
+"Animation",
+"Action",
+"Adventure"
+],
+"rating": 9.1,
+"mine": 0.0,
+"poster": "media/series/series-attack-on-titan.webp",
+"url": "https://www.imdb.com/title/tt2560140/"
+},
+{
+"type": "series",
+"title": "Arcane",
+"year": "2021–2024",
+"genres": [
+"Animation",
+"Action",
+"Adventure"
+],
+"rating": 9.0,
+"mine": 0.0,
+"poster": "media/series/series-arcane.webp",
+"url": "https://www.imdb.com/title/tt11126994/"
+},
+{
+"type": "series",
+"title": "Better Call Saul",
+"year": "2015–2022",
+"genres": [
+"Crime",
+"Drama"
+],
+"rating": 9.0,
+"mine": 0.0,
+"poster": "media/series/series-better-call-saul.webp",
+"url": "https://www.imdb.com/title/tt3032476/"
+},
+{
+"type": "series",
+"title": "Rick and Morty",
+"year": "2013–",
+"genres": [
+"Animation",
+"Adventure",
+"Comedy"
+],
+"rating": 9.0,
+"mine": 0.0,
+"poster": "media/series/series-rick-and-morty.webp",
+"url": "https://www.imdb.com/title/tt2861424/"
+},
+{
+"type": "series",
+"title": "Sherlock",
+"year": "2010–2017",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 9.0,
+"mine": 0.0,
+"poster": "media/series/series-sherlock.webp",
+"url": "https://www.imdb.com/title/tt1475582/"
+},
+{
+"type": "series",
+"title": "Fargo",
+"year": "2014–2024",
+"genres": [
+"Crime",
+"Drama",
+"Thriller"
+],
+"rating": 8.8,
+"mine": 0.0,
+"poster": "media/series/series-fargo.webp",
+"url": "https://www.imdb.com/title/tt2802850/"
+},
+{
+"type": "series",
+"title": "Black Mirror",
+"year": "2011–",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 8.7,
+"mine": 0.0,
+"poster": "media/series/series-black-mirror.webp",
+"url": "https://www.imdb.com/title/tt2085059/"
+},
+{
+"type": "series",
+"title": "Dark",
+"year": "2017–2020",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 8.7,
+"mine": 0.0,
+"poster": "media/series/series-dark.webp",
+"url": "https://www.imdb.com/title/tt5753856/"
+},
+{
+"type": "series",
+"title": "House",
+"year": "2004–2012",
+"genres": [
+"Drama"
+],
+"rating": 8.7,
+"mine": 0.0,
+"poster": "media/series/series-house.webp",
+"url": "https://www.imdb.com/title/tt0412142/"
+},
+{
+"type": "series",
+"title": "Narcos",
+"year": "2015–2017",
+"genres": [
+"Biography",
+"Crime",
+"Drama"
+],
+"rating": 8.7,
+"mine": 0.0,
+"poster": "media/series/series-narcos.webp",
+"url": "https://www.imdb.com/title/tt2707408/"
+},
+{
+"type": "series",
+"title": "Peaky Blinders",
+"year": "2013–2022",
+"genres": [
+"Crime",
+"Drama"
+],
+"rating": 8.7,
+"mine": 0.0,
+"poster": "media/series/series-peaky-blinders.webp",
+"url": "https://www.imdb.com/title/tt2442560/"
+},
+{
+"type": "series",
+"title": "House of Cards",
+"year": "2013–2018",
+"genres": [
+"Drama",
+"Thriller"
+],
+"rating": 8.6,
+"mine": 0.0,
+"poster": "media/series/series-house-of-cards.webp",
+"url": "https://www.imdb.com/title/tt1856010/"
+},
+{
+"type": "series",
+"title": "Stranger Things",
+"year": "2016–2025",
+"genres": [
+"Drama",
+"Fantasy",
+"Horror"
+],
+"rating": 8.6,
+"mine": 0.0,
+"poster": "media/series/series-stranger-things.webp",
+"url": "https://www.imdb.com/title/tt4574334/"
+},
+{
+"type": "series",
+"title": "Mr. Robot",
+"year": "2015–2019",
+"genres": [
+"Crime",
+"Drama",
+"Thriller"
+],
+"rating": 8.5,
+"mine": 0.0,
+"poster": "media/series/series-mr-robot.webp",
+"url": "https://www.imdb.com/title/tt4158110/"
+},
+{
+"type": "series",
+"title": "The Haunting of Hill House",
+"year": "2018",
+"genres": [
+"Drama",
+"Horror",
+"Mystery"
+],
+"rating": 8.5,
+"mine": 0.0,
+"poster": "media/series/series-the-haunting-of-hill-house.webp",
+"url": "https://www.imdb.com/title/tt6763664/"
+},
+{
+"type": "series",
+"title": "Kimetsu no Yaiba",
+"year": "2019",
+"genres": [
+"Action",
+"Award Winning",
+"Supernatural"
+],
+"rating": 8.42,
+"mine": 0.0,
+"poster": "media/series/series-kimetsu-no-yaiba.webp",
+"url": "https://myanimelist.net/anime/38000/Kimetsu_no_Yaiba"
+},
+{
+"type": "series",
+"title": "Banshee",
+"year": "2013–2016",
+"genres": [
+"Action",
+"Crime",
+"Drama"
+],
+"rating": 8.4,
+"mine": 0.0,
+"poster": "media/series/series-banshee.webp",
+"url": "https://www.imdb.com/title/tt2017109/"
+},
+{
+"type": "series",
+"title": "Brooklyn Nine-Nine",
+"year": "2013–2021",
+"genres": [
+"Comedy",
+"Crime"
+],
+"rating": 8.4,
+"mine": 0.0,
+"poster": "media/series/series-brooklyn-nine-nine.webp",
+"url": "https://www.imdb.com/title/tt2467372/"
+},
+{
+"type": "series",
+"title": "Cobra Kai",
+"year": "2018–2025",
+"genres": [
+"Action",
+"Comedy",
+"Drama"
+],
+"rating": 8.4,
+"mine": 0.0,
+"poster": "media/series/series-cobra-kai.webp",
+"url": "https://www.imdb.com/title/tt7221388/"
+},
+{
+"type": "series",
+"title": "Love, Death & Robots",
+"year": "2019–",
+"genres": [
+"Animation",
+"Short",
+"Action"
+],
+"rating": 8.4,
+"mine": 0.0,
+"poster": "media/series/series-love-death-robots.webp",
+"url": "https://www.imdb.com/title/tt9561862/"
+},
+{
+"type": "series",
+"title": "Ozark",
+"year": "2017–2022",
+"genres": [
+"Crime",
+"Drama",
+"Thriller"
+],
+"rating": 8.4,
+"mine": 0.0,
+"poster": "media/series/series-ozark.webp",
+"url": "https://www.imdb.com/title/tt5071412/"
+},
+{
+"type": "series",
+"title": "The Good Wife",
+"year": "2009–2016",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 8.4,
+"mine": 0.0,
+"poster": "media/series/series-the-good-wife.webp",
+"url": "https://www.imdb.com/title/tt1442462/"
+},
+{
+"type": "series",
+"title": "The Punisher",
+"year": "2017–2019",
+"genres": [
+"Action",
+"Crime",
+"Drama"
+],
+"rating": 8.4,
+"mine": 0.0,
+"poster": "media/series/series-the-punisher.webp",
+"url": "https://www.imdb.com/title/tt5675620/"
+},
+{
+"type": "series",
+"title": "House of the Dragon",
+"year": "2022–",
+"genres": [
+"Action",
+"Adventure",
+"Drama"
+],
+"rating": 8.3,
+"mine": 0.0,
+"poster": "media/series/series-house-of-the-dragon.webp",
+"url": "https://www.imdb.com/title/tt11198330/"
+},
+{
+"type": "series",
+"title": "Prison Break",
+"year": "2005–2017",
+"genres": [
+"Action",
+"Crime",
+"Drama"
+],
+"rating": 8.3,
+"mine": 0.0,
+"poster": "media/series/series-prison-break.webp",
+"url": "https://www.imdb.com/title/tt0455275/"
+},
+{
+"type": "series",
+"title": "Slow Horses",
+"year": "2022–",
+"genres": [
+"Drama",
+"Thriller"
+],
+"rating": 8.3,
+"mine": 0.0,
+"poster": "media/series/series-slow-horses.webp",
+"url": "https://www.imdb.com/title/tt5875444/"
+},
+{
+"type": "series",
+"title": "Dept. Q",
+"year": "2025–",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 8.2,
+"mine": 0.0,
+"poster": "media/series/series-dept-q.webp",
+"url": "https://www.imdb.com/title/tt27995114/"
+},
+{
+"type": "series",
+"title": "The Mentalist",
+"year": "2008–2015",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 8.2,
+"mine": 0.0,
+"poster": "media/series/series-the-mentalist.webp",
+"url": "https://www.imdb.com/title/tt1196946/"
+},
+{
+"type": "series",
+"title": "Silo",
+"year": "2023–",
+"genres": [
+"Drama",
+"Mystery",
+"Sci-Fi"
+],
+"rating": 8.1,
+"mine": 0.0,
+"poster": "media/series/series-silo.webp",
+"url": "https://www.imdb.com/title/tt14688458/"
+},
+{
+"type": "series",
+"title": "Sneaky Pete",
+"year": "2015–2019",
+"genres": [
+"Comedy",
+"Crime",
+"Drama"
+],
+"rating": 8.0,
+"mine": 0.0,
+"poster": "media/series/series-sneaky-pete.webp",
+"url": "https://www.imdb.com/title/tt5011816/"
+},
+{
+"type": "series",
+"title": "La Reina del Sur",
+"year": "2011–",
+"genres": [
+"Action",
+"Crime",
+"Drama"
+],
+"rating": 7.8,
+"mine": 0.0,
+"poster": "media/series/series-la-reina-del-sur.webp",
+"url": "https://www.imdb.com/title/tt1704637/"
+},
+{
+"type": "series",
+"title": "The Umbrella Academy",
+"year": "2019–2024",
+"genres": [
+"Action",
+"Adventure",
+"Comedy"
+],
+"rating": 7.8,
+"mine": 0.0,
+"poster": "media/series/series-the-umbrella-academy.webp",
+"url": "https://www.imdb.com/title/tt1312171/"
+},
+{
+"type": "series",
+"title": "Task",
+"year": "2025",
+"genres": [
+"Crime",
+"Drama"
+],
+"rating": 7.7,
+"mine": 0.0,
+"poster": "media/series/series-task.webp",
+"url": "https://www.imdb.com/title/tt28013708/"
+},
+{
+"type": "series",
+"title": "Bad Blood",
+"year": "2017–2018",
+"genres": [
+"Crime",
+"Drama"
+],
+"rating": 7.5,
+"mine": 0.0,
+"poster": "media/series/series-bad-blood.webp",
+"url": "https://www.imdb.com/title/tt6423364/"
+},
+{
+"type": "series",
+"title": "Black Rabbit",
+"year": "2025",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 7.4,
+"mine": 0.0,
+"poster": "media/series/series-black-rabbit.webp",
+"url": "https://www.imdb.com/title/tt23055142/"
+},
+{
+"type": "series",
+"title": "Absentia",
+"year": "2017–2020",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 7.2,
+"mine": 0.0,
+"poster": "media/series/series-absentia.webp",
+"url": "https://www.imdb.com/title/tt6794990/"
+},
+{
+"type": "series",
+"title": "Untamed",
+"year": "2025–",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 7.2,
+"mine": 0.0,
+"poster": "media/series/series-untamed.webp",
+"url": "https://www.imdb.com/title/tt31710822/"
+},
+{
+"type": "series",
+"title": "Ingobernable",
+"year": "2017–",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 7.0,
+"mine": 0.0,
+"poster": "media/series/series-ingobernable.webp",
+"url": "https://www.imdb.com/title/tt6495756/"
+},
+{
+"type": "series",
+"title": "Smoke",
+"year": "2025–",
+"genres": [
+"Crime",
+"Drama",
+"Mystery"
+],
+"rating": 6.6,
+"mine": 0.0,
+"poster": "media/series/series-smoke.webp",
+"url": "https://www.imdb.com/title/tt24163532/"
+}
+]
