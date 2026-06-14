@@ -200,6 +200,13 @@ function renderArch() {
 /* ════════════ PUBLICATIONS DATABASE ════════════ */
 const ST_LABEL = s => ({ published: T().st_published, accepted: T().st_accepted, review: T().st_review, progress: T().st_progress }[s] || s);
 const ST_ORDER = { published: 0, accepted: 1, review: 2, progress: 3 };
+// bucket the per-paper authorship role into 1st author / equal contributor / co-author
+const CONTRIB = p => {
+  const r = (p.role || "").toLowerCase();
+  if (/equal/.test(r)) return { key: "equal", label: T().role_equal };
+  if (/1st|first|lead/.test(r)) return { key: "first", label: T().role_first };
+  return { key: "co", label: T().role_co };
+};
 let pubFilter = { taxo: "all", type: "all", year: "all", status: "all", q: "", sort: null, dir: 1 };
 function renderTaxo() {
   const row = $("#taxoRow"); row.innerHTML = "";
@@ -235,15 +242,18 @@ function renderPubs() {
   rows.forEach(({ p }) => {
     const tr = el("tr", "pub-row");
     const rankBadge = p.rank ? `<span class="pub-rank">${p.rank}${p.impact ? ` · IF ${p.impact}` : ""}</span>` : (p.impact ? `<span class="pub-rank">IF ${p.impact}</span>` : "—");
-    tr.innerHTML = `<td><div class="pub-title">${p.title}</div><div class="pub-venue">${p.venue} · <em>${pick(p, "role")}</em></div><div class="pub-tags"><span class="pub-area">${txEn(p.taxo)}</span>${p.tags.map(t => `<span>${t}</span>`).join("")}</div></td>
-      <td class="pub-hide-sm">${p.type}</td>
+    const ci = CONTRIB(p);
+    tr.innerHTML = `<td><div class="pub-title">${p.title}</div><div class="pub-venue">${p.venue}</div><div class="pub-tags"><span class="pub-area">${txEn(p.taxo)}</span>${p.tags.map(t => `<span>${t}</span>`).join("")}</div></td>
+      <td><span class="pub-contrib c-${ci.key}">${ci.label}</span></td>
+      <td>${p.type}</td>
       <td><span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span></td>
-      <td class="pub-hide-sm">${rankBadge}</td>
+      <td>${rankBadge}</td>
       <td>${p.year}</td>
-      <td class="pub-hide-sm pub-links">${p.doi ? `<a class="pub-doi" href="${p.doi}" target="_blank" rel="noopener" onclick="event.stopPropagation()">DOI ↗</a>` : ""}${p.project ? `<a class="pub-proj" href="${p.project}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().pub_project}</a>` : ""}${!p.doi && !p.project ? "—" : ""}</td>`;
+      <td class="pub-links">${p.doi ? `<a class="pub-doi" href="${p.doi}" target="_blank" rel="noopener" onclick="event.stopPropagation()">DOI ↗</a>` : "—"}</td>
+      <td class="pub-links">${p.project ? `<a class="pub-proj" href="${p.project}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().pub_page}</a>` : "—"}</td>`;
     const ab = el("tr", "pub-abstract");
     const bib = p.bibtex ? `<button class="pub-bibtex-btn">${T().pub_copy}</button><pre class="pub-bibtex">${p.bibtex.replace(/</g, "&lt;")}</pre>` : "";
-    ab.innerHTML = `<td colspan="6"><div class="inner"><p>${pick(p, "abstract")}</p>${bib}</div></td>`;
+    ab.innerHTML = `<td colspan="8"><div class="inner"><p>${pick(p, "abstract")}</p>${bib}</div></td>`;
     tr.addEventListener("click", () => ab.classList.toggle("open"));
     if (p.bibtex) ab.querySelector(".pub-bibtex-btn").addEventListener("click", e => { e.stopPropagation(); navigator.clipboard?.writeText(p.bibtex); e.target.textContent = T().pub_copied; setTimeout(() => e.target.textContent = T().pub_copy, 1500); });
     body.append(tr); body.append(ab);

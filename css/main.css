@@ -159,13 +159,17 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .pubdb-search:focus { outline: none; border-color: var(--green-3); }
 .pubdb-sel { border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; background: var(--snow); font-size: .9rem; color: var(--mid); }
 .pubdb-count { color: var(--dim); font-size: .85rem; margin-inline-start: auto; }
-.pub-table { width: 100%; border-collapse: collapse; }
+.pub-table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 900px; }
+.pub-table col.c-paper { width: 27%; } .pub-table col.c-contrib { width: 13%; } .pub-table col.c-type { width: 9%; }
+.pub-table col.c-status { width: 12%; } .pub-table col.c-rank { width: 10%; } .pub-table col.c-year { width: 7%; }
+.pub-table col.c-doi { width: 10%; } .pub-table col.c-proj { width: 12%; }
 .pub-table thead th { text-align: left; font-size: .76rem; letter-spacing: .04em; text-transform: uppercase; color: var(--dim); padding: 10px 12px; border-bottom: 2px solid var(--line); cursor: pointer; user-select: none; white-space: nowrap; }
 .pub-table thead th:hover { color: var(--green-2); }
 .pub-row { border-bottom: 1px solid var(--line); cursor: pointer; transition: background .2s; }
 .pub-row:hover { background: var(--paper); }
-.pub-row td { padding: 14px 12px; vertical-align: top; font-size: .92rem; }
-.pub-title { font-weight: 600; color: var(--green-0); max-width: 40ch; }
+.pub-row td { padding: 14px 9px; vertical-align: top; font-size: .92rem; }
+.pub-table th:first-child, .pub-row td:first-child { max-width: 320px; }
+.pub-title { font-weight: 600; color: var(--green-0); }
 .pub-venue { color: var(--mid); font-size: .85rem; margin-top: 3px; }
 .pub-badge { display: inline-block; font-size: .72rem; padding: 2px 9px; border-radius: 99px; background: var(--paper-2); color: var(--green-1); white-space: nowrap; }
 .pub-badge.tx { background: color-mix(in srgb, var(--green-3) 22%, transparent); color: var(--green-1); }
@@ -184,7 +188,11 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .pub-rank { font-weight: 600; color: var(--green-1); font-size: .85rem; white-space: nowrap; }
 .pub-area { background: color-mix(in srgb, var(--green-3) 22%, transparent) !important; color: var(--green-1) !important; font-weight: 600; border: 0 !important; }
 .pub-links { white-space: nowrap; }
-.pub-proj { color: var(--gold); font-weight: 600; margin-inline-start: 10px; }
+.pub-proj { color: var(--gold); font-weight: 600; }
+.pub-contrib { display: inline-block; font-size: .76rem; font-weight: 600; border-radius: 7px; padding: 3px 10px; line-height: 1.3; }
+.pub-contrib.c-first { background: var(--green-0); color: var(--snow); }
+.pub-contrib.c-equal { background: color-mix(in srgb, var(--gold) 22%, transparent); color: #8a5e22; }
+.pub-contrib.c-co { background: var(--paper-2); color: var(--green-1); }
 .pub-bibtex-btn { margin-top: 10px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 14px; font-size: .82rem; color: var(--green-1); background: var(--snow); }
 .pub-bibtex-btn:hover { border-color: var(--green-3); }
 .pub-bibtex { margin-top: 10px; background: var(--green-0); color: #dce8e0; border-radius: 10px; padding: 14px; font-size: .76rem; line-height: 1.5; overflow-x: auto; white-space: pre; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
