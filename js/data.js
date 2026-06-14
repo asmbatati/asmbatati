@@ -367,33 +367,62 @@ export const PUBS = [
     abstract_ar: "مجموعة بيانات مفتوحة لقياس خوارزميات SLAM لتموضع الطائرات.", bibtex: "" },
 ];
 
-/* ── Robotics software-stack mental model (his work highlighted) ── */
-export const STACK = [
-  { lvl: "Layer 8", name: "Agentic AI & Multi-Robot", name_ar: "الذكاء الوكيل ومتعدد الروبوتات", mine: true,
-    desc: "Agentic planners that let a fleet reason about and divide tasks.", desc_ar: "مخطّطات وكيلة تتيح للأسطول الاستدلال وتقسيم المهام.",
-    tools: ["LLM agents", "task allocation", "behavior trees"] },
-  { lvl: "Layer 7", name: "Middleware & Orchestration", name_ar: "الوسطية والتنسيق", mine: true,
-    desc: "ROS 2 / DDS graph: nodes, topics, lifecycle, real-time. Authored the ROS 2 survey.", desc_ar: "رسم ROS 2 / DDS: العُقد، المواضيع، دورة الحياة، الزمن الحقيقي. مؤلف مسح ROS 2.",
-    tools: ["ROS 2", "DDS", "lifecycle nodes"] },
-  { lvl: "Layer 6", name: "Planning & Prediction", name_ar: "التخطيط والتوقّع", mine: true,
-    desc: "Trajectory prediction (VECTOR, D2DTracker) and path planning for agile tracking.", desc_ar: "توقّع المسار (VECTOR، D2DTracker) وتخطيط المسار للتتبّع السريع.",
-    tools: ["GRU", "Nav2", "model selection"] },
-  { lvl: "Layer 5", name: "Control", name_ar: "التحكّم", mine: true,
-    desc: "Offboard UAV control via MAVROS/PX4; low-level attitude & position loops.", desc_ar: "تحكّم خارجي بالطائرات عبر MAVROS/PX4؛ حلقات الوضع والموقع.",
-    tools: ["PX4", "MAVROS", "PID / cascade"] },
-  { lvl: "Layer 4", name: "State Estimation & Localization", name_ar: "تقدير الحالة والتموضع", mine: true,
-    desc: "The core: GPS-denied localization, residual EKF, sensor fusion. Two journal papers.", desc_ar: "الجوهر: التموضع دون GPS، مرشّح كالمان البقايا، دمج الحساسات. بحثان محكّمان.",
-    tools: ["EKF", "VIO", "XGBoost+KAN"] },
-  { lvl: "Layer 3", name: "Perception", name_ar: "الإدراك", mine: true,
-    desc: "Visual-inertial odometry (RoboEye), object & drone detection/tracking.", desc_ar: "القياس البصري-القصوري (RoboEye)، كشف وتتبّع الأجسام والطائرات.",
-    tools: ["stereo VIO", "detection", "tracking"] },
-  { lvl: "Layer 2", name: "Sensing & Drivers", name_ar: "الاستشعار والمشغّلات", mine: true,
-    desc: "Cameras, IMU, LiDAR, GNSS — and the RoboEye sensor kit (patented).", desc_ar: "كاميرات، IMU، ليدار، GNSS — وحساس RoboEye (براءة).",
-    tools: ["camera/IMU", "LiDAR", "RoboEye kit"] },
-  { lvl: "Layer 1", name: "Simulation & Sim2Real", name_ar: "المحاكاة والنقل للواقع", mine: true,
-    desc: "Gazebo / PX4 SITL worlds and the FLIGHTGEN automated dataset generator.", desc_ar: "عوالم Gazebo / PX4 SITL ومولّد البيانات الآلي FLIGHTGEN.",
-    tools: ["Gazebo", "PX4 SITL", "FLIGHTGEN"] },
-];
+/* ── Robotics architecture — his real mental model (from his drawio) ──
+   A closed perception↔decision loop around a shared world model, with a
+   supervisory layer and three timing bands. Each node carries where his
+   published / patented work lives. Rendered as an SVG schematic + cards. */
+export const ARCH = {
+  bands: [
+    { id: "delib",  rate: "0.1–10 Hz",     ms: "100 ms – 10 s", label: "Deliberative", label_ar: "تداولي" },
+    { id: "react",  rate: "10–50 Hz",      ms: "20–100 ms",     label: "Reactive",     label_ar: "تفاعلي" },
+    { id: "reflex", rate: "100 Hz – 1 kHz", ms: "1–10 ms",      label: "Reflex",       label_ar: "انعكاسي" },
+  ],
+  nodes: {
+    // ── Perception pipeline (left column, sensors → up) ──
+    semantic: { col: "perc", band: "delib", label: "Semantic Perception", label_ar: "الإدراك الدلالي",
+      sub: "Object detection · segmentation · scene understanding", sub_ar: "كشف الأجسام · التجزئة · فهم المشهد", mine: true,
+      work: "Drone & object detection and tracking", work_ar: "كشف وتتبّع الطائرات والأجسام", papers: ["D2DTracker"] },
+    spatial: { col: "perc", band: "react", label: "Spatial Perception & Mapping", label_ar: "الإدراك المكاني ورسم الخرائط",
+      sub: "SLAM · point clouds · local maps", sub_ar: "SLAM · سُحُب النقاط · خرائط محلية", mine: true,
+      work: "Visual-inertial odometry & local mapping (RoboEye, patented kit)", work_ar: "قياس بصري-قصوري ورسم خرائط محلي (RoboEye، عُدّة مُبرَّأة)", papers: ["RoboEye"] },
+    stateest: { col: "perc", band: "reflex", label: "State Estimation & Sensor Fusion", label_ar: "تقدير الحالة ودمج الحساسات",
+      sub: "Kalman filter · EKF · VIO", sub_ar: "مرشّح كالمان · EKF · VIO", mine: true,
+      work: "GPS-denied localization · residual EKF · sensor fusion", work_ar: "تموضع دون GPS · مرشّح كالمان البقايا · دمج الحساسات", papers: ["TSR-EKF", "GNSS-Denied Nav"] },
+    // ── Decision & control (right column, plans → down) ──
+    task: { col: "cog", band: "delib", label: "Task Planning & Mission Control", label_ar: "تخطيط المهام والتحكّم بالمهمّة",
+      sub: "Behavior trees · FSM · mission logic", sub_ar: "أشجار السلوك · آلات الحالة · منطق المهمّة", mine: true,
+      work: "Agentic multi-UAV coordination & task allocation", work_ar: "تنسيق وكيلي لأسطول الطائرات وتوزيع المهام", papers: ["Agentic UAVs"] },
+    motion: { col: "cog", band: "react", label: "Motion Planning & Local Navigation", label_ar: "تخطيط الحركة والملاحة المحلية",
+      sub: "RRT · DWA · trajectory generation", sub_ar: "RRT · DWA · توليد المسارات", mine: true,
+      work: "Trajectory prediction & planning for agile tracking", work_ar: "توقّع المسار والتخطيط للتتبّع السريع", papers: ["VECTOR", "D2DTracker"] },
+    control: { col: "cog", band: "reflex", label: "Real-time Control", label_ar: "التحكّم اللحظي",
+      sub: "PID · MPC · torque control", sub_ar: "PID · MPC · تحكّم بالعزم", mine: true,
+      work: "Off-board UAV control via PX4 / MAVROS", work_ar: "تحكّم خارجي بالطائرات عبر PX4 / MAVROS", papers: ["PX4 · MAVROS"] },
+    // ── Shared hub ──
+    world: { col: "center", label: "Shared World Model", label_ar: "نموذج العالم المشترك",
+      sub: "Semantic + geometric map · robot state · occupancy · dynamic obstacles · goals",
+      sub_ar: "خريطة دلالية + هندسية · حالة الروبوت · الإشغال · العوائق المتحركة · الأهداف", mine: false },
+    // ── Cross-cutting supervisor ──
+    super: { col: "super", label: "Supervisory & Monitoring", label_ar: "الإشراف والمراقبة",
+      sub: "Fault detection · plan validation · recovery · safety constraints", sub_ar: "كشف الأعطال · التحقّق من الخطة · التعافي · قيود السلامة", mine: true,
+      work: "Runtime safety & benchmarking for multi-robot systems", work_ar: "سلامة زمن التشغيل وقياس الأداء لأنظمة متعددة الروبوتات", papers: ["SAFEMRS", "ROSNavBench"] },
+    // ── Hardware layer ──
+    sensors: { col: "hw", label: "Sensors", label_ar: "الحساسات", sub: "Cameras · LiDAR · IMU · encoders", sub_ar: "كاميرات · ليدار · IMU · مُرمِّزات", mine: true,
+      work: "RoboEye sensor kit (patented)", work_ar: "عُدّة حساسات RoboEye (مُبرَّأة)", papers: ["RoboEye kit"] },
+    actuators: { col: "hw", label: "Actuators", label_ar: "المُشغِّلات", sub: "Motors · ESCs · grippers", sub_ar: "محرّكات · مسرّعات · قابضات", mine: false },
+    env: { col: "hw", label: "Dynamic Environment", label_ar: "البيئة الديناميكية", sub: "Moving obstacles · humans · changing conditions", sub_ar: "عوائق متحركة · بشر · ظروف متغيّرة", mine: false },
+  },
+  // signal paths shown in the legend
+  legend: [
+    { id: "flow",  label: "Standard flow",       label_ar: "التدفّق الأساسي" },
+    { id: "share", label: "Shared world-model",  label_ar: "بيانات نموذج العالم" },
+    { id: "react", label: "Reactive feedback",   label_ar: "تغذية راجعة تفاعلية" },
+    { id: "emerg", label: "Emergency reflex",    label_ar: "ردّ فعل طارئ" },
+  ],
+  // sim-to-real footnote (his FLIGHTGEN / Gazebo work feeds the same loop)
+  sim: "The whole loop is first closed in simulation — Gazebo / PX4-SITL worlds and the FLIGHTGEN automated dataset generator — before it ever flies.",
+  sim_ar: "تُغلَق الحلقة كاملةً أولًا في المحاكاة — عوالم Gazebo / PX4-SITL ومولّد البيانات الآلي FLIGHTGEN — قبل أي طيران حقيقي.",
+};
 
 export const CALISTHENICS = {
   list: ["Muscle-ups", "Front lever", "Planche progressions", "Handstand", "Pull-ups", "Dips", "L-sit", "Pistol squats"],
@@ -450,9 +479,11 @@ export const I18N = {
     eb_contact: "Contact", t_contact: "Let's build something that flies.",
     lb_close: "Close", lb_prev: "Previous", lb_next: "Next",
     tab_home: "Home", tab_beyond: "Beyond career",
-    eb_stack: "How robotics fits together", t_stack: "My mental model of the robot software stack.",
-    lead_stack: "From sensors to agents — every layer of an autonomous system, and where my work lives. Highlighted layers are ones I've built or published in.",
-    stack_mine: "I've worked here", stack_legend_mine: "Layers I built / published", stack_legend_other: "Context layers",
+    eb_stack: "How an autonomous robot thinks", t_stack: "My mental model of an autonomous robot.",
+    lead_stack: "Not a stack — a loop. Perception flows up the left, decisions flow down the right, and the two meet at a shared world model, all watched by a safety supervisor and clocked at three timescales. Highlighted blocks are where my published and patented work lives.",
+    stack_mine: "My work", stack_legend_mine: "Blocks I built / published", stack_legend_other: "Context blocks",
+    arch_perc: "Perception ↑", arch_cog: "Decision & control ↓", arch_work_title: "Where my work lives",
+    arch_aria: "Closed-loop autonomous-robot architecture: a perception pipeline ascending on the left, a decision-and-control column descending on the right, a shared world model at the centre, a supervisory layer, and a hardware layer — across three timing bands.",
     pubdb_title: "Browse every publication", pubdb_lead: "Search, filter by research area, and sort. Click a row for the abstract.",
     pubdb_search: "Search title, venue, tag…", pubdb_allyears: "All years", pubdb_allstatus: "All status",
     pubdb_count: "results", col_paper: "Paper", col_year: "Year", col_area: "Area", col_status: "Status", col_doi: "DOI",
@@ -493,9 +524,11 @@ export const I18N = {
     eb_contact: "تواصل", t_contact: "لنبنِ شيئًا يطير.",
     lb_close: "إغلاق", lb_prev: "السابق", lb_next: "التالي",
     tab_home: "الرئيسية", tab_beyond: "خارج العمل",
-    eb_stack: "كيف تتكامل الروبوتات", t_stack: "نموذجي الذهني لطبقات برمجيات الروبوت.",
-    lead_stack: "من الحساسات إلى الوكلاء — كل طبقة في النظام المستقل، وأين يقع عملي. الطبقات المميّزة بنيتُها أو نشرتُ فيها.",
-    stack_mine: "عملتُ هنا", stack_legend_mine: "طبقات بنيتُها / نشرتُ فيها", stack_legend_other: "طبقات سياقية",
+    eb_stack: "كيف يُفكّر روبوتٌ مستقل", t_stack: "نموذجي الذهني لروبوتٍ مستقل.",
+    lead_stack: "ليست طبقات، بل حلقة: يصعد الإدراك على اليسار، وتنزل القرارات على اليمين، ويلتقيان عند نموذج عالمٍ مشترك، يراقبهما مشرفُ سلامة، ويُضبط الزمن على ثلاثة مقاييس. الكتل المميّزة هي حيث يقع عملي المنشور والمُبرَّأ.",
+    stack_mine: "عملي", stack_legend_mine: "كتلٌ بنيتُها / نشرتُ فيها", stack_legend_other: "كتل سياقية",
+    arch_perc: "الإدراك ↑", arch_cog: "القرار والتحكّم ↓", arch_work_title: "أين يقع عملي",
+    arch_aria: "معمارية روبوت مستقل ذات حلقة مغلقة: مسار إدراك يصعد على اليسار، وعمود قرار وتحكّم ينزل على اليمين، ونموذج عالم مشترك في الوسط، وطبقة إشراف، وطبقة عتاد — عبر ثلاثة نطاقات زمنية.",
     pubdb_title: "تصفّح كل المنشورات", pubdb_lead: "ابحث، صفِّ حسب مجال البحث، ورتِّب. اضغط الصف لقراءة الملخّص.",
     pubdb_search: "ابحث في العنوان أو المحفل أو الوسم…", pubdb_allyears: "كل السنوات", pubdb_allstatus: "كل الحالات",
     pubdb_count: "نتيجة", col_paper: "البحث", col_year: "السنة", col_area: "المجال", col_status: "الحالة", col_doi: "DOI",

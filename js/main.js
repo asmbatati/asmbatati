@@ -3,7 +3,7 @@
    media collections · sphere · galleries · i18n. */
 
 import { PROFILE, STATS, PROJECTS, PAPERS, RESEARCH_NOTE, RESEARCH_NOTE_AR, ROBOTS, PRINTS,
-         PATENTS, EXPERIENCE, EDUCATION, SKILLS, REPOS, PUBS, TAXONOMY, STACK, CALISTHENICS,
+         PATENTS, EXPERIENCE, EDUCATION, SKILLS, REPOS, PUBS, TAXONOMY, ARCH, CALISTHENICS,
          ARTICLES, I18N, IMG } from "./data.js";
 import { initSphere, webglOK } from "./sphere.js";
 import { initCinematic } from "./cinematic.js";
@@ -107,13 +107,8 @@ function renderDynamic() {
   const rp = $("#repos"); rp.innerHTML = "";
   REPOS.forEach(r => { const a = el("a", "card repo"); a.href = r.url; a.target = "_blank"; a.rel = "noopener"; a.innerHTML = `<div class="repo-top"><span class="repo-name">${r.name}</span><span class="repo-star">★ ${r.stars}</span></div><p>${pick(r, "desc")}</p><span class="repo-lang">${r.lang}</span>`; rp.append(a); });
 
-  // robotics stack
-  const stk = $("#stack"); stk.innerHTML = "";
-  STACK.forEach(L => {
-    const d = el("div", "stack-layer" + (L.mine ? " mine" : ""));
-    d.innerHTML = `<div class="stack-side"><span class="lvl">${L.lvl}</span><h4>${pick(L, "name")}</h4>${L.mine ? `<span class="stack-mine-flag">◆ ${T().stack_mine}</span>` : ""}</div><div class="stack-body"><p>${pick(L, "desc")}</p><div class="stack-tools">${L.tools.map(t => `<span>${t}</span>`).join("")}</div></div>`;
-    stk.append(d);
-  });
+  // robotics architecture (his real closed-loop mental model)
+  renderArch();
 
   // project fallback
   const grid = $("#projFallback");
@@ -125,6 +120,81 @@ function renderDynamic() {
 
   renderPubs(); renderMediaGrid();
   window.__cursorBind?.();
+}
+
+/* ════════════ ROBOTICS ARCHITECTURE (his real closed-loop model) ════════════ */
+function renderArch() {
+  const host = $("#arch"); if (!host) return;
+  const N = ARCH.nodes;
+  // fixed geometry (viewBox 0 0 1000 660) — perception ↑ left, decision ↓ right,
+  // shared world model centre, supervisory panel right, hardware bottom, 3 timing bands.
+  const box = {
+    semantic: [64, 96, 222, 84], spatial: [64, 200, 222, 84], stateest: [64, 304, 222, 84],
+    task: [636, 96, 210, 84], motion: [636, 200, 210, 84], control: [636, 304, 210, 84],
+    world: [356, 108, 210, 280], super: [866, 96, 128, 292],
+    sensors: [64, 430, 222, 84], actuators: [636, 430, 210, 84], env: [64, 556, 782, 64],
+  };
+  const fo = id => {
+    const b = box[id], n = N[id];
+    const cls = `arch-node ${n.col}${n.mine ? " mine" : ""}`;
+    return `<foreignObject x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}">`
+      + `<div xmlns="http://www.w3.org/1999/xhtml" class="${cls}">`
+      + (n.mine ? `<span class="arch-dot" title="${T().stack_mine}"></span>` : "")
+      + `<span class="arch-n-label">${pick(n, "label")}</span>`
+      + `<span class="arch-n-sub">${pick(n, "sub")}</span></div></foreignObject>`;
+  };
+  const path = (d, cls) => `<path d="${d}" class="${cls}" fill="none"/>`;
+  // band stripes + timing labels (left rail)
+  const bands = [["delib", 92, 138], ["react", 196, 242], ["reflex", 300, 346]];
+  const stripes = bands.map(([id, y]) => `<rect x="58" y="${y}" width="790" height="92" rx="12" class="arch-band ${id}"/>`).join("");
+  const timing = bands.map(([id, y, cy], i) => {
+    const bd = ARCH.bands[i];
+    return `<foreignObject x="2" y="${cy - 24}" width="54" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-time"><b>${pick(bd, "label")}</b><span>${bd.rate}</span></div></foreignObject>`;
+  }).join("");
+  // connectors
+  const flow = [
+    "M175,556 L175,514", "M175,430 L175,388", "M175,304 L175,284", "M175,200 L175,180",   // perception ↑
+    "M741,180 L741,200", "M741,284 L741,304", "M741,388 L741,430", "M741,514 L741,556",   // decision ↓
+  ].map(d => path(d, "arch-flow")).join("");
+  const share = ["M286,138 L356,138", "M286,242 L356,242", "M566,138 L636,138", "M566,242 L636,242"]
+    .map(d => path(d, "arch-share")).join("");
+  const emerg = path("M286,258 L320,258 L320,410 L600,410 L600,346 L636,346", "arch-emerg");
+  const propr = path("M741,514 L741,536 L336,536 L336,346 L286,346", "arch-react");
+  const sup = ["M846,138 L866,138", "M846,242 L866,242", "M846,346 L866,346"].map(d => path(d, "arch-super")).join("");
+  const nodes = Object.keys(box).map(fo).join("");
+  const labels = `<text x="175" y="80" class="arch-coltitle">${T().arch_perc}</text>`
+    + `<text x="741" y="80" class="arch-coltitle">${T().arch_cog}</text>`;
+  const svg = `<svg viewBox="0 0 1000 660" class="arch-svg" role="img" aria-label="${T().arch_aria}">
+    <defs>
+      <marker id="ar-flow" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" class="m-flow"/></marker>
+      <marker id="ar-share" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" class="m-share"/></marker>
+      <marker id="ar-react" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" class="m-react"/></marker>
+      <marker id="ar-emerg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" class="m-emerg"/></marker>
+      <marker id="ar-sup" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" class="m-sup"/></marker>
+    </defs>
+    ${stripes}${timing}${labels}
+    <g class="g-flow">${flow}</g><g class="g-share">${share}</g>
+    <g class="g-react">${propr}</g><g class="g-emerg">${emerg}</g><g class="g-sup">${sup}</g>
+    <text x="455" y="404" class="arch-edgelabel emerg">${ARCH.legend[3][lang === "ar" ? "label_ar" : "label"]}</text>
+    <text x="455" y="530" class="arch-edgelabel">${ARCH.legend[2][lang === "ar" ? "label_ar" : "label"]}</text>
+    ${nodes}
+  </svg>`;
+  const legend = `<div class="arch-legend">` + ARCH.legend.map(l =>
+    `<span class="le-${l.id}"><i></i>${l[lang === "ar" ? "label_ar" : "label"]}</span>`).join("")
+    + `<span class="le-mine"><i></i>${T().stack_legend_mine}</span></div>`;
+  host.innerHTML = svg + legend;
+  // sim footnote
+  const sim = $("#archSim"); if (sim) sim.textContent = pick(ARCH, "sim");
+  // "where my work lives" cards
+  const cards = $("#archCards"); if (cards) {
+    const order = ["semantic", "spatial", "stateest", "motion", "task", "control", "super", "sensors"];
+    cards.innerHTML = order.filter(k => N[k] && N[k].mine).map(k => {
+      const n = N[k];
+      return `<article class="arch-card"><h4>${pick(n, "label")}</h4>`
+        + `<p class="arch-card-work">${pick(n, "work")}</p>`
+        + `<div class="arch-papers">${(n.papers || []).map(p => `<span>${p}</span>`).join("")}</div></article>`;
+    }).join("");
+  }
 }
 
 /* ════════════ PUBLICATIONS DATABASE ════════════ */
@@ -292,7 +362,8 @@ addEventListener("load", () => {
 });
 $$(".reveal").forEach(e => gsap.from(e, { y: reduced ? 0 : 40, opacity: 0, duration: 1.0, scrollTrigger: { trigger: e, start: "top 88%" } }));
 // stack stagger
-gsap.from("#stack .stack-layer", { x: reduced ? 0 : -30, opacity: 0, stagger: 0.06, duration: 0.7, scrollTrigger: { trigger: "#stack", start: "top 80%" } });
+gsap.from("#arch .arch-svg", { opacity: 0, y: reduced ? 0 : 20, duration: 0.8, scrollTrigger: { trigger: "#arch", start: "top 78%" } });
+gsap.from("#archCards .arch-card", { y: reduced ? 0 : 24, opacity: 0, stagger: 0.05, duration: 0.6, scrollTrigger: { trigger: "#archCards", start: "top 85%" } });
 
 // research path
 (function () { const path = $("#tlPath"); if (!path) return; const len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = reduced ? 0 : len; if (reduced) return; ST.create({ trigger: "#research", start: "top 60%", end: "bottom 80%", scrub: 0.6, onUpdate: s => path.style.strokeDashoffset = len * (1 - s.progress) }); })();
