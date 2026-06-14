@@ -24,7 +24,7 @@ export const PROFILE = {
   links: {
     github: "https://github.com/asmbatati",
     linkedin: "https://www.linkedin.com/in/asmbatati",
-    scholar: "https://scholar.google.com/citations?user=asmbatati",
+    scholar: "https://scholar.google.com/citations?hl=en&user=cxrJK64AAAAJ",
   },
   languages: ["Arabic — native", "English — professional", "Chinese — HSK2"],
   languages_ar: ["العربية — اللغة الأم", "الإنجليزية — احترافية", "الصينية — HSK2"],

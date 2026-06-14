@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://www.linkedin.com/in/asmbatati"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white"></a>
-  <a href="https://scholar.google.com/citations?user=asmbatati"><img alt="Google Scholar" src="https://img.shields.io/badge/Google%20Scholar-4285F4?style=flat&logo=googlescholar&logoColor=white"></a>
+  <a href="https://scholar.google.com/citations?hl=en&user=cxrJK64AAAAJ"><img alt="Google Scholar" src="https://img.shields.io/badge/Google%20Scholar-4285F4?style=flat&logo=googlescholar&logoColor=white"></a>
   <a href="mailto:asmalbatati@hotmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-C2611F?style=flat&logo=maildotru&logoColor=white"></a>
 </p>
 
@@ -33,7 +33,7 @@ Senior Research Assistant at the **Robotics &amp; Internet of Things Lab, Prince
 | **D2DTracker — drone-to-drone detection &amp; tracking** | IEEE UVS | [DOI](https://doi.org/10.1109/UVS59630.2024.10467173) |
 | **Palm — culturally inclusive Arabic LLM benchmark** | ACL 2025 | [DOI](https://doi.org/10.18653/v1/2025.acl-long.1579) |
 
-→ Full list on [Google Scholar](https://scholar.google.com/citations?user=asmbatati).
+→ Full list on [Google Scholar](https://scholar.google.com/citations?hl=en&user=cxrJK64AAAAJ).
 
 ### 🧰 Toolbox
 
