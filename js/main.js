@@ -4,7 +4,7 @@
 
 import { PROFILE, STATS, PROJECTS, PAPERS, RESEARCH_NOTE, RESEARCH_NOTE_AR, ROBOTS, PRINTS,
          PATENTS, EXPERIENCE, EDUCATION, SKILLS, REPOS, PUBS, TAXONOMY, STACK, CALISTHENICS,
-         I18N, IMG } from "./data.js";
+         ARTICLES, I18N, IMG } from "./data.js";
 import { initSphere, webglOK } from "./sphere.js";
 import { initCinematic } from "./cinematic.js";
 
@@ -59,6 +59,7 @@ function showPage(name) {
   if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
   requestAnimationFrame(() => ST.refresh());
   if (name === "beyond") initMedia();
+  if (name === "articles") renderArticles();
 }
 $$("[data-nav]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); showPage(a.dataset.nav); closeMenu(); }));
 $$("[data-scroll]").forEach(a => a.addEventListener("click", e => {
@@ -100,7 +101,7 @@ function renderDynamic() {
 
   // skills
   const sk = $("#skills"); sk.innerHTML = "";
-  SKILLS.forEach(g => sk.append(el("div", "skill-group card", `<h4>${pick(g, "group")}</h4>` + (lang === "ar" ? g.items_ar : g.items).map(i => `<span class="chip">${i}</span>`).join(""))));
+  SKILLS.forEach(g => sk.append(el("div", "skill-group card", `<h4>${pick(g, "group")}</h4><div class="chips-wrap">` + (lang === "ar" ? g.items_ar : g.items).map(i => `<span class="chip">${i}</span>`).join("") + "</div>")));
 
   // repos
   const rp = $("#repos"); rp.innerHTML = "";
@@ -127,7 +128,9 @@ function renderDynamic() {
 }
 
 /* ════════════ PUBLICATIONS DATABASE ════════════ */
-let pubFilter = { taxo: "all", year: "all", status: "all", q: "", sort: "year", dir: -1 };
+const ST_LABEL = s => ({ published: T().st_published, accepted: T().st_accepted, review: T().st_review, progress: T().st_progress }[s] || s);
+const ST_ORDER = { published: 0, accepted: 1, review: 2, progress: 3 };
+let pubFilter = { taxo: "all", type: "all", year: "all", status: "all", q: "", sort: null, dir: 1 };
 function renderTaxo() {
   const row = $("#taxoRow"); row.innerHTML = "";
   TAXONOMY.forEach(tx => { const b = el("button", "taxo" + (pubFilter.taxo === tx.id ? " on" : ""), tx[lang]); b.addEventListener("click", () => { pubFilter.taxo = tx.id; renderTaxo(); renderPubs(); }); row.append(b); });
@@ -136,7 +139,10 @@ function buildSelects() {
   const ys = [...new Set(PUBS.map(p => p.year))].sort((a, b) => b - a);
   $("#pubYear").innerHTML = `<option value="all">${T().pubdb_allyears}</option>` + ys.map(y => `<option value="${y}">${y}</option>`).join("");
   $("#pubYear").value = pubFilter.year;
-  const sts = [["all", T().pubdb_allstatus], ["published", T().st_published], ["accepted", T().st_accepted], ["review", T().st_review]];
+  const tps = [...new Set(PUBS.map(p => p.type))];
+  $("#pubType").innerHTML = `<option value="all">${T().pubdb_alltype}</option>` + tps.map(t => `<option value="${t}">${t}</option>`).join("");
+  $("#pubType").value = pubFilter.type;
+  const sts = [["all", T().pubdb_allstatus], ["published", T().st_published], ["accepted", T().st_accepted], ["review", T().st_review], ["progress", T().st_progress]];
   $("#pubStatus").innerHTML = sts.map(([v, l]) => `<option value="${v}">${l}</option>`).join("");
   $("#pubStatus").value = pubFilter.status;
   $("#pubSearch").placeholder = T().pubdb_search;
@@ -144,48 +150,72 @@ function buildSelects() {
 function renderPubs() {
   renderTaxo(); buildSelects();
   const body = $("#pubBody"); body.innerHTML = "";
-  let rows = PUBS.filter(p =>
+  let rows = PUBS.map((p, i) => ({ p, i })).filter(({ p }) =>
     (pubFilter.taxo === "all" || p.taxo === pubFilter.taxo) &&
+    (pubFilter.type === "all" || p.type === pubFilter.type) &&
     (pubFilter.year === "all" || String(p.year) === pubFilter.year) &&
     (pubFilter.status === "all" || p.status === pubFilter.status) &&
     (!pubFilter.q || (p.title + " " + p.venue + " " + p.tags.join(" ")).toLowerCase().includes(pubFilter.q)));
-  rows.sort((a, b) => { let r = a[pubFilter.sort] > b[pubFilter.sort] ? 1 : a[pubFilter.sort] < b[pubFilter.sort] ? -1 : 0; return r * pubFilter.dir; });
-  rows.forEach((p, i) => {
+  if (pubFilter.sort) {
+    const key = pubFilter.sort;
+    rows.sort((a, b) => { const x = a.p[key] ?? "", y = b.p[key] ?? ""; return (x > y ? 1 : x < y ? -1 : 0) * pubFilter.dir; });
+  } else {
+    rows.sort((a, b) => (ST_ORDER[a.p.status] - ST_ORDER[b.p.status]) || (b.p.year - a.p.year) || (a.i - b.i));
+  }
+  rows.forEach(({ p }) => {
     const tr = el("tr", "pub-row");
-    const stTxt = p.status === "published" ? T().st_published : p.status === "accepted" ? T().st_accepted : T().st_review;
-    tr.innerHTML = `<td><div class="pub-title">${p.title}</div><div class="pub-venue">${p.venue}</div><div class="pub-tags">${p.tags.map(t => `<span>${t}</span>`).join("")}</div></td>
+    const rankBadge = p.rank ? `<span class="pub-rank">${p.rank}${p.impact ? ` · IF ${p.impact}` : ""}</span>` : (p.impact ? `<span class="pub-rank">IF ${p.impact}</span>` : "—");
+    tr.innerHTML = `<td><div class="pub-title">${p.title}</div><div class="pub-venue">${p.venue} · <em>${pick(p, "role")}</em></div><div class="pub-tags"><span class="pub-area">${txEn(p.taxo)}</span>${p.tags.map(t => `<span>${t}</span>`).join("")}</div></td>
+      <td class="pub-hide-sm">${p.type}</td>
+      <td><span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span></td>
+      <td class="pub-hide-sm">${rankBadge}</td>
       <td>${p.year}</td>
-      <td class="pub-hide-sm"><span class="pub-badge tx">${txEn(p.taxo)}</span></td>
-      <td class="pub-hide-sm"><span class="pub-badge st-${p.status}">${stTxt}</span></td>
-      <td class="pub-hide-sm">${p.doi ? `<a class="pub-doi" href="${p.doi}" target="_blank" rel="noopener" onclick="event.stopPropagation()">DOI ↗</a>` : "—"}</td>`;
-    const ab = el("tr", "pub-abstract"); ab.innerHTML = `<td colspan="5"><div class="inner">${pick(p, "abstract")}</div></td>`;
+      <td class="pub-hide-sm pub-links">${p.doi ? `<a class="pub-doi" href="${p.doi}" target="_blank" rel="noopener" onclick="event.stopPropagation()">DOI ↗</a>` : ""}${p.project ? `<a class="pub-proj" href="${p.project}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().pub_project}</a>` : ""}${!p.doi && !p.project ? "—" : ""}</td>`;
+    const ab = el("tr", "pub-abstract");
+    const bib = p.bibtex ? `<button class="pub-bibtex-btn">${T().pub_copy}</button><pre class="pub-bibtex">${p.bibtex.replace(/</g, "&lt;")}</pre>` : "";
+    ab.innerHTML = `<td colspan="6"><div class="inner"><p>${pick(p, "abstract")}</p>${bib}</div></td>`;
     tr.addEventListener("click", () => ab.classList.toggle("open"));
+    if (p.bibtex) ab.querySelector(".pub-bibtex-btn").addEventListener("click", e => { e.stopPropagation(); navigator.clipboard?.writeText(p.bibtex); e.target.textContent = T().pub_copied; setTimeout(() => e.target.textContent = T().pub_copy, 1500); });
     body.append(tr); body.append(ab);
   });
   $("#pubCount").textContent = `${rows.length} ${T().pubdb_count}`;
 }
 $("#pubSearch").addEventListener("input", e => { pubFilter.q = e.target.value.toLowerCase().trim(); renderPubs(); });
 $("#pubYear").addEventListener("change", e => { pubFilter.year = e.target.value; renderPubs(); });
+$("#pubType").addEventListener("change", e => { pubFilter.type = e.target.value; renderPubs(); });
 $("#pubStatus").addEventListener("change", e => { pubFilter.status = e.target.value; renderPubs(); });
 $$("#pubdb th[data-sort]").forEach(th => th.addEventListener("click", () => { const k = th.dataset.sort; if (pubFilter.sort === k) pubFilter.dir *= -1; else { pubFilter.sort = k; pubFilter.dir = k === "year" ? -1 : 1; } renderPubs(); }));
 
 /* ════════════ MEDIA COLLECTIONS ════════════ */
-let MEDIA = null, mediaFilter = { type: "all", q: "", sort: "rating" };
+let MEDIA = null, mediaFilter = { type: "all", genre: "all", q: "", sort: "rating" };
 async function initMedia() {
-  if (MEDIA) return;
-  try { MEDIA = await (await fetch("media.json")).json(); } catch { MEDIA = []; }
+  if (!MEDIA) { try { MEDIA = await (await fetch("media.json")).json(); } catch { MEDIA = []; } }
   const tabs = [["all", "m_all"], ["movie", "m_movie"], ["series", "m_series"], ["game", "m_game"], ["manga", "m_manga"]];
   const tw = $("#mediaTabs"); tw.innerHTML = "";
-  tabs.forEach(([v, k]) => { const b = el("button", "media-tab" + (mediaFilter.type === v ? " on" : ""), T()[k]); b.dataset.type = v; b.addEventListener("click", () => { mediaFilter.type = v; $$("#mediaTabs .media-tab").forEach(x => x.classList.toggle("on", x.dataset.type === v)); renderMediaGrid(); }); tw.append(b); });
+  tabs.forEach(([v, k]) => { const b = el("button", "media-tab" + (mediaFilter.type === v ? " on" : ""), T()[k]); b.dataset.type = v; b.addEventListener("click", () => { mediaFilter.type = v; mediaFilter.genre = "all"; $$("#mediaTabs .media-tab").forEach(x => x.classList.toggle("on", x.dataset.type === v)); renderGenres(); renderMediaGrid(); }); tw.append(b); });
   $("#mediaSort").innerHTML = `<option value="rating">${T().m_sort_rating}</option><option value="year">${T().m_sort_year}</option>`;
+  $("#mediaSort").value = mediaFilter.sort;
   $("#mediaSearch").placeholder = T().pubdb_search;
-  renderMediaGrid();
+  renderGenres(); renderMediaGrid();
+}
+function renderGenres() {
+  const row = $("#mediaGenres"); if (!row || !MEDIA) return;
+  const pool = MEDIA.filter(m => mediaFilter.type === "all" || m.type === mediaFilter.type);
+  const genres = [...new Set(pool.flatMap(m => m.genres || []))].sort();
+  row.innerHTML = "";
+  [["all", T().m_allgenres], ...genres.map(g => [g, g])].forEach(([v, label]) => {
+    const b = el("button", "media-genre" + (mediaFilter.genre === v ? " on" : ""), label);
+    b.addEventListener("click", () => { mediaFilter.genre = v; renderGenres(); renderMediaGrid(); });
+    row.append(b);
+  });
 }
 $("#mediaSearch")?.addEventListener("input", e => { mediaFilter.q = e.target.value.toLowerCase().trim(); renderMediaGrid(); });
 $("#mediaSort")?.addEventListener("change", e => { mediaFilter.sort = e.target.value; renderMediaGrid(); });
 function renderMediaGrid() {
   const g = $("#mediaGrid"); if (!g || !MEDIA) return;
-  let items = MEDIA.filter(m => (mediaFilter.type === "all" || m.type === mediaFilter.type) && (!mediaFilter.q || m.title.toLowerCase().includes(mediaFilter.q)));
+  let items = MEDIA.filter(m => (mediaFilter.type === "all" || m.type === mediaFilter.type)
+    && (mediaFilter.genre === "all" || (m.genres || []).includes(mediaFilter.genre))
+    && (!mediaFilter.q || m.title.toLowerCase().includes(mediaFilter.q)));
   items.sort((a, b) => mediaFilter.sort === "year" ? (b.year || "").localeCompare(a.year || "") : (b.rating - a.rating));
   g.innerHTML = "";
   items.forEach(m => {
@@ -198,6 +228,36 @@ function renderMediaGrid() {
   $("#mediaCount").textContent = `${items.length} ${T().m_count}`;
 }
 
+/* ════════════ ARTICLES (Medium-style) ════════════ */
+function renderArticles() {
+  const grid = $("#articlesGrid"), read = $("#articleRead");
+  read.style.display = "none"; read.innerHTML = ""; grid.style.display = "";
+  grid.innerHTML = "";
+  if (!ARTICLES.length) { grid.innerHTML = `<div class="articles-empty">${T().art_empty}</div>`; return; }
+  ARTICLES.forEach(a => {
+    const card = el("article", "article-card");
+    card.innerHTML = `${a.cover ? `<img class="article-cover" src="${a.cover}" alt="" loading="lazy">` : ""}
+      <div class="article-body">
+        <div class="article-meta"><span>${a.date}</span><span class="dot"></span><span>${a.read} ${T().art_min}</span></div>
+        <h3>${pick(a, "title")}</h3><p>${pick(a, "excerpt")}</p>
+        <div class="article-tags">${a.tags.map(t => `<span>${t}</span>`).join("")}</div>
+      </div>`;
+    card.addEventListener("click", () => openArticle(a));
+    grid.append(card);
+  });
+}
+function openArticle(a) {
+  const grid = $("#articlesGrid"), read = $("#articleRead");
+  grid.style.display = "none"; read.style.display = "";
+  const body = (lang === "ar" ? a.body_ar : a.body) || a.body;
+  read.innerHTML = `<div class="article-full"><span class="a-back">${T().art_back}</span>
+    <h1>${pick(a, "title")}</h1><div class="a-meta">${a.date} · ${a.read} ${T().art_min}</div>
+    ${a.cover ? `<img class="article-cover" style="border-radius:14px;margin-bottom:2rem" src="${a.cover}" alt="">` : ""}
+    <div class="a-content">${body.map(b => b.h ? `<h2>${b.h}</h2>` : `<p>${b.p}</p>`).join("")}</div></div>`;
+  read.querySelector(".a-back").addEventListener("click", () => { renderArticles(); lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0); });
+  lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0);
+}
+
 /* ════════════ STATIC i18n + lang ════════════ */
 function applyStatic() {
   const t = T();
@@ -207,7 +267,12 @@ function applyStatic() {
   $$("[data-i18n-ph]").forEach(e => { const k = e.dataset.i18nPh; if (t[k]) e.placeholder = t[k]; });
   $("#year").textContent = new Date().getFullYear();
 }
-function applyLang() { applyStatic(); renderDynamic(); requestAnimationFrame(() => ST.refresh()); }
+function applyLang() {
+  applyStatic(); renderDynamic();
+  if ($("#page-articles").classList.contains("active")) renderArticles();
+  if ($("#page-beyond").classList.contains("active")) initMedia();
+  requestAnimationFrame(() => ST.refresh());
+}
 $("#langToggle").addEventListener("click", () => { lang = lang === "en" ? "ar" : "en"; applyLang(); });
 
 $("#cEmail").href = "mailto:" + PROFILE.email; $("#cEmail").textContent = PROFILE.email;

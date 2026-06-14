@@ -10,6 +10,7 @@ export function initCinematic({ section = "#cinematic", lenis, reduced } = {}) {
 
   const canvas = sec.querySelector("canvas");
   if (!canvas) return;
+  const fallback = sec.querySelector(".cine-fallback");
   const ctx = canvas.getContext("2d");
   const dpr = Math.min(devicePixelRatio || 1, 2);
   const N = cfg.frameCount;
@@ -18,7 +19,7 @@ export function initCinematic({ section = "#cinematic", lenis, reduced } = {}) {
 
   for (let i = 0; i < N; i++) {
     const img = new Image();
-    img.onload = () => { if (++loaded === 1) draw(0); };
+    img.onload = () => { if (++loaded === 1) { draw(0); if (fallback) fallback.style.opacity = "0"; } };
     img.src = cfg.framePath(i);
     frames[i] = img;
   }

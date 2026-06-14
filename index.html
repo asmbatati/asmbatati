@@ -19,12 +19,13 @@
   <div id="cursorDot"></div><div id="cursorRing"></div>
 
   <nav class="navbar">
-    <a class="brand" data-nav="home">A<span>.</span>Al-Batati</a>
+    <a class="brand" data-nav="home"><span class="brand-mark">AB</span>Abdulrahman <span>Al-Batati</span></a>
     <div class="nav-menu" id="navMenu">
       <ul class="nav-links">
         <li><a data-nav="home" data-i18n="tab_home">Home</a></li>
         <li><a data-scroll="#research" data-i18n="nav_research">Research</a></li>
         <li><a data-scroll="#projects" data-i18n="nav_projects">Projects</a></li>
+        <li><a data-nav="articles" data-i18n="tab_articles">Writing</a></li>
         <li><a data-nav="beyond" data-i18n="tab_beyond">Beyond career</a></li>
       </ul>
       <button id="langToggle" class="lang-toggle magnetic" data-i18n="lang_btn" aria-label="Switch language">ع</button>
@@ -92,20 +93,23 @@
           <div class="taxo-row" id="taxoRow"></div>
           <div class="pubdb-controls">
             <input class="pubdb-search" id="pubSearch" data-i18n-ph="pubdb_search" placeholder="Search…">
-            <select class="pubdb-sel" id="pubYear"></select>
+            <select class="pubdb-sel" id="pubType"></select>
             <select class="pubdb-sel" id="pubStatus"></select>
+            <select class="pubdb-sel" id="pubYear"></select>
             <span class="pubdb-count" id="pubCount"></span>
           </div>
+          <div class="pub-table-wrap">
           <table class="pub-table">
             <thead><tr>
-              <th data-sort="title" data-i18n="col_paper">Paper ⇅</th>
-              <th data-sort="year" data-i18n="col_year">Year ⇅</th>
-              <th class="pub-hide-sm" data-sort="taxo" data-i18n="col_area">Area ⇅</th>
-              <th class="pub-hide-sm" data-sort="status" data-i18n="col_status">Status ⇅</th>
-              <th class="pub-hide-sm" data-i18n="col_doi">DOI</th>
+              <th data-sort="title" data-i18n="col_paper">Paper</th>
+              <th class="pub-hide-sm" data-sort="type" data-i18n="col_type">Type</th>
+              <th data-sort="status" data-i18n="col_status">Status</th>
+              <th class="pub-hide-sm" data-sort="rank" data-i18n="col_rank">Rank</th>
+              <th data-sort="year" data-i18n="col_year">Year</th>
+              <th class="pub-hide-sm" data-i18n="col_links">Links</th>
             </tr></thead>
             <tbody id="pubBody"></tbody>
-          </table>
+          </table></div>
         </div>
       </div>
     </section>
@@ -200,12 +204,22 @@
     <section class="section" id="collections">
       <div class="reveal"><span class="eyebrow" data-i18n="coll_eb">Collections</span><h2 class="section-title" data-i18n="coll_title">What I watch &amp; play.</h2><p class="section-lead" data-i18n="coll_lead"></p></div>
       <div class="media-tabs" id="mediaTabs"></div>
+      <div class="media-genres" id="mediaGenres"></div>
       <div class="media-controls">
         <input class="pubdb-search" id="mediaSearch" placeholder="Search…">
         <select class="pubdb-sel" id="mediaSort"></select>
         <span class="media-count" id="mediaCount"></span>
       </div>
       <div class="media-grid" id="mediaGrid"></div>
+    </section>
+  </div>
+
+  <!-- ════════ PAGE: ARTICLES ════════ -->
+  <div class="page" id="page-articles">
+    <section class="section">
+      <div class="reveal"><span class="eyebrow" data-i18n="art_eb">Writing</span><h2 class="section-title" data-i18n="art_title">Notes &amp; articles.</h2><p class="section-lead" data-i18n="art_lead"></p></div>
+      <div class="articles-grid" id="articlesGrid"></div>
+      <div class="article-read" id="articleRead" style="display:none"></div>
     </section>
   </div>
 
