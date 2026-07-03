@@ -130,10 +130,24 @@ export const EDUCATION = [
 ];
 
 export const SKILLS = [
-  { group: "Robotics", group_ar: "الروبوتات", items: ["ROS 2 / middleware", "URDF · Gazebo · PX4", "Autonomous UAV / UGV", "Multi-robot & MARL"], items_ar: ["ROS 2 والوسطيات", "URDF · Gazebo · PX4", "طائرات وروبوتات أرضية مستقلة", "روبوتات متعددة و MARL"] },
-  { group: "AI / ML", group_ar: "الذكاء الاصطناعي", items: ["Reinforcement learning", "Trajectory prediction (GRU)", "Agentic AI", "GPS-denied navigation"], items_ar: ["التعلّم المعزّز", "توقّع المسار (GRU)", "الذكاء الوكيل", "الملاحة دون GPS"] },
-  { group: "Engineering", group_ar: "الهندسة", items: ["SolidWorks · NX11 CAD", "3D printing & prototyping", "Generative design", "Mechanical / vibration"], items_ar: ["تصميم SolidWorks · NX11", "الطباعة ثلاثية الأبعاد والنمذجة", "التصميم التوليدي", "الميكانيكا والاهتزازات"] },
-  { group: "Code", group_ar: "البرمجة", items: ["Python", "C++", "Docker · Git", "Simulation pipelines"], items_ar: ["Python", "C++", "Docker · Git", "خطوط المحاكاة"] },
+  { group: "CAD & Design", group_ar: "التصميم الهندسي CAD",
+    items: ["SolidWorks", "Siemens NX", "Assemblies & drawings", "Generative design", "CAD → URDF / mesh pipelines"],
+    items_ar: ["SolidWorks", "Siemens NX", "التجميعات والرسومات الهندسية", "التصميم التوليدي", "تحويل CAD إلى URDF ومجسّمات"] },
+  { group: "3D Printing & Fabrication", group_ar: "الطباعة ثلاثية الأبعاد والتصنيع",
+    items: ["FDM — PLA · PETG", "Design for additive (MIT xPRO)", "Rapid prototyping", "Carbon-fiber builds", "CNC & workshop"],
+    items_ar: ["طباعة FDM — PLA · PETG", "التصميم للتصنيع الإضافي (MIT xPRO)", "النمذجة السريعة", "هياكل ألياف الكربون", "CNC والورشة"] },
+  { group: "Modeling & Simulation", group_ar: "النمذجة والمحاكاة",
+    items: ["Dynamics & vibration", "MATLAB · Simulink", "COMSOL", "Gazebo · PX4 SITL", "Digital twins"],
+    items_ar: ["الديناميكا والاهتزازات", "MATLAB · Simulink", "COMSOL", "Gazebo · PX4 SITL", "التوائم الرقمية"] },
+  { group: "Robotics & Autonomy", group_ar: "الروبوتات والاستقلالية",
+    items: ["ROS 2 / middleware", "UAV · UGV · quadruped (Go2) autonomy", "SLAM · VIO · EKF fusion", "PX4 · MAVROS offboard", "Multi-robot & MARL"],
+    items_ar: ["ROS 2 والوسطيات", "استقلالية الطائرات والروبوتات الأرضية والرباعية (Go2)", "SLAM · VIO · دمج EKF", "تحكّم خارجي PX4 · MAVROS", "روبوتات متعددة و MARL"] },
+  { group: "AI / ML", group_ar: "الذكاء الاصطناعي",
+    items: ["Reinforcement learning", "Trajectory prediction (GRU)", "XGBoost · KAN estimators", "Agentic AI & LLM systems", "Arabic NLP datasets"],
+    items_ar: ["التعلّم المعزّز", "توقّع المسار (GRU)", "مُقدِّرات XGBoost · KAN", "الذكاء الوكيل وأنظمة LLM", "بيانات المعالجة العربية"] },
+  { group: "Software", group_ar: "البرمجة والأدوات",
+    items: ["Python", "C++", "Docker · Git · Linux", "LaTeX", "Simulation pipelines"],
+    items_ar: ["Python", "C++", "Docker · Git · Linux", "LaTeX", "خطوط المحاكاة"] },
 ];
 
 export const REPOS = [
@@ -429,26 +443,115 @@ export const CALISTHENICS = {
   list_ar: ["العضلة المرتفعة", "الرافعة الأمامية", "تدرّجات البلانش", "الوقوف على اليدين", "العقلة", "الغطس", "جلسة L", "القرفصاء الأحادية"],
 };
 
-/* ── Articles (Medium-style writing) — extend this array to publish ── */
-export const ARTICLES = [
-  { id: "ros2-survey-story", title: "What I learned distilling 8,500 papers into one ROS 2 survey",
-    title_ar: "ما تعلّمته من تلخيص ٨٥٠٠ بحث في مسحٍ واحد لـROS 2",
-    date: "2026-06-01", read: 8, tags: ["ROS 2", "research", "writing"], cover: "img/w960/proj-roboeye.webp",
-    excerpt: "A behind-the-scenes look at the methodology, the tooling, and the surprises behind a survey of the entire ROS 2 ecosystem.",
-    excerpt_ar: "نظرة من خلف الكواليس على المنهجية والأدوات والمفاجآت وراء مسحٍ لمنظومة ROS 2 بأكملها.",
-    body: [
-      { h: "Why a survey, and why now" },
-      { p: "Robotics middleware moves fast. ROS 2 went from a rewrite people were skeptical about to the default for serious autonomy in a few short years. Pulling that story together — the architecture, DDS, real-time, security, the tooling — into one reference felt overdue." },
-      { p: "This is a placeholder article so the writing space is wired and ready. Replace the entries in ARTICLES (js/data.js) with your real posts: title, date, read-time, tags, an optional cover image, an excerpt, and a body of { h } headings and { p } paragraphs. The list and reader views update automatically." },
-      { h: "How I'd structure the next one" },
-      { p: "Lead with the question, not the method. Show one result early. Keep the prose tight and let the figures carry the weight — the same rules I use for papers." },
+/* ── Blog: posts live in posts/*.md, indexed by posts/posts.json.
+   Publish a vault note with:  python tools/publish_post.py "<path-to-note.md>"  ── */
+
+/* ── Interactive interests gallery (page #gallery) ── */
+export const GALLERY = {
+  cats: [
+    { id: "cad", icon: "⌗", label: "CAD", label_ar: "التصميم CAD",
+      tease: "Parts, assemblies, renders", tease_ar: "قطع وتجميعات وتصييرات" },
+    { id: "print", icon: "⬢", label: "3D Printing", label_ar: "الطباعة ثلاثية الأبعاد",
+      tease: "A rotating table of parts", tease_ar: "طاولة دوّارة من القطع" },
+    { id: "model", icon: "∿", label: "Physics & Math", label_ar: "الفيزياء والرياضيات",
+      tease: "A live second-order system", tease_ar: "نظام حيّ من الدرجة الثانية" },
+    { id: "sim", icon: "▦", label: "Simulation", label_ar: "المحاكاة",
+      tease: "Close the loop before flight", tease_ar: "أغلِق الحلقة قبل الطيران" },
+    { id: "design", icon: "✎", label: "Design", label_ar: "التصميم الصناعي",
+      tease: "Machines, start to finish", tease_ar: "آلات من الفكرة إلى الواقع" },
+    { id: "robotics", icon: "✣", label: "Robotics", label_ar: "الروبوتات",
+      tease: "My platforms, rendered in 3D", tease_ar: "منصّاتي مجسّمةً أمامك" },
+  ],
+  cad: {
+    tools: ["SolidWorks", "Siemens NX", "Generative design", "cad_2_mesh"],
+    images: [
+      { id: "proj-taer", cap: "TAER — tilt-tail VTOL, full SolidWorks assembly", cap_ar: "طائر — VTOL بذيل دوّار، تجميع SolidWorks كامل" },
+      { id: "proj-agridrone", cap: "AgriDrone — heavy-lift hexacopter, carbon payload bay", cap_ar: "الدرون الزراعي — سداسية ثقيلة بحجيرة كربونية" },
+      { id: "proj-amir", cap: "AMIR — warehouse AGV, patented industrial design", cap_ar: "عامر — روبوت مستودعات بتصميم صناعي مُبرَّأ" },
+      { id: "proj-robohotel", cap: "RoboHotel — hospitality shell over an AMR base", cap_ar: "روبو-هوتيل — هيكل ضيافة فوق قاعدة متحركة" },
+      { id: "proj-faseeh", cap: "FASEEH — Ackermann UGV with long-travel suspension", cap_ar: "فصيح — مركبة أرضية بتوجيه أكرمان وتعليق طويل" },
+      { id: "proj-roboeye", cap: "RoboEye — stereo-VIO enclosure, 125 g in PETG", cap_ar: "عين الروبوت — حاوية كاميرات ثنائية، ١٢٥ غرامًا" },
     ],
-    body_ar: [
-      { h: "لماذا مسح، ولماذا الآن" },
-      { p: "تتحرّك وسطيات الروبوتات بسرعة. انتقل ROS 2 من إعادة كتابة شكّ فيها الناس إلى الخيار الافتراضي للاستقلالية الجادّة خلال سنوات قليلة." },
-      { p: "هذه مقالة تجريبية لتجهيز مساحة الكتابة. استبدل عناصر ARTICLES في js/data.js بمقالاتك الحقيقية: عنوان، تاريخ، زمن قراءة، وسوم، صورة غلاف اختيارية، مقتطف، ومتن من عناوين { h } وفقرات { p }." },
-    ] },
-];
+  },
+  print: {
+    photos: [
+      { id: "print-stereo", cap: "RoboEye stereo enclosure — PETG, 125 g", cap_ar: "حاوية عين الروبوت — PETG، ١٢٥ غ" },
+      { id: "print-kacst-1", cap: "Impeller, housings, mechanisms — KACST Industry 4.0", cap_ar: "مروحة وحاويات وآليّات — كاكست للصناعة ٤٫٠" },
+      { id: "print-kacst-2", cap: "Piston, turbine & centrifugal housing — printed for testing", cap_ar: "مكبس وتوربين وحاوية طاردة — للاختبار" },
+      { id: "patent-vtol", cap: "1:7 VTOL prototype — scale model", cap_ar: "نموذج VTOL بمقياس ١:٧" },
+    ],
+  },
+  design: {
+    projects: [
+      { id: "proj-vtol-build", name: "VTOL UAV Platform", name_ar: "منصة VTOL", steps: [
+        { t: "Concept", t_ar: "الفكرة", d: "A long-endurance mission needs both a helicopter's take-off and an airplane's cruise — so: a hybrid.", d_ar: "مهمة طويلة المدى تحتاج إقلاع المروحية وانسياب الطائرة — إذن: هجينة." },
+        { t: "CAD", t_ar: "التصميم", d: "Full airframe in SolidWorks — lift quad booms over a fixed wing, sized around batteries and payload.", d_ar: "هيكل كامل في SolidWorks — أذرع رفع رباعية فوق جناح ثابت حول البطاريات والحمولة." },
+        { t: "Build", t_ar: "التصنيع", d: "Carbon, foam and printed fittings, assembled and wired in-house at the lab.", d_ar: "كربون وفوم ووصلات مطبوعة، جُمّعت وسُلّكت داخل المعمل." },
+        { t: "Flight", t_ar: "الطيران", d: "Hover, transition, cruise — the take-off that used to open this site was this aircraft's.", d_ar: "تحويم فانتقال فانسياب — الإقلاع الذي كان يفتتح الموقع كان لهذه الطائرة." } ] },
+      { id: "proj-taer", name: "TAER", name_ar: "طائر", steps: [
+        { t: "Concept", t_ar: "الفكرة", d: "Push endurance further: folding lift arms that tuck away in cruise, a tail that tilts.", d_ar: "مدًى أطول: أذرع رفع تنطوي أثناء الانسياب وذيل يميل." },
+        { t: "CAD", t_ar: "التصميم", d: "Complete SolidWorks design — mechanisms, spars, control surfaces, mass budget.", d_ar: "تصميم SolidWorks كامل — آليّات وعوارض وأسطح تحكّم وميزانية كتلة." },
+        { t: "Trade studies", t_ar: "المفاضلات", d: "Prop placement vs drag, arm-fold kinematics, tail-tilt authority — iterated on paper before metal.", d_ar: "موضع المراوح مقابل المقاومة، وحركيّة طيّ الأذرع — قبل أي تصنيع." },
+        { t: "Status", t_ar: "الحالة", d: "A design-portfolio flagship; its ideas fed the built VTOL platform.", d_ar: "قطعة رئيسة في ملف التصميم؛ أفكارها غذّت المنصة المبنيّة." } ] },
+      { id: "proj-roboeye", name: "RoboEye", name_ar: "عين الروبوت", steps: [
+        { t: "Concept", t_ar: "الفكرة", d: "When GPS goes dark, robots go blind — package visual-inertial localization into one kit.", d_ar: "حين ينقطع GPS يعمى الروبوت — فلنحزم التموضع البصري-القصوري في عُدّة واحدة." },
+        { t: "CAD", t_ar: "التصميم", d: "Stereo baseline, IMU seat and compute bay in a 125 g printable enclosure.", d_ar: "قاعدة كاميرتين ومقعد IMU وحجيرة معالجة في حاوية ١٢٥ غرامًا قابلة للطباعة." },
+        { t: "Prototype", t_ar: "النموذج", d: "PETG prints on Raspberry Pi and Jetson — tested on UGVs and UAVs in GPS-denied rooms.", d_ar: "طباعة PETG على Raspberry Pi وJetson — اختُبرت داخليًا دون GPS." },
+        { t: "Patent", t_ar: "البراءة", d: "Granted industrial-design certificate, Saudi Authority for Intellectual Property, 2024.", d_ar: "شهادة تصميم صناعي من الهيئة السعودية للملكية الفكرية، ٢٠٢٤." } ] },
+      { id: "proj-amir", name: "AMIR", name_ar: "عامر", steps: [
+        { t: "Concept", t_ar: "الفكرة", d: "Warehouse totes move all day — a low robot that slides under, lifts and delivers.", d_ar: "صناديق المستودعات تتحرك طوال اليوم — روبوت منخفض ينزلق تحتها ويرفعها." },
+        { t: "CAD", t_ar: "التصميم", d: "Low-profile chassis, lift plate, sensor belt — designed for manufacture from day one.", d_ar: "هيكل منخفض وصفيحة رفع وحزام حساسات — مُصمَّم للتصنيع منذ اليوم الأول." },
+        { t: "Prototype", t_ar: "النموذج", d: "Drive base with onboard navigation, tested on warehouse-style routes.", d_ar: "قاعدة دفع بملاحة ذاتية جُرّبت على مسارات مستودعية." },
+        { t: "Patent", t_ar: "البراءة", d: "Granted industrial-design certificate (transfer robots), 2023.", d_ar: "شهادة تصميم صناعي (روبوتات النقل)، ٢٠٢٣." } ] },
+      { id: "proj-robohotel", name: "RoboHotel", name_ar: "روبو-هوتيل", steps: [
+        { t: "Concept", t_ar: "الفكرة", d: "A bellhop that never sleeps — luggage AMR with a guest-facing touchscreen.", d_ar: "حمّالٌ لا ينام — روبوت أمتعة بشاشة لمس للنزلاء." },
+        { t: "CAD", t_ar: "التصميم", d: "Hospitality-grade shell over the AMIR drive experience — soft surfaces, service tray, screen mast.", d_ar: "هيكل بمستوى الضيافة فوق خبرة عامر — أسطح ناعمة وصينية خدمة وسارية شاشة." },
+        { t: "Prototype", t_ar: "النموذج", d: "Guest-interaction flow mocked on the drive base with the real shell.", d_ar: "تدفّق تفاعل النزيل على القاعدة الحقيقية بالهيكل الفعلي." },
+        { t: "Patent", t_ar: "البراءة", d: "Part of the granted transfer-robots industrial design family.", d_ar: "ضمن عائلة براءة روبوتات النقل الممنوحة." } ] },
+      { id: "proj-faseeh", name: "FASEEH", name_ar: "فصيح", steps: [
+        { t: "Concept", t_ar: "الفكرة", d: "Outdoor autonomy dies on curbs and rocks — build the suspension first.", d_ar: "الاستقلالية الخارجية تموت عند الأرصفة والصخور — فلنبدأ من التعليق." },
+        { t: "CAD", t_ar: "التصميم", d: "Ackermann steering, long-travel arms, sealed electronics bay.", d_ar: "توجيه أكرمان وأذرع طويلة المدى وحجيرة إلكترونيات معزولة." },
+        { t: "Build", t_ar: "التصنيع", d: "Welded and printed mix; drivetrain tuned for uneven terrain.", d_ar: "مزيج لحام وطباعة؛ منظومة دفع مضبوطة للتضاريس الوعرة." },
+        { t: "Field", t_ar: "الميدان", d: "Outdoor navigation trials on gravel and sand.", d_ar: "تجارب ملاحة خارجية على الحصى والرمل." } ] },
+      { id: "proj-agridrone", name: "AgriDrone", name_ar: "الدرون الزراعي", steps: [
+        { t: "Concept", t_ar: "الفكرة", d: "Precision spraying for palm farms — heavy lift, gentle chemistry.", d_ar: "رشّ دقيق لمزارع النخيل — حمولة ثقيلة وكيمياء رفيقة." },
+        { t: "CAD", t_ar: "التصميم", d: "Hexacopter frame around a carbon-fiber payload bay and tank.", d_ar: "إطار سداسي حول حجيرة حمولة وخزّان من ألياف الكربون." },
+        { t: "Build", t_ar: "التصنيع", d: "Carbon arms, printed mounts, spray plumbing and pumps integrated.", d_ar: "أذرع كربونية وحوامل مطبوعة ومنظومة رشّ متكاملة." },
+        { t: "Field", t_ar: "الميدان", d: "Spraying and palm-survey flights.", d_ar: "طلعات رشّ ومسح للنخيل." } ] },
+      { id: "proj-surveil", name: "Surveillance Drone", name_ar: "درون المراقبة", steps: [
+        { t: "Concept", t_ar: "الفكرة", d: "An aerial eye for inspection and tracking research.", d_ar: "عين جوية للتفتيش وأبحاث التتبّع." },
+        { t: "CAD", t_ar: "التصميم", d: "Custom hexacopter sized around a stabilized gimbal payload.", d_ar: "سداسية مخصّصة حول حمولة جيمبال مثبّتة." },
+        { t: "Build", t_ar: "التصنيع", d: "Frame, power train and gimbal integration in the lab.", d_ar: "إطار ومنظومة قدرة وتكامل الجيمبال في المعمل." },
+        { t: "Research", t_ar: "البحث", d: "Flight platform behind the D2DTracker drone-tracking work.", d_ar: "منصة الطيران خلف أبحاث تتبّع الدرون D2DTracker." } ] },
+    ],
+  },
+  robotics: {
+    platforms: [
+      { id: "vtol", name: "VTOL hybrid UAV", name_ar: "طائرة VTOL هجينة",
+        desc: "Vertical take-off, fixed-wing cruise. Designed, fabricated and flown in-house for long-endurance missions.",
+        desc_ar: "إقلاع عمودي وانسياب ثابت الجناح. صُمّمت وصُنّعت وطارت داخليًا لمهام طويلة المدى.", tags: ["PX4", "long endurance"] },
+      { id: "quad", name: "Research quadrotor", name_ar: "رباعية بحثية",
+        desc: "The flight-test workhorse behind the trajectory-prediction and interception papers.",
+        desc_ar: "منصة اختبار الطيران خلف أبحاث توقّع المسار والاعتراض.", tags: ["D2DTracker", "VECTOR"] },
+      { id: "hexa", name: "Heavy-lift hexacopter", name_ar: "سداسية ثقيلة الحمولة",
+        desc: "Two builds: an agricultural sprayer with a carbon payload bay, and a gimbal-stabilized surveillance craft.",
+        desc_ar: "نسختان: رشّاشة زراعية بحجيرة كربونية، وطائرة مراقبة بجيمبال مثبّت.", tags: ["AgriDrone", "gimbal"] },
+      { id: "go2", name: "Quadruped — Unitree Go2", name_ar: "الروبوت الرباعي — Unitree Go2",
+        desc: "The legged platform behind the quadruped perception · locomotion · VLA survey and the QuadroRL rough-terrain reinforcement-learning work.",
+        desc_ar: "المنصة ذات الأرجل خلف مسح الروبوتات الرباعية (إدراك · حركة · نماذج VLA) وأعمال QuadroRL لعبور التضاريس بالتعلّم المعزّز.", tags: ["Go2", "RL locomotion", "VLA"] },
+      { id: "rover", name: "FASEEH — outdoor UGV", name_ar: "فصيح — مركبة أرضية",
+        desc: "Ackermann-steered rover with long-travel suspension for autonomy on uneven terrain.",
+        desc_ar: "مركبة بتوجيه أكرمان وتعليق طويل المدى للاستقلالية على التضاريس الوعرة.", tags: ["Ackermann", "outdoor"] },
+      { id: "agv", name: "AMIR — warehouse AGV", name_ar: "عامر — روبوت مستودعات",
+        desc: "Low-profile tote-carrier with onboard navigation. Granted industrial-design patent.",
+        desc_ar: "حامل صناديق منخفض بملاحة ذاتية. حاصل على براءة تصميم صناعي.", tags: ["patent", "logistics"] },
+      { id: "bot", name: "RoboHotel — service robot", name_ar: "روبو-هوتيل — روبوت خدمة",
+        desc: "A bellhop AMR: luggage deck, guest touchscreen, hospitality-grade shell.",
+        desc_ar: "روبوت حمّال: سطح أمتعة وشاشة نزلاء وهيكل بمستوى الضيافة.", tags: ["patent", "service"] },
+    ],
+  },
+  sim: { chips: ["Gazebo", "PX4 SITL", "FLIGHTGEN", "ROSNavBench", "ROS 2"] },
+};
 
 /* ── UI strings ── */
 export const I18N = {
@@ -490,13 +593,21 @@ export const I18N = {
     col_type: "Type", col_rank: "Rank", col_links: "Links", col_contrib: "Contribution", col_project: "Project page", pubdb_alltype: "All types", pub_copy: "Copy BibTeX", pub_copied: "Copied ✓", pub_project: "Project ↗", pub_page: "Visit ↗",
     role_first: "1st author", role_equal: "Equal contributor", role_co: "Co-author",
     tab_articles: "Writing", art_eb: "Writing", art_title: "Notes & articles.", art_lead: "Long-form writing on robotics, research, and building things — like a personal Medium.",
-    art_empty: "No articles yet — coming soon.", art_min: "min read", art_back: "← All articles", m_allgenres: "All genres",
+    art_empty: "No articles yet — coming soon.", art_min: "min read", art_back: "← All articles",
     st_published: "Published", st_accepted: "Accepted", st_review: "Under review", st_progress: "In progress",
-    beyond_kicker: "Off the clock", beyond_title: "Beyond the lab.", beyond_lead: "The same discipline that builds robots — pointed at a mountain, a pull-up bar, and a very long watchlist.",
+    beyond_kicker: "Off the clock", beyond_title: "Beyond the lab.", beyond_lead: "The same discipline that builds robots — pointed at a mountain and a pull-up bar.",
     cal_eb: "Training", cal_title: "Calisthenics.", cal_lead: "Bodyweight strength — the engineer's loop: small consistent reps, honest feedback, gains that compound. A few of the moves I train:",
-    coll_eb: "Collections", coll_title: "What I watch & play.", coll_lead: "A running database of favorite films, series, games, and manga — pulled straight from my vault.",
-    m_all: "All", m_movie: "Movies", m_series: "Series", m_game: "Games", m_manga: "Manga", m_sort_rating: "Top rated", m_sort_year: "Newest", m_count: "titles",
     research_more: "Browse the full publications database ↓",
+    tab_gallery: "Gallery",
+    hub_kicker: "Interests & craft", hub_title: "Six ways I build.", hub_sub: "Click the emblem to open it.",
+    hub_back: "↩ All six", gal_flow_hint: "keep scrolling — the hardware drifts by",
+    gp_drag: "drag ⟲ to spin · it also turns on its own", gp_pick: "Platforms",
+    math_zeta: "damping ζ", math_wn: "frequency ωₙ",
+    math_note: "A live second-order system — the mathematics under every mount, arm and airframe I tune.",
+    sim_note: "Truth vs estimate: closing a GPS-denied flight loop in simulation first.",
+    design_hint: "Each machine rotates by — click one for its design story.",
+    cad_hint: "Renders from the CAD bench — click to zoom.",
+    print_hint: "Procedural part meshes over a turntable — the real prints below.",
   },
   ar: {
     nav_about: "نبذة", nav_research: "الأبحاث", nav_projects: "المشاريع", nav_gallery: "المعرض", nav_experience: "الخبرة",
@@ -536,12 +647,20 @@ export const I18N = {
     col_type: "النوع", col_rank: "التصنيف", col_links: "روابط", col_contrib: "المساهمة", col_project: "صفحة المشروع", pubdb_alltype: "كل الأنواع", pub_copy: "انسخ BibTeX", pub_copied: "تم النسخ ✓", pub_project: "المشروع ↗", pub_page: "زيارة ↗",
     role_first: "مؤلف أول", role_equal: "مساهم مكافئ", role_co: "مؤلف مشارك",
     tab_articles: "مقالات", art_eb: "كتابات", art_title: "ملاحظات ومقالات.", art_lead: "كتابات مطوّلة عن الروبوتات والبحث وبناء الأشياء — كأنها مِديوم شخصية.",
-    art_empty: "لا مقالات بعد — قريبًا.", art_min: "دقيقة قراءة", art_back: "← كل المقالات", m_allgenres: "كل التصنيفات",
+    art_empty: "لا مقالات بعد — قريبًا.", art_min: "دقيقة قراءة", art_back: "← كل المقالات",
     st_published: "منشور", st_accepted: "مقبول", st_review: "قيد المراجعة", st_progress: "قيد العمل",
-    beyond_kicker: "خارج الدوام", beyond_title: "خارج المختبر.", beyond_lead: "الانضباط نفسه الذي يبني الروبوتات — موجّهًا نحو جبل، وعقلة، وقائمة مشاهدة طويلة.",
+    beyond_kicker: "خارج الدوام", beyond_title: "خارج المختبر.", beyond_lead: "الانضباط نفسه الذي يبني الروبوتات — موجّهًا نحو جبلٍ وعقلة.",
     cal_eb: "تدريب", cal_title: "الكاليسثينكس.", cal_lead: "قوّة وزن الجسم — حلقة المهندس: تكراراتٌ صغيرة ثابتة، تغذية راجعة صادقة، ومكاسب تتراكم. بعض الحركات التي أتمرّن عليها:",
-    coll_eb: "تجميعات", coll_title: "ما أشاهده وألعبه.", coll_lead: "قاعدة بيانات متجدّدة لأفلامي ومسلسلاتي وألعابي والمانجا — مسحوبة مباشرة من القبو.",
-    m_all: "الكل", m_movie: "أفلام", m_series: "مسلسلات", m_game: "ألعاب", m_manga: "مانجا", m_sort_rating: "الأعلى تقييمًا", m_sort_year: "الأحدث", m_count: "عنوانًا",
     research_more: "تصفّح قاعدة المنشورات كاملة ↓",
+    tab_gallery: "المعرض",
+    hub_kicker: "اهتمامات وحِرفة", hub_title: "ستّ طرائق أبني بها.", hub_sub: "اضغط على الشعار لفتحه.",
+    hub_back: "↩ الستّ كلّها", gal_flow_hint: "تابع التمرير — العتاد ينساب أمامك",
+    gp_drag: "اسحب ⟲ للتدوير · وهو يدور من تلقاء نفسه", gp_pick: "المنصّات",
+    math_zeta: "التخميد ζ", math_wn: "التردد الطبيعي ωₙ",
+    math_note: "نظام حيّ من الدرجة الثانية — الرياضيات الكامنة خلف كل حاملٍ وذراعٍ وهيكلٍ أضبطه.",
+    sim_note: "المسار الحقيقي مقابل المُقدَّر: هكذا تُغلَق حلقة الطيران دون GPS في المحاكاة أولًا.",
+    design_hint: "كل آلة تدور أمامك — اضغط عليها لقراءة قصة تصميمها.",
+    cad_hint: "تصييرات من مشغل التصميم — اضغط للتكبير.",
+    print_hint: "مجسّمات قطع فوق طاولة دوّارة — والمطبوعات الحقيقية أسفلها.",
   },
 };

@@ -1,12 +1,13 @@
-/* Abdulrahman S. Al-Batati — portfolio v3 (light, bilingual, multi-page).
-   Router · scroll-scrub cinematic · publications DB · robotics stack ·
-   media collections · sphere · galleries · i18n. */
+/* Abdulrahman S. Al-Batati — portfolio v7 (light, bilingual, multi-page).
+   Router · static generated hero · publications DB · robotics stack ·
+   scroll-flow hardware gallery · interactive interests gallery · markdown
+   blog (posts/) · sphere · i18n. */
 
 import { PROFILE, STATS, PROJECTS, PAPERS, RESEARCH_NOTE, RESEARCH_NOTE_AR, ROBOTS, PRINTS,
          PATENTS, EXPERIENCE, EDUCATION, SKILLS, REPOS, PUBS, TAXONOMY, ARCH, CALISTHENICS,
-         ARTICLES, I18N, IMG } from "./data.js";
+         I18N, IMG } from "./data.js";
 import { initSphere, webglOK } from "./sphere.js";
-import { initCinematic } from "./cinematic.js";
+import { renderGallery } from "./gallery.js";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -40,7 +41,7 @@ if (!touch && !reduced) {
   addEventListener("pointermove", e => { gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: "auto" }); rx = e.clientX; ry = e.clientY; }, { passive: true });
   gsap.ticker.add(() => { const x = gsap.getProperty(ring, "x"), y = gsap.getProperty(ring, "y"); gsap.set(ring, { x: x + (rx - x) * 0.16, y: y + (ry - y) * 0.16 }); });
   document.body.classList.add("hasCursor");
-  window.__cursorBind = () => $$("a, button, .magnetic, #sphereCanvas, .gItem, .media-card, .pub-row").forEach(e => {
+  window.__cursorBind = () => $$("a, button, .magnetic, #sphereCanvas, .gItem, .flow-card, .cat-card, .ring-card, .article-card, .pub-row").forEach(e => {
     if (e.__cb) return; e.__cb = 1;
     e.addEventListener("pointerenter", () => ring.classList.add("on"));
     e.addEventListener("pointerleave", () => ring.classList.remove("on"));
@@ -58,8 +59,8 @@ function showPage(name) {
   lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0);
   if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
   requestAnimationFrame(() => ST.refresh());
-  if (name === "beyond") initMedia();
   if (name === "articles") renderArticles();
+  if (name === "gallery") galleryCtx();
 }
 $$("[data-nav]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); showPage(a.dataset.nav); closeMenu(); }));
 $$("[data-scroll]").forEach(a => a.addEventListener("click", e => {
@@ -85,9 +86,19 @@ function renderDynamic() {
   });
   $("#researchNote").textContent = lang === "ar" ? RESEARCH_NOTE_AR : RESEARCH_NOTE;
 
-  // galleries
-  const fill = (sel, items) => { const g = $(sel); g.innerHTML = ""; items.forEach((it, idx) => { const cap = pick(it, "cap"); const f = el("figure", "gItem"); f.innerHTML = `<img src="${IMG(it.id, "w480")}" alt="${cap}" loading="lazy"><figcaption>${cap}</figcaption>`; f.addEventListener("click", () => openLightbox(items, idx)); g.append(f); }); };
-  fill("#robotsGrid", ROBOTS); fill("#printsGrid", PRINTS);
+  // hardware flow gallery (rows drift with scroll)
+  const flow = (sel, items) => {
+    const g = $(sel); g.innerHTML = "";
+    items.forEach((it, idx) => {
+      const cap = pick(it, "cap");
+      const f = el("figure", "flow-card");
+      f.innerHTML = `<img src="${IMG(it.id, "w480")}" alt="${cap}" loading="lazy"><figcaption>${cap}</figcaption>`;
+      f.addEventListener("click", () => openLightbox(items, idx));
+      g.append(f);
+    });
+  };
+  flow("#flowRobots", ROBOTS); flow("#flowPrints", [...PRINTS, PATENTS[0]].map(p => ({ id: p.id, cap: p.cap ?? p.title, cap_ar: p.cap_ar ?? p.title_ar })));
+  wireFlow();
 
   // patents
   const pat = $("#patents"); pat.innerHTML = "";
@@ -118,8 +129,24 @@ function renderDynamic() {
   const cal = $("#calList"); cal.innerHTML = "";
   (lang === "ar" ? CALISTHENICS.list_ar : CALISTHENICS.list).forEach(m => cal.append(el("span", null, m)));
 
-  renderPubs(); renderMediaGrid();
+  renderPubs();
   window.__cursorBind?.();
+}
+
+/* ── flow gallery: rows drift horizontally as the section scrolls by ── */
+let flowSTs = [];
+function wireFlow() {
+  flowSTs.forEach(s => s.kill()); flowSTs = [];
+  if (reduced) return;
+  const dir = document.documentElement.dir === "rtl" ? -1 : 1;
+  [["#flowRobots", -1], ["#flowPrints", 1]].forEach(([sel, sign]) => {
+    const row = $(sel); if (!row) return;
+    const drift = () => Math.max(0, row.scrollWidth - row.parentElement.clientWidth + 80);
+    flowSTs.push(gsap.fromTo(row, { x: sign * dir < 0 ? 0 : -drift() }, {
+      x: sign * dir < 0 ? -drift() : 0, ease: "none",
+      scrollTrigger: { trigger: "#galleries", start: "top 85%", end: "bottom 15%", scrub: 0.6, invalidateOnRefresh: true },
+    }).scrollTrigger);
+  });
 }
 
 /* ════════════ ROBOTICS ARCHITECTURE (his real closed-loop model) ════════════ */
@@ -266,74 +293,54 @@ $("#pubType").addEventListener("change", e => { pubFilter.type = e.target.value;
 $("#pubStatus").addEventListener("change", e => { pubFilter.status = e.target.value; renderPubs(); });
 $$("#pubdb th[data-sort]").forEach(th => th.addEventListener("click", () => { const k = th.dataset.sort; if (pubFilter.sort === k) pubFilter.dir *= -1; else { pubFilter.sort = k; pubFilter.dir = k === "year" ? -1 : 1; } renderPubs(); }));
 
-/* ════════════ MEDIA COLLECTIONS ════════════ */
-let MEDIA = null, mediaFilter = { type: "all", genre: "all", q: "", sort: "rating" };
-async function initMedia() {
-  if (!MEDIA) { try { MEDIA = await (await fetch("media.json")).json(); } catch { MEDIA = []; } }
-  const tabs = [["all", "m_all"], ["movie", "m_movie"], ["series", "m_series"], ["game", "m_game"], ["manga", "m_manga"]];
-  const tw = $("#mediaTabs"); tw.innerHTML = "";
-  tabs.forEach(([v, k]) => { const b = el("button", "media-tab" + (mediaFilter.type === v ? " on" : ""), T()[k]); b.dataset.type = v; b.addEventListener("click", () => { mediaFilter.type = v; mediaFilter.genre = "all"; $$("#mediaTabs .media-tab").forEach(x => x.classList.toggle("on", x.dataset.type === v)); renderGenres(); renderMediaGrid(); }); tw.append(b); });
-  $("#mediaSort").innerHTML = `<option value="rating">${T().m_sort_rating}</option><option value="year">${T().m_sort_year}</option>`;
-  $("#mediaSort").value = mediaFilter.sort;
-  $("#mediaSearch").placeholder = T().pubdb_search;
-  renderGenres(); renderMediaGrid();
-}
-function renderGenres() {
-  const row = $("#mediaGenres"); if (!row || !MEDIA) return;
-  const pool = MEDIA.filter(m => mediaFilter.type === "all" || m.type === mediaFilter.type);
-  const genres = [...new Set(pool.flatMap(m => m.genres || []))].sort();
-  row.innerHTML = "";
-  [["all", T().m_allgenres], ...genres.map(g => [g, g])].forEach(([v, label]) => {
-    const b = el("button", "media-genre" + (mediaFilter.genre === v ? " on" : ""), label);
-    b.addEventListener("click", () => { mediaFilter.genre = v; renderGenres(); renderMediaGrid(); });
-    row.append(b);
+/* ════════════ INTERESTS GALLERY (page #gallery) ════════════ */
+function galleryCtx() {
+  renderGallery({
+    pick, t: T, lang, reduced,
+    lightbox: (items, idx) => openLightbox(items, idx),
   });
-}
-$("#mediaSearch")?.addEventListener("input", e => { mediaFilter.q = e.target.value.toLowerCase().trim(); renderMediaGrid(); });
-$("#mediaSort")?.addEventListener("change", e => { mediaFilter.sort = e.target.value; renderMediaGrid(); });
-function renderMediaGrid() {
-  const g = $("#mediaGrid"); if (!g || !MEDIA) return;
-  let items = MEDIA.filter(m => (mediaFilter.type === "all" || m.type === mediaFilter.type)
-    && (mediaFilter.genre === "all" || (m.genres || []).includes(mediaFilter.genre))
-    && (!mediaFilter.q || m.title.toLowerCase().includes(mediaFilter.q)));
-  items.sort((a, b) => mediaFilter.sort === "year" ? (b.year || "").localeCompare(a.year || "") : (b.rating - a.rating));
-  g.innerHTML = "";
-  items.forEach(m => {
-    const c = el("article", "media-card");
-    const poster = m.poster ? `<img class="media-poster" src="${m.poster}" alt="${m.title}" loading="lazy">` : `<div class="media-noposter">${m.title}</div>`;
-    c.innerHTML = `${poster}<div class="media-meta"><h4>${m.title}</h4><div class="my"><span>${(m.year || "").split("–")[0]}</span>${m.rating ? `<span class="rt">★ ${m.rating}</span>` : ""}</div></div>`;
-    if (m.url) { c.style.cursor = "pointer"; c.addEventListener("click", () => window.open(m.url, "_blank")); }
-    g.append(c);
-  });
-  $("#mediaCount").textContent = `${items.length} ${T().m_count}`;
 }
 
-/* ════════════ ARTICLES (Medium-style) ════════════ */
-function renderArticles() {
+/* ════════════ BLOG (markdown posts) ════════════ */
+let POSTS = null;
+async function loadPosts() {
+  if (POSTS) return POSTS;
+  try { POSTS = await (await fetch("posts/posts.json")).json(); }
+  catch { POSTS = []; }
+  POSTS.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  return POSTS;
+}
+async function renderArticles() {
   const grid = $("#articlesGrid"), read = $("#articleRead");
   read.style.display = "none"; read.innerHTML = ""; grid.style.display = "";
   grid.innerHTML = "";
-  if (!ARTICLES.length) { grid.innerHTML = `<div class="articles-empty">${T().art_empty}</div>`; return; }
-  ARTICLES.forEach(a => {
+  const posts = await loadPosts();
+  if (!posts.length) { grid.innerHTML = `<div class="articles-empty">${T().art_empty}</div>`; return; }
+  posts.forEach(a => {
     const card = el("article", "article-card");
     card.innerHTML = `${a.cover ? `<img class="article-cover" src="${a.cover}" alt="" loading="lazy">` : ""}
-      <div class="article-body">
+      <div class="article-body" ${a.lang === "ar" ? 'dir="rtl"' : ""}>
         <div class="article-meta"><span>${a.date}</span><span class="dot"></span><span>${a.read} ${T().art_min}</span></div>
-        <h3>${pick(a, "title")}</h3><p>${pick(a, "excerpt")}</p>
-        <div class="article-tags">${a.tags.map(t => `<span>${t}</span>`).join("")}</div>
+        <h3>${pick(a, "title")}</h3><p>${pick(a, "excerpt") || ""}</p>
+        <div class="article-tags">${(a.tags || []).map(t => `<span>${t}</span>`).join("")}</div>
       </div>`;
     card.addEventListener("click", () => openArticle(a));
     grid.append(card);
   });
+  window.__cursorBind?.();
 }
-function openArticle(a) {
+async function openArticle(a) {
   const grid = $("#articlesGrid"), read = $("#articleRead");
   grid.style.display = "none"; read.style.display = "";
-  const body = (lang === "ar" ? a.body_ar : a.body) || a.body;
-  read.innerHTML = `<div class="article-full"><span class="a-back">${T().art_back}</span>
+  let body = "";
+  try {
+    const md = await (await fetch(`posts/${a.file}`)).text();
+    body = DOMPurify.sanitize(marked.parse(md));
+  } catch { body = `<p>${T().art_empty}</p>`; }
+  read.innerHTML = `<div class="article-full" ${a.lang === "ar" ? 'dir="rtl"' : ""}><span class="a-back">${T().art_back}</span>
     <h1>${pick(a, "title")}</h1><div class="a-meta">${a.date} · ${a.read} ${T().art_min}</div>
     ${a.cover ? `<img class="article-cover" style="border-radius:14px;margin-bottom:2rem" src="${a.cover}" alt="">` : ""}
-    <div class="a-content">${body.map(b => b.h ? `<h2>${b.h}</h2>` : `<p>${b.p}</p>`).join("")}</div></div>`;
+    <div class="a-content">${body}</div></div>`;
   read.querySelector(".a-back").addEventListener("click", () => { renderArticles(); lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0); });
   lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0);
 }
@@ -350,7 +357,7 @@ function applyStatic() {
 function applyLang() {
   applyStatic(); renderDynamic();
   if ($("#page-articles").classList.contains("active")) renderArticles();
-  if ($("#page-beyond").classList.contains("active")) initMedia();
+  if ($("#page-gallery").classList.contains("active")) galleryCtx();
   requestAnimationFrame(() => ST.refresh());
 }
 $("#langToggle").addEventListener("click", () => { lang = lang === "en" ? "ar" : "en"; applyLang(); });
@@ -364,6 +371,7 @@ applyLang();
 addEventListener("load", () => {
   const tl = gsap.timeline();
   tl.to("#loader", { yPercent: -100, duration: reduced ? 0 : 0.9, ease: "power4.inOut", delay: reduced ? 0 : 0.4 }).set("#loader", { display: "none" })
+    .from(".hero-art img", { scale: 1.06, duration: 1.6, ease: "power2.out" }, "<")
     .from(".hero-kicker", { y: 18, opacity: 0 }, "<0.1")
     .from(".hero-title .line", { yPercent: 115, stagger: 0.1, duration: 1.1 }, "<0.05")
     .from(".hero-sub", { y: 18, opacity: 0 }, "<0.4")
@@ -378,9 +386,15 @@ gsap.from("#archCards .arch-card", { y: reduced ? 0 : 24, opacity: 0, stagger: 0
 // research path
 (function () { const path = $("#tlPath"); if (!path) return; const len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = reduced ? 0 : len; if (reduced) return; ST.create({ trigger: "#research", start: "top 60%", end: "bottom 80%", scrub: 0.6, onUpdate: s => path.style.strokeDashoffset = len * (1 - s.progress) }); })();
 
-// cinematic scrub hero
-window.__CINEMATIC = { frameCount: 150, framePath: i => `frames/hero/frame_${String(i).padStart(4, "0")}.webp`, bg: "#16352a" };
-initCinematic({ section: "#cine", lenis, reduced });
+// hero video: self-removes until vid/hero.mp4 ships (the still stays underneath)
+const heroVid = $(".hero-vid");
+if (heroVid) {
+  if (reduced) heroVid.remove();
+  else heroVid.addEventListener("error", () => heroVid.remove(), { once: true });
+}
+
+// subtle parallax on the static hero art
+if (!reduced) gsap.to(".hero-art img, .hero-vid", { yPercent: 10, ease: "none", scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.4 } });
 
 // sphere
 const sphereWrap = $("#sphereWrap");
@@ -396,7 +410,7 @@ $("#ppClose").addEventListener("click", closePanel); panel.addEventListener("cli
 
 let lbItems = [], lbIdx = 0; const lb = $("#lightbox");
 function openLightbox(items, idx) { lbItems = items; lbIdx = idx; renderLb(); lb.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop(); }
-function renderLb() { const it = lbItems[lbIdx]; $("#lbImg").src = IMG(it.id, "w1600"); $("#lbImg").alt = pick(it, "cap"); $("#lbCap").textContent = pick(it, "cap"); $("#lbCount").textContent = `${lbIdx + 1} / ${lbItems.length}`; }
+function renderLb() { const it = lbItems[lbIdx]; $("#lbImg").src = IMG(it.id, "w1600"); $("#lbImg").alt = pick(it, "cap") || pick(it, "name") || ""; $("#lbCap").textContent = pick(it, "cap") || pick(it, "name") || ""; $("#lbCount").textContent = `${lbIdx + 1} / ${lbItems.length}`; }
 function closeLb() { lb.classList.remove("active"); document.body.style.overflow = ""; lenis?.start(); }
 const step = d => { lbIdx = (lbIdx + d + lbItems.length) % lbItems.length; renderLb(); };
 $(".lb-close").addEventListener("click", closeLb); lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });
@@ -409,4 +423,4 @@ addEventListener("scroll", () => $(".navbar").classList.toggle("scrolled", scrol
 $("#hamburger").addEventListener("click", () => { $("#hamburger").classList.toggle("active"); $("#navMenu").classList.toggle("active"); });
 
 /* ── initial route ── */
-if (location.hash === "#beyond") showPage("beyond");
+if (["#beyond", "#articles", "#gallery"].includes(location.hash)) showPage(location.hash.slice(1));

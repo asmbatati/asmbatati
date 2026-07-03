@@ -1,0 +1,15 @@
+[
+{
+  "slug": "ros2-survey-story",
+  "file": "ros2-survey-story.md",
+  "title": "What I learned distilling 8,500 papers into one ROS 2 survey",
+  "title_ar": "ما تعلّمته من تلخيص ٨٥٠٠ بحث في مسحٍ واحد لـROS 2",
+  "date": "2026-06-01",
+  "read": 8,
+  "lang": "en",
+  "tags": ["ROS 2", "research", "writing"],
+  "cover": "img/w960/proj-roboeye.webp",
+  "excerpt": "A behind-the-scenes look at the methodology, the tooling, and the surprises behind a survey of the entire ROS 2 ecosystem.",
+  "excerpt_ar": "نظرة من خلف الكواليس على المنهجية والأدوات والمفاجآت وراء مسحٍ لمنظومة ROS 2 بأكملها."
+}
+]
