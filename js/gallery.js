@@ -9,7 +9,7 @@
 
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
-import { GALLERY, IMG } from "./data.js?v=9";
+import { GALLERY, REPOS, ORGS, IMG } from "./data.js?v=10";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -105,9 +105,16 @@ function paintView(id) {
   const host = qs("#gpView"); host.innerHTML = "";
   const cat = GALLERY.cats.find(c => c.id === id);
   host.append(el("div", "gp-view-head", `<h2>${ctx.pick(cat, "label")}</h2>`));
-  ({ caddesign: viewCadDesign, hardware: viewHardware, model: viewModel, sim: viewSim, robotics: viewRobotics })[id](host);
+  ({ design: viewDesign, mathmodel: viewMath, physsim: viewSim, fabrication: viewFab, software: viewSoftware, integration: viewIntegration })[id](host);
   window.__cursorBind?.();
 }
+const skillChips = (host, skills, label) => {
+  if (!skills?.length) return;
+  const w = el("div", "gp-skillrow", `<span class="gp-skilllabel">${label}</span>`);
+  const chips = el("div", "gp-toolchips");
+  skills.forEach(s => chips.append(el("span", "chip", s)));
+  w.append(chips); host.append(w);
+};
 
 /* ══════════ 3D ring carousel (CAD & Design) ══════════ */
 function buildRing(host, items, makeFace, onPick) {
@@ -147,10 +154,10 @@ function buildRing(host, items, makeFace, onPick) {
   live.push({ stop: () => { alive = false; cancelAnimationFrame(raf); } });
 }
 
-/* ── CAD & Design world (merged) ── */
-function viewCadDesign(host) {
+/* ── Design world: sketches → CAD → drawings, each machine's design story ── */
+function viewDesign(host) {
   host.append(el("p", "gp-hint", ctx.t().design_hint));
-  const items = GALLERY.caddesign.projects;
+  const items = GALLERY.design.projects;
   const brief = el("div", "design-brief");
   buildRing(host, items, it =>
     `<img src="${IMG(it.id, "w480")}" alt="${ctx.pick(it, "name")}" loading="lazy"><figcaption>${ctx.pick(it, "name")}</figcaption>`,
@@ -162,9 +169,32 @@ function viewCadDesign(host) {
       if (window.gsap && !ctx.reduced) gsap.from(brief.querySelectorAll(".db-step"), { y: 18, opacity: 0, stagger: 0.07, duration: 0.5, ease: "expo.out" });
       brief.scrollIntoView({ behavior: ctx.reduced ? "instant" : "smooth", block: "nearest" });
     });
-  const chips = el("div", "gp-toolchips");
-  GALLERY.caddesign.tools.forEach(t => chips.append(el("span", "chip", t)));
-  host.append(chips, brief);
+  skillChips(host, GALLERY.design.skills, ctx.t().gp_skills);
+  host.append(brief);
+}
+
+/* ── Software world: skills + orgs + the repos behind the robots ── */
+function viewSoftware(host) {
+  const T = ctx.t();
+  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.software, "intro")));
+  skillChips(host, GALLERY.software.skills, T.gp_skills);
+  host.append(el("h3", "gp-subh", T.soft_orgs));
+  const og = el("div", "org-grid");
+  ORGS.forEach(o => og.append(el("article", "card org",
+    `<div class="org-top"><span class="org-name">${o.name}</span><span class="org-handle">@${o.handle}</span></div>
+     <p class="org-role">${ctx.pick(o, "role")}</p><p class="org-desc">${ctx.pick(o, "desc")}</p>
+     <div class="org-links"><a href="${o.url}" target="_blank" rel="noopener">${T.org_follow}</a>${o.site ? `<a href="${o.site}" target="_blank" rel="noopener">${T.org_site}</a>` : ""}</div>`)));
+  host.append(og);
+  host.append(el("h3", "gp-subh", T.soft_repos));
+  const rg = el("div", "repo-grid soft-repos");
+  REPOS.forEach(r => {
+    const a = el("a", "card repo");
+    a.href = r.url; a.target = "_blank"; a.rel = "noopener";
+    a.innerHTML = `<div class="repo-top"><span class="repo-name">${r.name}</span><span class="repo-star">★ ${r.stars}</span></div><p>${ctx.pick(r, "desc")}</p><span class="repo-lang">${r.lang}</span>`;
+    rg.append(a);
+  });
+  host.append(rg);
+  host.append(el("p", "gp-hint center", `<a class="soft-gh" href="https://github.com/asmbatati" target="_blank" rel="noopener">${T.soft_gh}</a>`));
 }
 
 /* ══════════ Three.js helpers ══════════ */
@@ -333,16 +363,20 @@ function buildGo2(M) {
 }
 const BUILDERS = { quad: buildQuad, hexa: buildHexa, vtol: buildVTOL, go2: buildGo2, rover: buildRover, agv: buildAGV, bot: buildBot };
 
-/* ── Robotics world: 3D model per platform, with a 3D ⇄ photo toggle ── */
-function viewRobotics(host) {
+/* ── Robotic Systems Integration: 3D model per platform, 3D ⇄ photo toggle ── */
+function viewIntegration(host) {
   const T = ctx.t();
+  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.integration, "intro")));
   const grid = el("div", "gp-robotics"); host.append(grid);
   const stageCol = el("div", "gpr-stage");
   const side = el("div", "gpr-side", `<div class="d-h">${T.gp_pick}</div>`);
   grid.append(stageCol, side);
 
-  const sc = makeScene(stageCol, Math.min(460, innerWidth * 0.9));
-  const photoBox = el("div", "gpr-photo"); photoBox.hidden = true; stageCol.append(photoBox);
+  // the photo overlays ONLY this wrapper (canvas area) — the caption + toggle
+  // below stay clickable, so you can always switch back to the 3D model
+  const viewWrap = el("div", "gpr-view3d"); stageCol.append(viewWrap);
+  const sc = makeScene(viewWrap, Math.min(460, innerWidth * 0.9));
+  const photoBox = el("div", "gpr-photo"); photoBox.hidden = true; viewWrap.append(photoBox);
   const caption = el("div", "gpr-caption"); stageCol.append(caption);
   stageCol.append(el("p", "gp-hint center", T.gp_drag));
   if (!sc) return;
@@ -353,7 +387,7 @@ function viewRobotics(host) {
   const list = el("div", "gpr-list"); side.append(list);
   function applyMode(p) {
     const hasPhoto = !!p.photo;
-    stageCol.classList.toggle("show-photo", mode === "photo" && hasPhoto);
+    viewWrap.classList.toggle("show-photo", mode === "photo" && hasPhoto);
     photoBox.hidden = !(mode === "photo" && hasPhoto);
     if (mode === "photo" && hasPhoto) photoBox.innerHTML = `<img src="${IMG(p.photo, "w960")}" alt="${ctx.pick(p, "name")}">`;
   }
@@ -377,7 +411,7 @@ function viewRobotics(host) {
     applyMode(p);
     list.querySelectorAll(".gpr-item").forEach(b => b.classList.toggle("on", b.dataset.id === p.id));
   }
-  GALLERY.robotics.platforms.forEach(p => {
+  GALLERY.integration.platforms.forEach(p => {
     const b = el("button", "gpr-item", `<b>${ctx.pick(p, "name")}</b><span>${ctx.pick(p, "desc").split("—")[0].split(".")[0]}</span>`);
     b.dataset.id = p.id;
     b.addEventListener("click", () => select(p));
@@ -388,7 +422,7 @@ function viewRobotics(host) {
   cv.addEventListener("pointerdown", e => { dragging = true; px = e.clientX; });
   onWin("pointermove", e => { if (!dragging) return; const dx = e.clientX - px; px = e.clientX; vel = dx * 0.006; rotY += dx * 0.012; });
   onWin("pointerup", () => dragging = false);
-  select(GALLERY.robotics.platforms[0]);
+  select(GALLERY.integration.platforms[0]);
   sc.start(t => {
     if (!dragging) { rotY += ctx.reduced ? 0 : 0.006 + vel; vel *= 0.94; }
     if (current) {
@@ -403,9 +437,9 @@ function viewRobotics(host) {
 }
 
 /* ── Fabrication & Integration: real STLs as spotlit trophies ── */
-function viewHardware(host) {
+function viewFab(host) {
   const T = ctx.t();
-  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.hardware, "intro")));
+  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.fabrication, "intro")));
   const sc = makeScene(host, Math.min(520, innerWidth * 0.92), { dark: true });
   const cap = el("div", "trophy-cap"); host.append(cap);
   const nav = el("div", "trophy-nav",
@@ -417,7 +451,7 @@ function viewHardware(host) {
     sc.root.add(mesh(new THREE.CylinderGeometry(0.95, 1.12, 0.34, 56), new THREE.MeshStandardMaterial({ color: 0x161a1f, roughness: 0.85 }), 0, -1.05, 0));
     sc.root.add(mesh(new THREE.CylinderGeometry(0.97, 0.97, 0.02, 56), new THREE.MeshStandardMaterial({ color: 0xb6803a, roughness: 0.4, metalness: 0.5 }), 0, -0.87, 0));
     const loader = new STLLoader();
-    const trophies = GALLERY.hardware.trophies;
+    const trophies = GALLERY.fabrication.trophies;
     let current = null, idx = 0, rot = 0, vel = 0, dragging = false, px = 0;
     const mat = new THREE.MeshStandardMaterial({ color: 0x4f9b74, roughness: 0.42, metalness: 0.12 });
     function show(i) {
@@ -455,16 +489,16 @@ function viewHardware(host) {
   // the real prints, below
   host.append(el("h3", "gp-subh", T.gp_prints_h));
   const strip = el("div", "print-strip");
-  GALLERY.hardware.photos.forEach((p, i) => {
+  GALLERY.fabrication.photos.forEach((p, i) => {
     const f = el("figure", "gItem", `<img src="${IMG(p.id, "w480")}" alt="${ctx.pick(p, "cap")}" loading="lazy"><figcaption>${ctx.pick(p, "cap")}</figcaption>`);
-    f.addEventListener("click", () => ctx.lightbox(GALLERY.hardware.photos, i));
+    f.addEventListener("click", () => ctx.lightbox(GALLERY.fabrication.photos, i));
     strip.append(f);
   });
   host.append(strip);
 }
 
 /* ── Physics & Math world: live 2nd-order system + theory cards ── */
-function viewModel(host) {
+function viewMath(host) {
   const T = ctx.t();
   const wrap = el("div", "math-wrap",
     `<div class="math-eq">ẍ + 2ζω<sub>n</sub>ẋ + ω<sub>n</sub>²x = 0</div>
@@ -523,7 +557,7 @@ function viewModel(host) {
   // theory cards
   host.append(el("h3", "gp-subh", T.gp_theory));
   const grid = el("div", "theory-grid");
-  GALLERY.model.topics.forEach(tp => grid.append(el("article", "theory-card",
+  GALLERY.mathmodel.topics.forEach(tp => grid.append(el("article", "theory-card",
     `<div class="theory-eq">${tp.eq}</div><b>${ctx.pick(tp, "t")}</b><p>${ctx.pick(tp, "note")}</p>`)));
   host.append(grid);
 }
@@ -531,7 +565,7 @@ function viewModel(host) {
 /* ── Simulation world: live GPS-denied estimate + ROS 2 sim/viz stack ── */
 function viewSim(host) {
   const T = ctx.t();
-  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.sim, "intro")));
+  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.physsim, "intro")));
   const wrap = el("div", "sim-wrap", `<canvas id="simCv"></canvas>
     <div class="sim-legend"><span class="sl-truth">— truth</span><span class="sl-est">– – estimate</span><span class="sl-fix">◉ correction</span></div>`);
   host.append(wrap);
@@ -575,7 +609,7 @@ function viewSim(host) {
   // ROS 2 sim + viz stack
   host.append(el("h3", "gp-subh", T.sim_stack));
   const grid = el("div", "sim-grid");
-  GALLERY.sim.simulators.forEach(s => grid.append(el("article", "sim-card" + (s.tag === "mine" ? " mine" : ""),
+  GALLERY.physsim.simulators.forEach(s => grid.append(el("article", "sim-card" + (s.tag === "mine" ? " mine" : ""),
     `<div class="sim-card-top"><b>${s.name}</b><span class="sim-tag">${s.tag}</span></div><p>${ctx.pick(s, "note")}</p>`)));
   host.append(grid);
 }

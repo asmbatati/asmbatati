@@ -77,10 +77,19 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 /* pages (router) */
 .page { display: none; }
 .page.active { display: block; }
-/* tab transition — resting opacity stays 1; the keyframe only plays on entry */
-.page-in { animation: pageIn .5s var(--ease); }
-@keyframes pageIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .page-in { animation: none; } }
+
+/* ── block-curtain page transition (2×5) + drone flyby ── */
+.transition { position: fixed; inset: 0; display: none; flex-direction: column; z-index: 9200; pointer-events: none; }
+.transition-row { flex: 1; display: flex; }
+.transition-row.row-1 .block { transform-origin: top; }
+.transition-row.row-2 .block { transform-origin: bottom; }
+.transition .block { flex: 1; background: var(--green-0); transform: scaleY(0); will-change: transform; visibility: hidden; box-shadow: 0 0 0 1px var(--green-0); }
+.trans-drone { position: absolute; top: 44%; left: 0; width: clamp(96px, 12vw, 150px); opacity: 0; will-change: transform; filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35)); }
+.trans-drone svg { width: 100%; height: auto; }
+.td-ink { fill: var(--paper); }
+.td-arm { stroke: var(--paper); stroke-width: 3.2; fill: none; stroke-linecap: round; }
+.td-prop { fill: color-mix(in srgb, var(--paper) 55%, transparent); }
+.td-gold { fill: var(--gold); }
 
 /* ════ HERO — static generated illustration ════ */
 .hero-static { position: relative; height: 100svh; min-height: 580px; overflow: hidden; background: var(--paper); }
@@ -672,10 +681,11 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .gpr-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; }
 .gpr-toggle button { padding: 5px 13px; font-size: .8rem; color: var(--mid); background: var(--snow); transition: all .25s; }
 .gpr-toggle button.on { background: var(--green-2); color: #fff; }
-.gpr-photo { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; background: var(--paper); border: 1px solid var(--line); }
+.gpr-view3d { position: relative; min-width: 0; }
+.gpr-photo { position: absolute; inset: 0; z-index: 2; border-radius: 18px; overflow: hidden; background: var(--paper); border: 1px solid var(--line); }
 .gpr-photo img { width: 100%; height: 100%; object-fit: cover; }
 .gpr-stage { position: relative; }
-.gpr-stage.show-photo .three-stage { visibility: hidden; }
+.gpr-view3d.show-photo .three-stage { visibility: hidden; }
 
 /* #8 research map + mental model on mobile */
 .rm-mobile { display: none; }
@@ -709,6 +719,25 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
   .nav-menu.active .nav-links { gap: 1.3rem; padding: 1.8rem 2rem; }
   .lang-toggle { height: 34px; padding: 0 12px; }
 }
+
+/* ════ v10: qualifications + software-way + misc ════ */
+.cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px,100%),1fr)); gap: 1.2rem; }
+.cert { padding: 1.4rem 1.5rem; position: relative; }
+.cert-year { color: var(--gold); font-family: var(--disp); font-weight: 700; font-size: .9rem; }
+.cert h4 { font-size: 1.1rem; color: var(--green-0); margin: .3rem 0 .2rem; }
+.prog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px,100%),1fr)); gap: 1.2rem; }
+.prog { padding: 1.3rem 1.4rem; }
+.prog-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.prog-top h4 { font-size: 1.02rem; color: var(--green-0); line-height: 1.3; }
+.prog-n { color: var(--gold); font-family: var(--disp); font-weight: 700; font-size: .85rem; white-space: nowrap; }
+.award-list { display: grid; gap: .9rem; }
+.award-row { display: grid; grid-template-columns: 90px 1fr; gap: 1rem; align-items: center; padding: 1rem 1.3rem; }
+.award-row h4 { font-size: 1.02rem; color: var(--green-0); }
+.gp-skillrow { display: flex; flex-direction: column; align-items: center; gap: .4rem; margin-top: 1.6rem; }
+.gp-skilllabel { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); font-weight: 700; }
+.soft-repos { margin-top: 0; }
+.soft-gh { color: var(--green-2); font-weight: 700; }
+@media (max-width: 720px) { .award-row { grid-template-columns: 1fr; gap: .2rem; } }
 
 /* Arabic / RTL */
 [dir="rtl"] body, [dir="rtl"] { font-family: 'Tajawal', var(--body); }

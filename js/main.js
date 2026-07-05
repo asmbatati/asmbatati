@@ -5,9 +5,9 @@
    interactive interests Gallery · markdown blog · i18n. */
 
 import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
-         TEACHING, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_NOTE, RESEARCH_NOTE_AR,
-         I18N, IMG } from "./data.js?v=9";
-import { renderGallery } from "./gallery.js?v=9";
+         TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_NOTE, RESEARCH_NOTE_AR,
+         I18N, IMG } from "./data.js?v=10";
+import { renderGallery } from "./gallery.js?v=10";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -55,21 +55,53 @@ if (!touch && !reduced) {
   }), 400));
 }
 
-/* ════════════ ROUTER ════════════ */
-function showPage(name) {
+/* ════════════ ROUTER + block-curtain transition (2×5 blocks + drone flyby) ════════════ */
+function switchPage(name) {
   $$(".page").forEach(p => p.classList.toggle("active", p.id === "page-" + name));
   $$("[data-nav]").forEach(a => a.classList.toggle("active", a.dataset.nav === name));
-  lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0);
+  lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0);          // new page starts from the top
   if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
   if (name === "articles") renderArticles();
   if (name === "gallery") galleryCtx();
   if (name === "projects") wireFlow();
   if (name === "home") wireJourney();
-  // tab transition — CSS re-triggered by re-adding the class (resting opacity is 1,
-  // so a page is never left invisible even if the animation doesn't run)
-  const pageEl = $("#page-" + name);
-  if (pageEl && !reduced) { pageEl.classList.remove("page-in"); void pageEl.offsetWidth; pageEl.classList.add("page-in"); }
   requestAnimationFrame(() => { ST.refresh(); revealIn("#page-" + name); });
+}
+let transBusy = false;
+const BLOCK_STAGGER = { each: 0.05, from: "start", grid: [2, 5], axis: "x" };
+function showPage(name) {
+  if ($("#page-" + name)?.classList.contains("active")) return;
+  const blocks = $$("#transition .block"), drone = $("#transDrone");
+  if (reduced || !blocks.length || !window.gsap) { switchPage(name); return; }
+  if (transBusy) return;
+  transBusy = true;
+  const t = $("#transition");
+  t.style.display = "flex";
+  gsap.set(blocks, { visibility: "visible", scaleY: 0 });
+  // the drone crosses the whole screen while the curtain closes + reopens
+  const rtl = document.documentElement.dir === "rtl";
+  gsap.set(drone, { scaleX: rtl ? -1 : 1, opacity: 1 });
+  gsap.fromTo(drone, { x: rtl ? "115vw" : "-15vw" }, { x: rtl ? "-15vw" : "115vw", duration: 1.5, ease: "power1.inOut" });
+  gsap.fromTo(drone, { yPercent: -30 }, { yPercent: 30, duration: 0.38, yoyo: true, repeat: 3, ease: "sine.inOut" });
+  // watchdog-protected: if rAF stalls (backgrounded tab), the switch still
+  // happens and the curtain is cleared — navigation can never deadlock
+  let switched = false, cleaned = false;
+  const cleanup = () => {
+    if (cleaned) return; cleaned = true;
+    gsap.killTweensOf(blocks); gsap.killTweensOf(drone);
+    gsap.set(blocks, { visibility: "hidden", scaleY: 0 });
+    gsap.set(drone, { opacity: 0 });
+    t.style.display = "none"; transBusy = false;
+  };
+  const doSwitch = () => {
+    if (switched) return; switched = true;
+    clearTimeout(coverWatch);
+    switchPage(name);
+    gsap.to(blocks, { scaleY: 0, duration: 0.5, stagger: BLOCK_STAGGER, ease: "power4.inOut", delay: 0.08, onComplete: cleanup });
+    setTimeout(cleanup, 1400);                       // reveal watchdog
+  };
+  const coverWatch = setTimeout(doSwitch, 1300);     // cover watchdog
+  gsap.to(blocks, { scaleY: 1, duration: 0.5, stagger: BLOCK_STAGGER, ease: "power4.inOut", onComplete: doSwitch });
 }
 $$("[data-nav]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); showPage(a.dataset.nav); closeMenu(); }));
 $$("[data-scroll]").forEach(a => a.addEventListener("click", e => {
@@ -123,6 +155,7 @@ function renderDynamic() {
 
   renderOrgs();
   renderTeaching();
+  renderQuals();
 
   renderPubs();
   window.__cursorBind?.();
@@ -151,6 +184,28 @@ function renderTeaching() {
     <div class="teach-tags">${(c.tags || []).map(t => `<span>${t}</span>`).join("")}</div></div></article>`;
   const co = $("#teachCourses"); if (co) co.innerHTML = TEACHING.courses.map(card).join("");
   const ws = $("#teachWorkshops"); if (ws) ws.innerHTML = TEACHING.workshops.map(card).join("");
+}
+
+/* ── Qualifications page ── */
+function renderQuals() {
+  const stats = $("#qStats");
+  if (stats) { stats.innerHTML = ""; QUALS.stats.forEach(s => stats.append(el("div", "tstat", `<span class="tstat-n">${s.n}</span><span class="tstat-l">${pick(s, "label")}</span>`))); }
+  const edu = $("#qEdu");
+  if (edu) edu.innerHTML = EDUCATION.map(e => `<article class="teach-card card"><div class="teach-when">${pick(e, "when")}</div>
+    <div class="teach-body"><div class="teach-head"><h4>${pick(e, "deg")}</h4></div>
+    <p class="teach-org">${pick(e, "org")}</p>${pick(e, "extra") ? `<p class="teach-note">${pick(e, "extra")}</p>` : ""}</div></article>`).join("");
+  const certs = $("#qCerts");
+  if (certs) certs.innerHTML = QUALS.certs.map(c => `<article class="card cert">
+    <span class="cert-year">${c.year}</span><h4>${c.title}</h4><p class="teach-org">${pick(c, "org")}</p>
+    <div class="teach-tags">${c.skills.map(s => `<span>${s}</span>`).join("")}</div></article>`).join("");
+  const progs = $("#qPrograms");
+  if (progs) progs.innerHTML = QUALS.programs.map(p => `<article class="card prog">
+    <div class="prog-top"><h4>${p.title}</h4><span class="prog-n">${p.n} ${T().q_courses}</span></div>
+    <p class="teach-org">${p.org}</p>
+    <div class="teach-tags">${p.items.map(i => `<span>${i}</span>`).join("")}</div></article>`).join("");
+  const aw = $("#qAwards");
+  if (aw) aw.innerHTML = QUALS.awards.map(a => `<div class="award-row card">
+    <span class="teach-when">${a.year}</span><div><h4>${pick(a, "title")}</h4><p class="teach-org">${pick(a, "org")}</p></div></div>`).join("");
 }
 
 /* ── Organizations (Projects page) ── */
@@ -495,19 +550,21 @@ if (heroVid) {
 }
 if (!reduced) gsap.to(".hero-art img, .hero-vid", { yPercent: 10, ease: "none", scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.4 } });
 
-/* ── journey vertical timeline: a fill line grows + dots light with scroll ── */
+/* ── journey vertical timeline: the fill tip tracks the 62%-viewport line exactly,
+   so it stays in sync with the scroll; dots light when the tip passes them ── */
 function wireJourney() {
-  const fill = $("#jrnyFill"); if (!fill) return;
+  const fill = $("#jrnyFill"), track = $("#jrny"); if (!fill || !track) return;
   const dots = $$("#journey .jrny-dot");
   if (reduced) { fill.style.height = "100%"; dots.forEach(d => d.classList.add("on")); return; }
   journeyST?.kill();
   journeyST = ST.create({
-    trigger: "#jrny", start: "top 72%", end: "bottom 62%", scrub: true,
+    trigger: track, start: "top 62%", end: "bottom 62%", scrub: true,
     onUpdate: s => {
-      fill.style.height = (s.progress * 100).toFixed(1) + "%";
-      const lit = s.progress * dots.length + 0.25;
-      dots.forEach((d, i) => d.classList.toggle("on", i < lit));
+      const px = s.progress * track.clientHeight;
+      fill.style.height = px.toFixed(1) + "px";
+      dots.forEach(d => d.classList.toggle("on", d.closest(".jrny-item").offsetTop + 14 <= px));
     },
+    onRefresh: s => { fill.style.height = (s.progress * track.clientHeight).toFixed(1) + "px"; },
   });
 }
 wireJourney();
@@ -547,5 +604,5 @@ function closeMenu() { $("#hamburger").classList.remove("active"); $("#navMenu")
 addEventListener("scroll", () => $(".navbar").classList.toggle("scrolled", scrollY > 40), { passive: true });
 $("#hamburger").addEventListener("click", () => { $("#hamburger").classList.toggle("active"); $("#navMenu").classList.toggle("active"); });
 
-/* ── initial route ── */
-if (["#research", "#projects", "#gallery", "#articles", "#teaching"].includes(location.hash)) showPage(location.hash.slice(1));
+/* ── initial route (no curtain on first load — the loader already covers) ── */
+if (["#research", "#projects", "#gallery", "#teaching", "#quals", "#articles"].includes(location.hash)) switchPage(location.hash.slice(1));

@@ -22,6 +22,28 @@
   <div id="loader" aria-hidden="true"><div class="mk"><img src="img/logo-mark.png" alt="" width="76" height="76"></div></div>
   <div id="cursorDot"></div><div id="cursorRing"></div>
 
+  <!-- page-transition curtain: 2×5 blocks + a drone crossing the screen -->
+  <div class="transition" id="transition" aria-hidden="true">
+    <div class="transition-row row-1">
+      <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+    </div>
+    <div class="transition-row row-2">
+      <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+    </div>
+    <div class="trans-drone" id="transDrone">
+      <svg viewBox="0 0 120 46" fill="none" aria-hidden="true">
+        <ellipse cx="18" cy="8" rx="16" ry="2.6" class="td-prop"/>
+        <ellipse cx="102" cy="8" rx="16" ry="2.6" class="td-prop"/>
+        <rect x="16.6" y="8" width="2.8" height="9" rx="1.2" class="td-ink"/>
+        <rect x="100.6" y="8" width="2.8" height="9" rx="1.2" class="td-ink"/>
+        <path d="M19 17 L52 26 H68 L101 17" class="td-arm"/>
+        <path d="M44 24 Q60 16 76 24 L72 33 Q60 38 48 33 Z" class="td-ink"/>
+        <circle cx="60" cy="27.5" r="3.4" class="td-gold"/>
+        <rect x="54" y="36" width="12" height="5.4" rx="2.4" class="td-ink"/>
+      </svg>
+    </div>
+  </div>
+
   <nav class="navbar">
     <a class="brand" data-nav="home" aria-label="Abdulrahman Al-Batati — home"><img class="brand-logo" src="img/logo-lockup.png" alt="Abdulrahman Al-Batati"></a>
     <div class="nav-menu" id="navMenu">
@@ -31,6 +53,7 @@
         <li><a data-nav="projects" data-i18n="tab_projects">Projects</a></li>
         <li><a data-nav="gallery" data-i18n="tab_gallery">Gallery</a></li>
         <li><a data-nav="teaching" data-i18n="tab_teaching">Teaching</a></li>
+        <li><a data-nav="quals" data-i18n="tab_quals">Qualifications</a></li>
         <li><a data-nav="articles" data-i18n="tab_articles">Writing</a></li>
       </ul>
       <button id="langToggle" class="lang-toggle magnetic" aria-label="Switch language" title="العربية / English">
@@ -88,7 +111,7 @@
     <section class="section alt" id="journey-sec"><div class="section-inner">
       <div class="reveal"><span class="eyebrow" data-i18n="eb_journey">The path so far</span><h2 class="section-title" data-i18n="t_journey">Education &amp; career, from 2018.</h2>
         <p class="section-lead" data-i18n="lead_journey"></p></div>
-      <div class="jrny">
+      <div class="jrny" id="jrny">
         <span class="jrny-fill" id="jrnyFill"></span>
         <div id="journey"></div>
       </div>
@@ -255,6 +278,23 @@
     </section>
   </div>
 
+  <!-- ════════ PAGE: QUALIFICATIONS ════════ -->
+  <div class="page" id="page-quals">
+    <section class="section" id="quals">
+      <div class="reveal"><span class="eyebrow" data-i18n="quals_kicker">Qualifications</span><h1 class="section-title" data-i18n="quals_title">Degrees, certifications &amp; training.</h1>
+        <p class="section-lead" data-i18n="quals_lead"></p></div>
+      <div class="teach-stats" id="qStats"></div>
+      <h3 class="teach-h reveal" data-i18n="q_edu">Education</h3>
+      <div class="teach-list" id="qEdu"></div>
+      <h3 class="teach-h reveal" data-i18n="q_certs">Professional certifications</h3>
+      <div class="cert-grid" id="qCerts"></div>
+      <h3 class="teach-h reveal" data-i18n="q_programs">Specializations &amp; programs</h3>
+      <div class="prog-grid" id="qPrograms"></div>
+      <h3 class="teach-h reveal" data-i18n="q_awards">Awards &amp; honors</h3>
+      <div class="award-list" id="qAwards"></div>
+    </section>
+  </div>
+
   <!-- ════════ PAGE: WRITING (markdown blog) ════════ -->
   <div class="page" id="page-articles">
     <section class="section">
@@ -278,6 +318,6 @@
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
-  <script type="module" src="js/main.js?v=9"></script>
+  <script type="module" src="js/main.js?v=10"></script>
 </body>
 </html>

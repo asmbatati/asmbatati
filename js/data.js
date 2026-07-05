@@ -285,6 +285,52 @@ export const TEACHING = {
   ],
 };
 
+/* ── Qualifications: degrees, professional certs, specializations, awards
+   (source of truth: the vault "My Courses & Certifications" + "My Awards") ── */
+export const QUALS = {
+  stats: [
+    { n: "2", label: "degrees, both with honors", label_ar: "درجتان بمرتبة الشرف" },
+    { n: "2", label: "professional certifications", label_ar: "اعتمادان مهنيان" },
+    { n: "8", label: "specializations & programs", label_ar: "تخصّصات وبرامج" },
+    { n: "50+", label: "courses completed", label_ar: "مقرّرًا مكتملًا" },
+    { n: "4", label: "competition awards", label_ar: "جوائز مسابقات" },
+  ],
+  certs: [
+    { year: "2024", title: "Certified 3DEXPERIENCE SOLIDWORKS — Associate", org: "Dassault Systèmes SOLIDWORKS",
+      org_ar: "داسو سيستمز SOLIDWORKS", skills: ["CAD design", "3D modeling"] },
+    { year: "2024", title: "Mechanical Engineer — Professional Accreditation", org: "Saudi Council of Engineers (SCE)",
+      org_ar: "الهيئة السعودية للمهندسين", skills: ["Professional practice", "Mechanical engineering"] },
+  ],
+  programs: [
+    { org: "The Construct", title: "ROS Masterclass", n: 26,
+      items: ["ROS 2 Basics → Advanced Navigation", "URDF · TF · Control framework", "Manipulation & Perception", "Docker · QA · CI/CD for robotics", "Managing Fleets of Robots with ROS 2"] },
+    { org: "University of Pennsylvania", title: "Robotics Specialization", n: 6,
+      items: ["Aerial Robotics", "Computational Motion Planning", "Mobility", "Estimation & Learning", "Perception", "Capstone"] },
+    { org: "MIT", title: "Robotics Essentials · Additive Manufacturing for Innovative Design", n: 2,
+      items: ["Core robotics principles", "3D printing & design for AM"] },
+    { org: "University of Alberta", title: "Reinforcement Learning Specialization", n: 4,
+      items: ["RL fundamentals", "Sample-based methods", "Function approximation", "Complete RL system (capstone)"] },
+    { org: "Imperial College London", title: "Mathematics for Machine Learning", n: 3,
+      items: ["Linear algebra", "Multivariate calculus", "PCA"] },
+    { org: "University of Michigan", title: "Python for Everybody Specialization", n: 5,
+      items: ["Python & data structures", "Web data · databases", "Visualization capstone"] },
+    { org: "Czech Technical University · IEEE RAS", title: "Summer School on Multi-Robot Systems", n: 1,
+      items: ["Swarms & coordination"] },
+    { org: "IIIA-CSIC", title: "Multi-Agent Reinforcement Learning: Foundations & Modern Approaches", n: 1,
+      items: ["MARL foundations"] },
+  ],
+  awards: [
+    { year: "2024", title: "1st place — IEEE RAS Multi-Robot Systems Competition", title_ar: "المركز الأول — مسابقة IEEE RAS لأنظمة الروبوتات المتعددة",
+      org: "IEEE RAS · multi-robot simulation challenge", org_ar: "IEEE RAS · تحدّي محاكاة الروبوتات المتعددة" },
+    { year: "2024", title: "Supervised the winning team — Robotic Sumo Challenge", title_ar: "أشرفت على الفريق الفائز — تحدّي السومو الروبوتي",
+      org: "Prince Sultan University", org_ar: "جامعة الأمير سلطان" },
+    { year: "2018", title: "1st place — University Physics Olympics", title_ar: "المركز الأول — أولمبياد الفيزياء الجامعي",
+      org: "KFUPM", org_ar: "جامعة الملك فهد للبترول والمعادن" },
+    { year: "2018", title: "2nd place — Machine Design Championship", title_ar: "المركز الثاني — بطولة تصميم الآلات",
+      org: "KFUPM", org_ar: "جامعة الملك فهد للبترول والمعادن" },
+  ],
+};
+
 /* ── Research taxonomy + full publications database ── */
 export const TAXONOMY = [
   { id: "all", en: "All", ar: "الكل" },
@@ -573,30 +619,24 @@ export const CALISTHENICS = {
    Publish a vault note with:  python tools/publish_post.py "<path-to-note.md>"  ── */
 
 /* ── Interactive interests gallery (page #gallery) ──
-   5 ways (v9). Each cat.icon → img/gal/<icon>.webp (generated engraved icons). */
+   SIX ways (v10). Each cat.icon → img/gal/<icon>.webp (generated engraved icons). */
 export const GALLERY = {
   cats: [
-    { id: "caddesign", icon: "cad", label: "CAD & Design", label_ar: "التصميم CAD والهندسي",
-      tease: "Parts, assemblies, whole machines", tease_ar: "قطع وتجميعات وآلات كاملة" },
-    { id: "hardware", icon: "hardware", label: "Fabrication & Integration", label_ar: "التصنيع والدمج",
-      tease: "Print, assemble, integrate", tease_ar: "طباعة وتجميع ودمج" },
-    { id: "model", icon: "physics", label: "Physics & Math", label_ar: "الفيزياء والرياضيات",
-      tease: "The theory under the machines", tease_ar: "النظرية خلف الآلات" },
-    { id: "sim", icon: "sim", label: "Simulation", label_ar: "المحاكاة",
-      tease: "ROS 2 worlds before flight", tease_ar: "عوالم ROS 2 قبل الطيران" },
-    { id: "robotics", icon: "robotics", label: "Robotics", label_ar: "الروبوتات",
-      tease: "My platforms — 3D + real", tease_ar: "منصّاتي — مجسّمة وحقيقية" },
+    { id: "design", icon: "cad", label: "Design", label_ar: "التصميم",
+      tease: "Sketch → CAD → drawing", tease_ar: "من الفكرة إلى CAD والرسم الهندسي" },
+    { id: "mathmodel", icon: "physics", label: "Mathematical Modeling", label_ar: "النمذجة الرياضية",
+      tease: "Newton → Lagrange → Kalman", tease_ar: "من نيوتن إلى لاغرانج وكالمان" },
+    { id: "physsim", icon: "sim", label: "Physics Simulation", label_ar: "المحاكاة الفيزيائية",
+      tease: "Gazebo · Isaac · Rviz 2", tease_ar: "Gazebo · Isaac · Rviz 2" },
+    { id: "fabrication", icon: "hardware", label: "Fabrication", label_ar: "التصنيع",
+      tease: "Print · machine · solder", tease_ar: "طباعة وتشغيل ولحام" },
+    { id: "software", icon: "software", label: "Software", label_ar: "البرمجيات",
+      tease: "The repos behind the robots", tease_ar: "المستودعات خلف الروبوتات" },
+    { id: "integration", icon: "robotics", label: "Robotic Systems Integration", label_ar: "دمج الأنظمة الروبوتية",
+      tease: "Full systems — 3D + real", tease_ar: "أنظمة كاملة — مجسّمة وواقعية" },
   ],
-  caddesign: {
-    tools: ["SolidWorks", "Siemens NX", "Generative design", "cad_2_mesh"],
-    images: [
-      { id: "proj-taer", cap: "TAER — tilt-tail VTOL, full SolidWorks assembly", cap_ar: "طائر — VTOL بذيل دوّار، تجميع SolidWorks كامل" },
-      { id: "proj-agridrone", cap: "AgriDrone — heavy-lift hexacopter, carbon payload bay", cap_ar: "الدرون الزراعي — سداسية ثقيلة بحجيرة كربونية" },
-      { id: "proj-amir", cap: "AMIR — warehouse AGV, patented industrial design", cap_ar: "عامر — روبوت مستودعات بتصميم صناعي مُبرَّأ" },
-      { id: "proj-robohotel", cap: "RoboHotel — hospitality shell over an AMR base", cap_ar: "روبو-هوتيل — هيكل ضيافة فوق قاعدة متحركة" },
-      { id: "proj-faseeh", cap: "FASEEH — Ackermann UGV with long-travel suspension", cap_ar: "فصيح — مركبة أرضية بتوجيه أكرمان وتعليق طويل" },
-      { id: "proj-roboeye", cap: "RoboEye — stereo-VIO enclosure, 125 g in PETG", cap_ar: "عين الروبوت — حاوية كاميرات ثنائية، ١٢٥ غرامًا" },
-    ],
+  design: {
+    skills: ["SolidWorks", "Siemens NX", "Technical drawings · GD&T", "STL / mesh prep (cad_2_mesh)", "Engineering Design Process", "Generative design"],
     projects: [
       { id: "proj-vtol-build", name: "VTOL UAV Platform", name_ar: "منصة VTOL", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "A long-endurance mission needs both a helicopter's take-off and an airplane's cruise — so: a hybrid.", d_ar: "مهمة طويلة المدى تحتاج إقلاع المروحية وانسياب الطائرة — إذن: هجينة." },
@@ -640,7 +680,9 @@ export const GALLERY = {
         { t: "Research", t_ar: "البحث", d: "Flight platform behind the D2DTracker drone-tracking work.", d_ar: "منصة الطيران خلف أبحاث تتبّع الدرون D2DTracker." } ] },
     ],
   },
-  robotics: {
+  integration: {
+    intro: "Where everything above meets: airframe + estimator + planner + software, integrated into a platform that leaves the bench. Toggle each between the 3D model and the real machine.",
+    intro_ar: "حيث يلتقي كل ما سبق: هيكل ومُقدِّر ومخطِّط وبرمجيات، مدموجة في منصة تغادر الطاولة. بدِّل بين المجسّم والصورة الحقيقية.",
     platforms: [
       { id: "vtol", photo: "proj-vtol-build", name: "VTOL hybrid UAV", name_ar: "طائرة VTOL هجينة",
         desc: "Vertical take-off, fixed-wing cruise. Designed, fabricated and flown in-house for long-endurance missions.",
@@ -665,8 +707,9 @@ export const GALLERY = {
         desc_ar: "روبوت حمّال: سطح أمتعة وشاشة نزلاء وهيكل بمستوى الضيافة.", tags: ["patent", "service"] },
     ],
   },
-  // Fabrication & Integration — real STLs rendered one-by-one as spotlit trophies + real print photos
-  hardware: {
+  // Fabrication — real STLs rendered one-by-one as spotlit trophies + real print photos
+  fabrication: {
+    skills: ["FDM 3D printing — PLA · PETG", "CNC machining (KACST)", "Soldering & harness wiring", "Carbon-fiber builds", "Design for AM (MIT xPRO)", "Rapid prototyping"],
     intro: "Every part below is a real STL I designed and printed — mostly for the Tarot-960 drone build. Each spins under a spotlight; step through them.",
     intro_ar: "كل قطعة أدناه مجسّم STL حقيقي صمّمته وطبعته — أغلبها لبناء درون Tarot-960. تدور كلٌّ منها تحت ضوء كاشف؛ تنقّل بينها.",
     trophies: [
@@ -686,11 +729,18 @@ export const GALLERY = {
       { id: "patent-vtol", cap: "1:7 VTOL prototype — scale model", cap_ar: "نموذج VTOL بمقياس ١:٧" },
     ],
   },
-  // Physics & Math — a live demo + the theory that actually shows up in the work
-  model: {
-    intro: "Not decoration — this is the math I use. One live demo, and the theory behind the machines.",
-    intro_ar: "ليست زينة — هذه هي الرياضيات التي أستعملها. عرضٌ حيّ واحد، والنظرية خلف الآلات.",
+  // Mathematical Modeling — how a system becomes equations: Newton → Lagrange →
+  // linearized 2nd-order → rotations → estimation → control. Live demo + theory.
+  mathmodel: {
+    intro: "How a machine becomes mathematics: write the forces (Newton) or the energy (Lagrange), linearize, then estimate and control. One live demo, and the theories I actually use.",
+    intro_ar: "كيف تصير الآلة رياضيات: اكتب القوى (نيوتن) أو الطاقة (لاغرانج)، ثم خطِّط، ثم قدِّر وتحكَّم. عرضٌ حيّ واحد، والنظريات التي أستعملها فعلًا.",
     topics: [
+      { t: "Newtonian mechanics", t_ar: "ميكانيكا نيوتن", eq: "ΣF = m a,   Στ = I α",
+        note: "Where every model starts: free-body diagrams, forces and torques — the airframe, the rover, the arm.",
+        note_ar: "حيث يبدأ كل نموذج: مخططات الجسم الحرّ والقوى والعزوم — الهيكل والمركبة والذراع." },
+      { t: "Lagrangian mechanics", t_ar: "ميكانيكا لاغرانج", eq: "d/dt (∂L/∂q̇) − ∂L/∂q = Q",
+        note: "The energy route — write L = T − V in generalized coordinates and the equations of motion fall out; my go-to for linkages and multi-body dynamics.",
+        note_ar: "طريق الطاقة — اكتب L = T − V بإحداثيات معمّمة فتخرج معادلات الحركة؛ خياري الأول للوصلات والأجسام المتعددة." },
       { t: "Second-order dynamics", t_ar: "ديناميكا الدرجة الثانية", eq: "ẍ + 2ζωₙẋ + ωₙ²x = 0",
         note: "Every mount, arm and airframe rings like this — damping ζ and natural frequency ωₙ set how it settles. Live demo above.",
         note_ar: "كل حامل وذراع وهيكل يرنّ هكذا — التخميد ζ والتردد الطبيعي ωₙ يحدّدان كيف يستقرّ. العرض الحيّ أعلاه." },
@@ -711,8 +761,14 @@ export const GALLERY = {
         note_ar: "الحصان العامل تحت PX4 — لا تزال أول حلقة ألجأ إليها على العتاد الحقيقي." },
     ],
   },
-  // Simulation — the ROS 2 sim + viz stack, plus a live GPS-denied estimate demo
-  sim: {
+  // Software — the repos + orgs behind the robots (rendered from REPOS + ORGS)
+  software: {
+    intro: "Robots are half software. The open-source stacks, tools and research code I ship — under my handle and the labs I build with.",
+    intro_ar: "نصف الروبوت برمجيات. الحزم والأدوات والشيفرات البحثية التي أنشرها — باسمي وتحت المعامل التي أبني معها.",
+    skills: ["Python", "C++", "ROS 2", "Docker", "Git · CI/CD", "Linux"],
+  },
+  // Physics Simulation — the ROS 2 sim + viz stack, plus a live GPS-denied estimate demo
+  physsim: {
     intro: "I close every loop in simulation first. The ROS 2 stack I reach for — and Rviz 2 to see what the robot believes.",
     intro_ar: "أُغلق كل حلقة في المحاكاة أولًا. منظومة ROS 2 التي أعتمدها — وRviz 2 لأرى ما يعتقده الروبوت.",
     simulators: [
@@ -807,6 +863,13 @@ export const I18N = {
     gp_photo: "Photo", gp_3d: "3D model",
     gp_trophy_hint: "Real STLs I designed and printed — use ‹ › to step through the collection.",
     gp_theory: "The theory behind it", sim_stack: "My ROS 2 sim + viz stack", gp_prints_h: "And in the real world",
+    /* ── v10 ── */
+    tab_quals: "Qualifications",
+    quals_kicker: "Qualifications", quals_title: "Degrees, certifications & training.",
+    quals_lead: "The formal track — two honors degrees, professional accreditation, and the course programs behind the toolbox.",
+    q_edu: "Education", q_certs: "Professional certifications", q_programs: "Specializations & programs",
+    q_awards: "Awards & honors", q_courses: "courses",
+    gp_skills: "Skills", soft_orgs: "Organizations", soft_repos: "Selected repositories", soft_gh: "Everything on GitHub ↗",
   },
   ar: {
     nav_about: "نبذة", nav_research: "الأبحاث", nav_projects: "المشاريع", nav_gallery: "المعرض", nav_experience: "الخبرة",
@@ -886,5 +949,12 @@ export const I18N = {
     gp_photo: "صورة", gp_3d: "مجسّم ثلاثي",
     gp_trophy_hint: "مجسّمات STL حقيقية صمّمتها وطبعتها — استخدم ‹ › للتنقّل في المجموعة.",
     gp_theory: "النظرية خلفه", sim_stack: "منظومة المحاكاة والعرض بـROS 2", gp_prints_h: "وفي الواقع",
+    /* ── v10 ── */
+    tab_quals: "المؤهلات",
+    quals_kicker: "المؤهلات", quals_title: "شهادات واعتمادات وتدريب.",
+    quals_lead: "المسار الرسمي — درجتان بمرتبة الشرف، واعتماد مهني، وبرامج المقرّرات التي بُني عليها صندوق أدواتي.",
+    q_edu: "التعليم", q_certs: "اعتمادات مهنية", q_programs: "تخصّصات وبرامج",
+    q_awards: "جوائز وتكريم", q_courses: "مقرّرًا",
+    gp_skills: "مهارات", soft_orgs: "المنظّمات", soft_repos: "مستودعات مختارة", soft_gh: "كل شيء على GitHub ↗",
   },
 };
