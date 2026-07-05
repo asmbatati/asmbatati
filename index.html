@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Abdulrahman S. Al-Batati — Robotics & Autonomous Intelligent Systems</title>
-  <meta name="description" content="Abdulrahman S. Al-Batati — robotics researcher. UAV/UGV design, GPS-denied localization, reinforcement learning, ROS 2. 10 papers, 2 patents, 8 robots built.">
+  <meta name="description" content="Abdulrahman S. Al-Batati — robotics researcher. UAV/UGV/quadruped autonomy, GPS-denied localization, reinforcement learning, ROS 2. 10 papers, 2 patents, 8 robots built.">
   <meta property="og:title" content="Abdulrahman S. Al-Batati — Robotics Researcher">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="css/main.css">
@@ -27,8 +27,8 @@
     <div class="nav-menu" id="navMenu">
       <ul class="nav-links">
         <li><a data-nav="home" data-i18n="tab_home">Home</a></li>
-        <li><a data-scroll="#research" data-i18n="nav_research">Research</a></li>
-        <li><a data-scroll="#projects" data-i18n="nav_projects">Projects</a></li>
+        <li><a data-nav="research" data-i18n="tab_research">Research</a></li>
+        <li><a data-nav="projects" data-i18n="tab_projects">Projects</a></li>
         <li><a data-nav="gallery" data-i18n="tab_gallery">Gallery</a></li>
         <li><a data-nav="articles" data-i18n="tab_articles">Writing</a></li>
         <li><a data-nav="beyond" data-i18n="tab_beyond">Beyond career</a></li>
@@ -41,14 +41,13 @@
 
   <!-- ════════ PAGE: HOME ════════ -->
   <div class="page active" id="page-home">
-    <!-- static hero — generated illustration of the work world -->
+    <!-- static hero — generated illustration; the video overlays it when present -->
     <section class="hero-static" id="hero">
       <picture class="hero-art">
         <source media="(min-width: 1700px)" srcset="img/w2400/hero-generated.webp">
         <source media="(min-width: 980px)" srcset="img/w1600/hero-generated.webp">
         <img src="img/w960/hero-generated.webp" alt="An engraved illustration of my work: VTOL and multirotor drones, a quadruped robot, a rover, a robotic arm, a 3D printer and the equations behind them" fetchpriority="high">
       </picture>
-      <!-- animated version of the same illustration — hides itself until vid/hero.mp4 exists -->
       <video class="hero-vid" src="vid/hero.mp4" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
       <div class="hero-overlay">
         <div class="inner">
@@ -59,8 +58,8 @@
           </h1>
           <p class="hero-sub" data-i18n="hero_sub">Senior Research Assistant at PSU's Robotics &amp; IoT Lab.</p>
           <div class="hero-cta-row">
-            <a data-scroll="#projects" class="btn btn-primary magnetic" data-i18n="hero_cta1">Explore the work →</a>
-            <a data-scroll="#research" class="btn btn-ghost magnetic" data-i18n="hero_cta2">Read the research</a>
+            <a data-nav="projects" class="btn btn-primary magnetic" data-i18n="hero_cta1">Explore the work →</a>
+            <a data-nav="research" class="btn btn-ghost magnetic" data-i18n="hero_cta2">Read the research</a>
           </div>
         </div>
       </div>
@@ -82,103 +81,22 @@
       </div>
     </section>
 
-    <!-- RESEARCH: timeline + DB -->
-    <section class="section alt" id="research">
-      <div class="section-inner">
-        <div class="reveal"><span class="eyebrow" data-i18n="eb_research">Research</span><h2 class="section-title" data-i18n="t_research">A path through the publications.</h2>
-          <p class="section-lead" data-i18n="lead_research"></p></div>
-        <div class="tl-wrap">
-          <svg class="tl-svg" viewBox="0 0 60 1000" preserveAspectRatio="none" aria-hidden="true"><path id="tlPath" d="M30,0 C30,140 12,180 30,320 C46,440 16,500 30,640 C44,760 18,820 30,1000"/></svg>
-          <div id="timeline"></div>
-        </div>
-        <p class="research-note" id="researchNote"></p>
-
-        <!-- publications database -->
-        <div class="pubdb" id="pubdb">
-          <div class="reveal" style="margin-top:3.5rem"><span class="eyebrow" data-i18n="pubdb_title">Browse every publication</span>
-            <p class="section-lead" data-i18n="pubdb_lead"></p></div>
-          <div class="taxo-row" id="taxoRow"></div>
-          <div class="pubdb-controls">
-            <input class="pubdb-search" id="pubSearch" data-i18n-ph="pubdb_search" placeholder="Search…">
-            <select class="pubdb-sel" id="pubType"></select>
-            <select class="pubdb-sel" id="pubStatus"></select>
-            <select class="pubdb-sel" id="pubYear"></select>
-            <span class="pubdb-count" id="pubCount"></span>
-          </div>
-          <div class="pub-table-wrap">
-          <table class="pub-table">
-            <colgroup><col class="c-paper"><col class="c-contrib"><col class="c-type"><col class="c-status"><col class="c-rank"><col class="c-year"><col class="c-doi"><col class="c-proj"></colgroup>
-            <thead><tr>
-              <th data-sort="title" data-i18n="col_paper">Paper</th>
-              <th data-sort="role" data-i18n="col_contrib">Contribution</th>
-              <th data-sort="type" data-i18n="col_type">Type</th>
-              <th data-sort="status" data-i18n="col_status">Status</th>
-              <th data-sort="rank" data-i18n="col_rank">Rank</th>
-              <th data-sort="year" data-i18n="col_year">Year</th>
-              <th data-i18n="col_doi">DOI</th>
-              <th data-i18n="col_project">Project page</th>
-            </tr></thead>
-            <tbody id="pubBody"></tbody>
-          </table></div>
-        </div>
+    <!-- THE PATH SO FAR — education + career journey (glowing scroll path) -->
+    <section class="section alt" id="journey-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_journey">The path so far</span><h2 class="section-title" data-i18n="t_journey">Education &amp; career, from 2018.</h2>
+        <p class="section-lead" data-i18n="lead_journey"></p></div>
+      <div class="tl-wrap">
+        <svg class="tl-svg" viewBox="0 0 60 1000" preserveAspectRatio="none" aria-hidden="true"><path id="tlPath" d="M30,0 C30,140 12,180 30,320 C46,440 16,500 30,640 C44,760 18,820 30,1000"/></svg>
+        <div id="journey"></div>
       </div>
-    </section>
-
-    <!-- ROBOTICS ARCHITECTURE — his real closed-loop mental model -->
-    <section class="section" id="stack-sec">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_stack">How an autonomous robot thinks</span><h2 class="section-title" data-i18n="t_stack">My mental model of an autonomous robot.</h2>
-        <p class="section-lead" data-i18n="lead_stack"></p></div>
-      <div class="arch-figure" id="arch"></div>
-      <p class="arch-sim" id="archSim"></p>
-      <h3 class="arch-work-h" data-i18n="arch_work_title">Where my work lives</h3>
-      <div class="arch-cards" id="archCards"></div>
-    </section>
-
-    <!-- PROJECTS sphere -->
-    <section class="section gallery-dark" id="projects">
-      <div class="section-inner">
-        <div class="reveal"><span class="eyebrow" data-i18n="eb_projects">Projects</span><h2 class="section-title" data-i18n="t_projects">Eight machines, built to leave the bench.</h2>
-          <p class="section-lead" data-i18n="lead_projects"></p></div>
-        <div id="sphereWrap"><canvas id="sphereCanvas"></canvas><div id="sphereTag"></div><div id="projFallback"></div></div>
-        <p class="sphere-hint" data-i18n="hint_sphere">drag ⟲ to explore · tap to open</p>
-      </div>
-    </section>
-
-    <!-- HARDWARE FLOW GALLERY — rows drift with scroll -->
-    <section class="section flow-sec" id="galleries">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_gallery">Gallery</span><h2 class="section-title" data-i18n="t_gallery">Hardware, in the metal.</h2>
-        <p class="section-lead" data-i18n="gal_flow_hint"></p></div>
-      <div class="flow-wrap">
-        <div class="flow-row" id="flowRobots"></div>
-        <div class="flow-row rev" id="flowPrints"></div>
-      </div>
-    </section>
-
-    <!-- PATENTS -->
-    <section class="section alt" id="patents-sec"><div class="section-inner">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_patents">Patents</span><h2 class="section-title" data-i18n="t_patents">Two granted industrial designs.</h2></div>
-      <div class="patent-grid" id="patents"></div>
     </div></section>
 
-    <!-- EXPERIENCE + EDUCATION -->
-    <section class="section" id="experience-sec">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_track">Track record</span><h2 class="section-title" data-i18n="t_track">Experience &amp; education.</h2></div>
-      <div class="cols">
-        <div class="col reveal"><h3 data-i18n="h_exp">Experience</h3><div id="experience"></div></div>
-        <div class="col reveal"><h3 data-i18n="h_edu">Education</h3><div id="education"></div></div>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section class="section alt" id="skills-sec"><div class="section-inner">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_toolkit">Toolkit</span><h2 class="section-title" data-i18n="t_toolkit">What I work with.</h2></div>
-      <div class="skill-grid" id="skills"></div>
-    </div></section>
-
-    <!-- REPOS -->
-    <section class="section" id="repos-sec">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_oss">Open source</span><h2 class="section-title" data-i18n="t_oss">Code on GitHub.</h2><p class="section-lead" data-i18n="lead_oss"></p></div>
-      <div class="repo-grid" id="repos"></div>
+    <!-- WHAT I RESEARCH — teaser cards → Research page -->
+    <section class="section" id="focus">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_focus">What I research</span><h2 class="section-title" data-i18n="t_focus">Four questions, one autonomous robot.</h2>
+        <p class="section-lead" data-i18n="lead_focus"></p></div>
+      <div class="focus-grid" id="focusCards"></div>
+      <div class="focus-cta reveal"><a class="btn btn-solid magnetic" data-nav="research" data-i18n="focus_cta">Open the research map →</a></div>
     </section>
 
     <!-- CONTACT -->
@@ -197,6 +115,98 @@
     </section>
   </div>
 
+  <!-- ════════ PAGE: RESEARCH ════════ -->
+  <div class="page" id="page-research">
+    <!-- research-interests map -->
+    <section class="section" id="researchmap-sec">
+      <div class="reveal"><span class="eyebrow" data-i18n="rm_kicker">Research interests</span><h2 class="section-title" data-i18n="rm_title">Where my research lives.</h2>
+        <p class="section-lead" data-i18n="rm_lead"></p></div>
+      <div class="rm-figure" id="researchMap"></div>
+      <p class="rm-caption" id="rmCaption"></p>
+      <div class="rm-platforms" id="rmPlatforms"></div>
+    </section>
+
+    <!-- ROBOTICS ARCHITECTURE — closed-loop mental model -->
+    <section class="section alt" id="stack-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_stack">How an autonomous robot thinks</span><h2 class="section-title" data-i18n="t_stack">My mental model of an autonomous robot.</h2>
+        <p class="section-lead" data-i18n="lead_stack"></p></div>
+      <div class="arch-figure" id="arch"></div>
+      <p class="arch-sim" id="archSim"></p>
+      <h3 class="arch-work-h" data-i18n="arch_work_title">Where my work lives</h3>
+      <div class="arch-cards" id="archCards"></div>
+    </div></section>
+
+    <!-- PUBLICATIONS DATABASE -->
+    <section class="section" id="pubdb-sec">
+      <div class="reveal"><span class="eyebrow" data-i18n="pubdb_title">Browse every publication</span><h2 class="section-title" data-i18n="t_research">Every publication.</h2>
+        <p class="section-lead" data-i18n="pubdb_lead"></p></div>
+      <div class="pubdb" id="pubdb">
+        <div class="taxo-row" id="taxoRow"></div>
+        <div class="pubdb-controls">
+          <input class="pubdb-search" id="pubSearch" data-i18n-ph="pubdb_search" placeholder="Search…">
+          <select class="pubdb-sel" id="pubType"></select>
+          <select class="pubdb-sel" id="pubStatus"></select>
+          <select class="pubdb-sel" id="pubYear"></select>
+          <span class="pubdb-count" id="pubCount"></span>
+        </div>
+        <div class="pub-table-wrap">
+        <table class="pub-table">
+          <colgroup><col class="c-paper"><col class="c-contrib"><col class="c-type"><col class="c-status"><col class="c-rank"><col class="c-year"><col class="c-doi"><col class="c-proj"></colgroup>
+          <thead><tr>
+            <th data-sort="title" data-i18n="col_paper">Paper</th>
+            <th data-sort="role" data-i18n="col_contrib">Contribution</th>
+            <th data-sort="type" data-i18n="col_type">Type</th>
+            <th data-sort="status" data-i18n="col_status">Status</th>
+            <th data-sort="rank" data-i18n="col_rank">Rank</th>
+            <th data-sort="year" data-i18n="col_year">Year</th>
+            <th data-i18n="col_doi">DOI</th>
+            <th data-i18n="col_project">Project page</th>
+          </tr></thead>
+          <tbody id="pubBody"></tbody>
+        </table></div>
+        <p class="research-note" id="researchNote"></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ════════ PAGE: PROJECTS ════════ -->
+  <div class="page" id="page-projects">
+    <section class="section" id="projects">
+      <div class="reveal"><span class="eyebrow" data-i18n="projpg_kicker">Projects</span><h2 class="section-title" data-i18n="projpg_title">The machines.</h2>
+        <p class="section-lead" data-i18n="proj_intro"></p></div>
+      <div class="proj-filter" id="projFilter"></div>
+      <div class="proj-grid" id="projGrid"></div>
+    </section>
+
+    <!-- PATENTS -->
+    <section class="section alt" id="patents-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_patents">Patents</span><h2 class="section-title" data-i18n="t_patents">Two granted industrial designs.</h2></div>
+      <div class="patent-grid" id="patents"></div>
+    </div></section>
+
+    <!-- HARDWARE FLOW GALLERY — rows drift with scroll -->
+    <section class="section flow-sec" id="galleries">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_gallery">Gallery</span><h2 class="section-title" data-i18n="t_gallery">Hardware, in the metal.</h2>
+        <p class="section-lead" data-i18n="gal_flow_hint"></p></div>
+      <div class="flow-wrap">
+        <div class="flow-row" id="flowRobots"></div>
+        <div class="flow-row rev" id="flowPrints"></div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section alt" id="skills-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_toolkit">Toolkit</span><h2 class="section-title" data-i18n="t_toolkit">What I work with.</h2></div>
+      <div class="skill-grid" id="skills"></div>
+    </div></section>
+
+    <!-- REPOS -->
+    <section class="section" id="repos-sec">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_oss">Open source</span><h2 class="section-title" data-i18n="t_oss">Code on GitHub.</h2><p class="section-lead" data-i18n="lead_oss"></p></div>
+      <div class="repo-grid" id="repos"></div>
+    </section>
+  </div>
+
   <!-- ════════ PAGE: GALLERY (interactive interests) ════════ -->
   <div class="page" id="page-gallery">
     <section class="section gp-section">
@@ -204,8 +214,6 @@
         <span class="eyebrow" data-i18n="hub_kicker">Interests &amp; craft</span>
         <h1 class="section-title" data-i18n="hub_title">Six ways I build.</h1>
       </div>
-
-      <!-- stage A: the emblem, alone -->
       <div class="hub-stage" id="hubStage">
         <button class="hub-emblem" id="hubEmblem" aria-label="Open the interests">
           <img src="img/w960/gallery-hub.webp" alt="An engraved emblem of six crafts: CAD, 3D printing, physics and math, simulation, design, robotics">
@@ -214,8 +222,6 @@
         <p class="hub-sub" id="hubSub" data-i18n="hub_sub">Click the emblem to open it.</p>
         <div class="hub-cats" id="hubCats"></div>
       </div>
-
-      <!-- stage B: the selected world -->
       <div class="gp-world" id="gpWorld" hidden>
         <div class="gp-chipbar">
           <button class="gp-back" id="gpBack" data-i18n="hub_back">↩ All six</button>
@@ -236,7 +242,6 @@
         <p class="lead" data-i18n="beyond_lead"></p>
       </div>
     </section>
-
     <section class="section cal-band alt"><div class="section-inner">
       <div class="reveal"><span class="eyebrow" data-i18n="cal_eb">Training</span><h2 class="section-title" data-i18n="cal_title">Calisthenics.</h2><p class="section-lead" data-i18n="cal_lead"></p></div>
       <div class="cal-list" id="calList"></div>

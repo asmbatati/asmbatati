@@ -1,12 +1,12 @@
-/* Abdulrahman S. Al-Batati — portfolio v7 (light, bilingual, multi-page).
-   Router · static generated hero · publications DB · robotics stack ·
-   scroll-flow hardware gallery · interactive interests gallery · markdown
-   blog (posts/) · sphere · i18n. */
+/* Abdulrahman S. Al-Batati — portfolio v8 (light, bilingual, multi-page).
+   Router · static/animated hero · Home (journey path + research teaser) ·
+   Research (interests map + robot architecture + publications DB) ·
+   Projects (filterable showcase + patents + hardware + skills + repos) ·
+   interactive interests Gallery · markdown blog · i18n. */
 
-import { PROFILE, STATS, PROJECTS, PAPERS, RESEARCH_NOTE, RESEARCH_NOTE_AR, ROBOTS, PRINTS,
-         PATENTS, EXPERIENCE, EDUCATION, SKILLS, REPOS, PUBS, TAXONOMY, ARCH, CALISTHENICS,
-         I18N, IMG } from "./data.js";
-import { initSphere, webglOK } from "./sphere.js";
+import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS,
+         PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_NOTE, RESEARCH_NOTE_AR,
+         CALISTHENICS, I18N, IMG } from "./data.js";
 import { renderGallery } from "./gallery.js";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
@@ -23,6 +23,9 @@ let lang = "en";
 const T = () => I18N[lang];
 const pick = (o, k) => (lang === "ar" ? (o[k + "_ar"] ?? o[k]) : o[k]);
 const txEn = id => (TAXONOMY.find(t => t.id === id) || {})[lang] || id;
+// scroll-trigger handles wired lazily per page — declared up here so the
+// first applyLang() (which calls wireJourneyPath) never hits their TDZ.
+let journeyST = null, flowSTs = [];
 
 /* ── Lenis ── */
 let lenis = null;
@@ -41,7 +44,7 @@ if (!touch && !reduced) {
   addEventListener("pointermove", e => { gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: "auto" }); rx = e.clientX; ry = e.clientY; }, { passive: true });
   gsap.ticker.add(() => { const x = gsap.getProperty(ring, "x"), y = gsap.getProperty(ring, "y"); gsap.set(ring, { x: x + (rx - x) * 0.16, y: y + (ry - y) * 0.16 }); });
   document.body.classList.add("hasCursor");
-  window.__cursorBind = () => $$("a, button, .magnetic, #sphereCanvas, .gItem, .flow-card, .cat-card, .ring-card, .article-card, .pub-row").forEach(e => {
+  window.__cursorBind = () => $$("a, button, .magnetic, .gItem, .flow-card, .cat-card, .ring-card, .article-card, .pub-row, .proj-card, .focus-card, .rm-card").forEach(e => {
     if (e.__cb) return; e.__cb = 1;
     e.addEventListener("pointerenter", () => ring.classList.add("on"));
     e.addEventListener("pointerleave", () => ring.classList.remove("on"));
@@ -58,9 +61,11 @@ function showPage(name) {
   $$("[data-nav]").forEach(a => a.classList.toggle("active", a.dataset.nav === name));
   lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0);
   if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
-  requestAnimationFrame(() => ST.refresh());
   if (name === "articles") renderArticles();
   if (name === "gallery") galleryCtx();
+  if (name === "projects") wireFlow();
+  if (name === "home") wireJourneyPath();
+  requestAnimationFrame(() => { ST.refresh(); revealIn("#page-" + name); });
 }
 $$("[data-nav]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); showPage(a.dataset.nav); closeMenu(); }));
 $$("[data-scroll]").forEach(a => a.addEventListener("click", e => {
@@ -70,6 +75,10 @@ $$("[data-scroll]").forEach(a => a.addEventListener("click", e => {
   closeMenu();
   function go(sel) { const t = $(sel); if (t) lenis ? lenis.scrollTo(t, { offset: -60 }) : t.scrollIntoView(); }
 }));
+// re-run reveals for the freshly shown page (elements were display:none, so triggers didn't fire)
+function revealIn(pageSel) {
+  $$(`${pageSel} .reveal`).forEach(e => { if (getComputedStyle(e).opacity === "0") gsap.to(e, { y: 0, opacity: 1, duration: 0.8 }); });
+}
 
 /* ════════════ RENDER (re-runnable) ════════════ */
 function renderDynamic() {
@@ -77,14 +86,11 @@ function renderDynamic() {
   STATS.forEach(s => statsW.append(el("div", "stat", `<span class="stat-n">${s.n}</span><span class="stat-l">${pick(s, "label")}</span>`)));
   $("#langs").innerHTML = (lang === "ar" ? PROFILE.languages_ar : PROFILE.languages).map(l => `<span class="chip">${l}</span>`).join("");
 
-  // timeline
-  const tl = $("#timeline"); tl.innerHTML = "";
-  PAPERS.forEach((p, i) => {
-    const n = el("article", "tl-item" + (i % 2 ? " right" : ""));
-    n.innerHTML = `<div class="tl-dot"></div><div class="tl-card card"><span class="tl-year">${p.year}</span><span class="tl-tag">${p.tag}</span><h3>${p.title}</h3><p class="tl-venue">${p.venue} · <em>${pick(p, "role")}</em></p><a class="tl-doi" href="${p.doi}" target="_blank" rel="noopener">DOI ↗</a></div>`;
-    tl.append(n);
-  });
-  $("#researchNote").textContent = lang === "ar" ? RESEARCH_NOTE_AR : RESEARCH_NOTE;
+  renderJourney();
+  renderFocus();
+  renderResearchMap();
+  renderArch();
+  renderProjects();
 
   // hardware flow gallery (rows drift with scroll)
   const flow = (sel, items) => {
@@ -98,17 +104,10 @@ function renderDynamic() {
     });
   };
   flow("#flowRobots", ROBOTS); flow("#flowPrints", [...PRINTS, PATENTS[0]].map(p => ({ id: p.id, cap: p.cap ?? p.title, cap_ar: p.cap_ar ?? p.title_ar })));
-  wireFlow();
 
   // patents
   const pat = $("#patents"); pat.innerHTML = "";
   PATENTS.forEach(p => pat.append(el("article", "card patent", `<img src="${IMG(p.id, "w480")}" alt="${pick(p, "title")}" loading="lazy"><div><span class="tl-year">${p.year}</span><h3>${pick(p, "title")}</h3><p>${pick(p, "body")}</p></div>`)));
-
-  // exp / edu
-  const exp = $("#experience"); exp.innerHTML = "";
-  EXPERIENCE.forEach(e => exp.append(el("div", "row", `<span class="row-when">${pick(e, "when")}</span><div class="row-body"><h4>${pick(e, "role")}</h4><p class="row-org">${pick(e, "org")}</p><p class="row-note">${pick(e, "note")}</p></div>`)));
-  const edu = $("#education"); edu.innerHTML = "";
-  EDUCATION.forEach(e => edu.append(el("div", "row", `<span class="row-when">${pick(e, "when")}</span><div class="row-body"><h4>${pick(e, "deg")}</h4><p class="row-org">${pick(e, "org")}</p>${pick(e, "extra") ? `<p class="row-note">${pick(e, "extra")}</p>` : ""}</div>`)));
 
   // skills
   const sk = $("#skills"); sk.innerHTML = "";
@@ -118,13 +117,6 @@ function renderDynamic() {
   const rp = $("#repos"); rp.innerHTML = "";
   REPOS.forEach(r => { const a = el("a", "card repo"); a.href = r.url; a.target = "_blank"; a.rel = "noopener"; a.innerHTML = `<div class="repo-top"><span class="repo-name">${r.name}</span><span class="repo-star">★ ${r.stars}</span></div><p>${pick(r, "desc")}</p><span class="repo-lang">${r.lang}</span>`; rp.append(a); });
 
-  // robotics architecture (his real closed-loop mental model)
-  renderArch();
-
-  // project fallback
-  const grid = $("#projFallback");
-  if (grid && grid.dataset.filled) { grid.innerHTML = ""; PROJECTS.forEach(p => { const f = el("figure", "gItem"); f.innerHTML = `<img src="${IMG(p.id, "w480")}" alt="${pick(p, "title")}" loading="lazy"><figcaption>${pick(p, "title")}</figcaption>`; f.addEventListener("click", () => openProject(p)); grid.append(f); }); }
-
   // calisthenics
   const cal = $("#calList"); cal.innerHTML = "";
   (lang === "ar" ? CALISTHENICS.list_ar : CALISTHENICS.list).forEach(m => cal.append(el("span", null, m)));
@@ -133,28 +125,114 @@ function renderDynamic() {
   window.__cursorBind?.();
 }
 
-/* ── flow gallery: rows drift horizontally as the section scrolls by ── */
-let flowSTs = [];
-function wireFlow() {
-  flowSTs.forEach(s => s.kill()); flowSTs = [];
-  if (reduced) return;
-  const dir = document.documentElement.dir === "rtl" ? -1 : 1;
-  [["#flowRobots", -1], ["#flowPrints", 1]].forEach(([sel, sign]) => {
-    const row = $(sel); if (!row) return;
-    const drift = () => Math.max(0, row.scrollWidth - row.parentElement.clientWidth + 80);
-    flowSTs.push(gsap.fromTo(row, { x: sign * dir < 0 ? 0 : -drift() }, {
-      x: sign * dir < 0 ? -drift() : 0, ease: "none",
-      scrollTrigger: { trigger: "#galleries", start: "top 85%", end: "bottom 15%", scrub: 0.6, invalidateOnRefresh: true },
-    }).scrollTrigger);
+/* ── The path so far: education + career journey (Home) ── */
+function renderJourney() {
+  const tl = $("#journey"); if (!tl) return; tl.innerHTML = "";
+  const kindLabel = { edu: T().j_edu, work: T().j_work, milestone: T().j_milestone, next: T().j_next };
+  JOURNEY.forEach((j, i) => {
+    const n = el("article", `tl-item j-${j.kind}` + (i % 2 ? " right" : ""));
+    n.innerHTML = `<div class="tl-dot"></div><div class="tl-card card">
+      <span class="tl-year">${j.year}</span><span class="tl-tag j-tag-${j.kind}">${kindLabel[j.kind] || pick(j, "tag")}</span>
+      <h3>${pick(j, "title")}</h3><p class="tl-org">${pick(j, "org")}</p><p class="tl-note">${pick(j, "note")}</p></div>`;
+    tl.append(n);
   });
 }
 
-/* ════════════ ROBOTICS ARCHITECTURE (his real closed-loop model) ════════════ */
+/* ── Home research teaser cards → Research page ── */
+function renderFocus() {
+  const host = $("#focusCards"); if (!host) return; host.innerHTML = "";
+  RESEARCH_MAP.domains.forEach(d => {
+    const c = el("article", "focus-card");
+    c.style.setProperty("--c", d.color);
+    c.innerHTML = `<span class="fc-dot"></span><h3>${pick(d, "label")}</h3>
+      <p>${(lang === "ar" ? d.topics_ar : d.topics).join(" · ")}</p>`;
+    c.addEventListener("click", () => showPage("research"));
+    host.append(c);
+  });
+}
+
+/* ════════════ RESEARCH-INTERESTS MAP (Ramy-style overlapping fields) ════════════ */
+const RM_POS = {
+  tl: { card: [24, 34, 300, 150], circle: [340, 250], link: [324, 150] },
+  tr: { card: [636, 34, 300, 150], circle: [620, 250], link: [636, 150] },
+  bl: { card: [24, 436, 300, 150], circle: [340, 372], link: [324, 470] },
+  br: { card: [636, 436, 300, 150], circle: [620, 372], link: [636, 470] },
+};
+function renderResearchMap() {
+  const host = $("#researchMap"); if (!host) return;
+  const HUB = [480, 310], R = 200;
+  const circles = RESEARCH_MAP.domains.map(d => {
+    const [cx, cy] = RM_POS[d.pos].circle;
+    return `<circle class="rm-circle" id="rmc-${d.id}" cx="${cx}" cy="${cy}" r="${R}" style="--c:${d.color}"/>`;
+  }).join("");
+  const links = RESEARCH_MAP.domains.map(d => {
+    const [lx, ly] = RM_POS[d.pos].link;
+    return `<line class="rm-link" id="rml-${d.id}" x1="${HUB[0]}" y1="${HUB[1]}" x2="${lx}" y2="${ly}"/>`;
+  }).join("");
+  const hub = `<foreignObject x="${HUB[0] - 92}" y="${HUB[1] - 62}" width="184" height="124">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="rm-hub"><b>${pick(RESEARCH_MAP.center, "label")}</b><span>${pick(RESEARCH_MAP.center, "sub")}</span></div>
+    </foreignObject>`;
+  const cards = RESEARCH_MAP.domains.map(d => {
+    const [x, y, w, h] = RM_POS[d.pos].card;
+    const chips = (lang === "ar" ? d.topics_ar : d.topics).map(t => `<span>${t}</span>`).join("");
+    return `<foreignObject x="${x}" y="${y}" width="${w}" height="${h}">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="rm-card" data-dom="${d.id}" style="--c:${d.color}">
+        <b>${pick(d, "label")}</b><div class="rm-chips">${chips}</div></div></foreignObject>`;
+  }).join("");
+  host.innerHTML = `<svg viewBox="0 0 960 620" class="rm-svg" role="img" aria-label="${pick(RESEARCH_MAP.center, "label")}">
+    <g class="rm-circles">${circles}</g><g class="rm-links">${links}</g>${hub}${cards}</svg>`;
+
+  const cap = $("#rmCaption");
+  const reset = () => { cap.textContent = T().rm_hint; cap.classList.remove("on"); host.querySelectorAll(".rm-circle,.rm-card,.rm-link").forEach(e => e.classList.remove("dim", "hi")); };
+  RESEARCH_MAP.domains.forEach(d => {
+    const card = host.querySelector(`.rm-card[data-dom="${d.id}"]`);
+    const enter = () => {
+      cap.innerHTML = `<b style="color:${d.color}">${pick(d, "label")}:</b> ${pick(d, "work")}`;
+      cap.classList.add("on");
+      host.querySelectorAll(".rm-circle").forEach(c => c.classList.toggle("dim", c.id !== `rmc-${d.id}`));
+      host.querySelector(`#rmc-${d.id}`).classList.add("hi");
+      host.querySelector(`#rml-${d.id}`).classList.add("hi");
+    };
+    card.addEventListener("pointerenter", enter);
+    host.querySelector(`#rmc-${d.id}`).addEventListener("pointerenter", enter);
+    card.addEventListener("click", enter);
+  });
+  host.addEventListener("pointerleave", reset);
+  reset();
+
+  // platform chips
+  const plat = $("#rmPlatforms"); if (plat) {
+    plat.innerHTML = `<span class="rm-plabel">${T().rm_platforms}</span>` +
+      RESEARCH_MAP.platforms.map(p => `<span class="rm-pchip">${pick(p, "label")}</span>`).join("");
+  }
+}
+
+/* ════════════ PROJECTS showcase (filterable grid) ════════════ */
+let projCat = "all";
+const PROJ_CATS = () => [["all", T().proj_all], ["aerial", T().proj_aerial], ["ground", T().proj_ground], ["sensor", T().proj_sensor]];
+function renderProjects() {
+  const fr = $("#projFilter"); if (!fr) return; fr.innerHTML = "";
+  PROJ_CATS().forEach(([v, label]) => {
+    const b = el("button", "proj-chip" + (projCat === v ? " on" : ""), label);
+    b.addEventListener("click", () => { projCat = v; renderProjects(); });
+    fr.append(b);
+  });
+  const grid = $("#projGrid"); grid.innerHTML = "";
+  PROJECTS.filter(p => projCat === "all" || p.cat === projCat).forEach(p => {
+    const c = el("article", "proj-card");
+    c.innerHTML = `<div class="proj-cover"><img src="${IMG(p.id, "w480")}" alt="${pick(p, "title")}" loading="lazy"><span class="proj-cat">${pick(p, "kind")}</span></div>
+      <div class="proj-body"><div class="proj-top"><h3>${pick(p, "title")}</h3><span class="proj-year">${p.year}</span></div>
+        <p>${pick(p, "blurb")}</p><span class="proj-open">${T().proj_view} →</span></div>`;
+    c.addEventListener("click", () => openProject(p));
+    grid.append(c);
+  });
+  window.__cursorBind?.();
+}
+
+/* ════════════ ROBOTICS ARCHITECTURE (closed-loop model) ════════════ */
 function renderArch() {
   const host = $("#arch"); if (!host) return;
   const N = ARCH.nodes;
-  // fixed geometry (viewBox 0 0 1000 660) — perception ↑ left, decision ↓ right,
-  // shared world model centre, supervisory panel right, hardware bottom, 3 timing bands.
   const box = {
     semantic: [64, 96, 222, 84], spatial: [64, 200, 222, 84], stateest: [64, 304, 222, 84],
     task: [636, 96, 210, 84], motion: [636, 200, 210, 84], control: [636, 304, 210, 84],
@@ -171,20 +249,17 @@ function renderArch() {
       + `<span class="arch-n-sub">${pick(n, "sub")}</span></div></foreignObject>`;
   };
   const path = (d, cls) => `<path d="${d}" class="${cls}" fill="none"/>`;
-  // band stripes + timing labels (left rail)
   const bands = [["delib", 92, 138], ["react", 196, 242], ["reflex", 300, 346]];
   const stripes = bands.map(([id, y]) => `<rect x="58" y="${y}" width="790" height="92" rx="12" class="arch-band ${id}"/>`).join("");
   const timing = bands.map(([id, y, cy], i) => {
     const bd = ARCH.bands[i];
     return `<foreignObject x="2" y="${cy - 24}" width="54" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="arch-time"><b>${pick(bd, "label")}</b><span>${bd.rate}</span></div></foreignObject>`;
   }).join("");
-  // connectors
   const flow = [
-    "M175,556 L175,514", "M175,430 L175,388", "M175,304 L175,284", "M175,200 L175,180",   // perception ↑
-    "M741,180 L741,200", "M741,284 L741,304", "M741,388 L741,430", "M741,514 L741,556",   // decision ↓
+    "M175,556 L175,514", "M175,430 L175,388", "M175,304 L175,284", "M175,200 L175,180",
+    "M741,180 L741,200", "M741,284 L741,304", "M741,388 L741,430", "M741,514 L741,556",
   ].map(d => path(d, "arch-flow")).join("");
-  const share = ["M286,138 L356,138", "M286,242 L356,242", "M566,138 L636,138", "M566,242 L636,242"]
-    .map(d => path(d, "arch-share")).join("");
+  const share = ["M286,138 L356,138", "M286,242 L356,242", "M566,138 L636,138", "M566,242 L636,242"].map(d => path(d, "arch-share")).join("");
   const emerg = path("M286,258 L320,258 L320,410 L600,410 L600,346 L636,346", "arch-emerg");
   const propr = path("M741,514 L741,536 L336,536 L336,346 L286,346", "arch-react");
   const sup = ["M846,138 L866,138", "M846,242 L866,242", "M846,346 L866,346"].map(d => path(d, "arch-super")).join("");
@@ -210,9 +285,7 @@ function renderArch() {
     `<span class="le-${l.id}"><i></i>${l[lang === "ar" ? "label_ar" : "label"]}</span>`).join("")
     + `<span class="le-mine"><i></i>${T().stack_legend_mine}</span></div>`;
   host.innerHTML = svg + legend;
-  // sim footnote
   const sim = $("#archSim"); if (sim) sim.textContent = pick(ARCH, "sim");
-  // "where my work lives" cards
   const cards = $("#archCards"); if (cards) {
     const order = ["semantic", "spatial", "stateest", "motion", "task", "control", "super", "sensors"];
     cards.innerHTML = order.filter(k => N[k] && N[k].mine).map(k => {
@@ -227,7 +300,6 @@ function renderArch() {
 /* ════════════ PUBLICATIONS DATABASE ════════════ */
 const ST_LABEL = s => ({ published: T().st_published, accepted: T().st_accepted, review: T().st_review, progress: T().st_progress }[s] || s);
 const ST_ORDER = { published: 0, accepted: 1, review: 2, progress: 3 };
-// bucket the per-paper authorship role into 1st author / equal contributor / co-author
 const CONTRIB = p => {
   const r = (p.role || "").toLowerCase();
   if (/equal/.test(r)) return { key: "equal", label: T().role_equal };
@@ -286,6 +358,7 @@ function renderPubs() {
     body.append(tr); body.append(ab);
   });
   $("#pubCount").textContent = `${rows.length} ${T().pubdb_count}`;
+  $("#researchNote").textContent = lang === "ar" ? RESEARCH_NOTE_AR : RESEARCH_NOTE;
 }
 $("#pubSearch").addEventListener("input", e => { pubFilter.q = e.target.value.toLowerCase().trim(); renderPubs(); });
 $("#pubYear").addEventListener("change", e => { pubFilter.year = e.target.value; renderPubs(); });
@@ -295,10 +368,7 @@ $$("#pubdb th[data-sort]").forEach(th => th.addEventListener("click", () => { co
 
 /* ════════════ INTERESTS GALLERY (page #gallery) ════════════ */
 function galleryCtx() {
-  renderGallery({
-    pick, t: T, lang, reduced,
-    lightbox: (items, idx) => openLightbox(items, idx),
-  });
+  renderGallery({ pick, t: T, lang, reduced, lightbox: (items, idx) => openLightbox(items, idx) });
 }
 
 /* ════════════ BLOG (markdown posts) ════════════ */
@@ -356,8 +426,11 @@ function applyStatic() {
 }
 function applyLang() {
   applyStatic(); renderDynamic();
-  if ($("#page-articles").classList.contains("active")) renderArticles();
-  if ($("#page-gallery").classList.contains("active")) galleryCtx();
+  const active = $(".page.active")?.id.replace("page-", "");
+  if (active === "articles") renderArticles();
+  if (active === "gallery") galleryCtx();
+  if (active === "projects") wireFlow();
+  if (active === "home") wireJourneyPath();
   requestAnimationFrame(() => ST.refresh());
 }
 $("#langToggle").addEventListener("click", () => { lang = lang === "en" ? "ar" : "en"; applyLang(); });
@@ -379,12 +452,6 @@ addEventListener("load", () => {
     .from(".navbar", { y: -24, opacity: 0 }, "<");
 });
 $$(".reveal").forEach(e => gsap.from(e, { y: reduced ? 0 : 40, opacity: 0, duration: 1.0, scrollTrigger: { trigger: e, start: "top 88%" } }));
-// stack stagger
-gsap.from("#arch .arch-svg", { opacity: 0, y: reduced ? 0 : 20, duration: 0.8, scrollTrigger: { trigger: "#arch", start: "top 78%" } });
-gsap.from("#archCards .arch-card", { y: reduced ? 0 : 24, opacity: 0, stagger: 0.05, duration: 0.6, scrollTrigger: { trigger: "#archCards", start: "top 85%" } });
-
-// research path
-(function () { const path = $("#tlPath"); if (!path) return; const len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = reduced ? 0 : len; if (reduced) return; ST.create({ trigger: "#research", start: "top 60%", end: "bottom 80%", scrub: 0.6, onUpdate: s => path.style.strokeDashoffset = len * (1 - s.progress) }); })();
 
 // hero video: self-removes until vid/hero.mp4 ships (the still stays underneath)
 const heroVid = $(".hero-vid");
@@ -392,15 +459,38 @@ if (heroVid) {
   if (reduced) heroVid.remove();
   else heroVid.addEventListener("error", () => heroVid.remove(), { once: true });
 }
-
-// subtle parallax on the static hero art
 if (!reduced) gsap.to(".hero-art img, .hero-vid", { yPercent: 10, ease: "none", scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.4 } });
 
-// sphere
-const sphereWrap = $("#sphereWrap");
-if (webglOK() && !reduced) {
-  ST.create({ trigger: sphereWrap, start: "top 130%", once: true, onEnter: () => initSphere({ canvas: $("#sphereCanvas"), onPick: openProject, onHover: item => { const tag = $("#sphereTag"); if (item) { tag.textContent = pick(item, "title"); tag.classList.add("on"); } else tag.classList.remove("on"); }, reducedMotion: reduced }) });
-} else { sphereWrap.classList.add("fallback"); $("#projFallback").dataset.filled = "1"; renderDynamic(); }
+/* ── journey glowing path (scroll-scrubbed, re-wireable per page show) ── */
+function wireJourneyPath() {
+  const path = $("#tlPath"); if (!path) return;
+  const len = path.getTotalLength();
+  path.style.strokeDasharray = len;
+  if (reduced) { path.style.strokeDashoffset = 0; return; }
+  path.style.strokeDashoffset = len;
+  journeyST?.kill();
+  journeyST = ST.create({
+    trigger: "#journey-sec", start: "top 75%", end: "bottom 65%", scrub: true,
+    onUpdate: s => { path.style.strokeDashoffset = len * (1 - s.progress); },
+    onRefresh: s => { path.style.strokeDashoffset = len * (1 - s.progress); },
+  });
+}
+wireJourneyPath();
+
+/* ── hardware flow gallery: rows drift as #galleries scrolls by ── */
+function wireFlow() {
+  flowSTs.forEach(s => s.kill()); flowSTs = [];
+  if (reduced) return;
+  const dir = document.documentElement.dir === "rtl" ? -1 : 1;
+  [["#flowRobots", -1], ["#flowPrints", 1]].forEach(([sel, sign]) => {
+    const row = $(sel); if (!row) return;
+    const drift = () => Math.max(0, row.scrollWidth - row.parentElement.clientWidth + 80);
+    flowSTs.push(gsap.fromTo(row, { x: sign * dir < 0 ? 0 : -drift() }, {
+      x: sign * dir < 0 ? -drift() : 0, ease: "none",
+      scrollTrigger: { trigger: "#galleries", start: "top 85%", end: "bottom 15%", scrub: 0.6, invalidateOnRefresh: true },
+    }).scrollTrigger);
+  });
+}
 
 /* ── project panel + lightbox ── */
 const panel = $("#projPanel");
@@ -423,4 +513,4 @@ addEventListener("scroll", () => $(".navbar").classList.toggle("scrolled", scrol
 $("#hamburger").addEventListener("click", () => { $("#hamburger").classList.toggle("active"); $("#navMenu").classList.toggle("active"); });
 
 /* ── initial route ── */
-if (["#beyond", "#articles", "#gallery"].includes(location.hash)) showPage(location.hash.slice(1));
+if (["#research", "#projects", "#gallery", "#articles", "#beyond"].includes(location.hash)) showPage(location.hash.slice(1));
