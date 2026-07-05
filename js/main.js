@@ -4,10 +4,10 @@
    Projects (filterable showcase + patents + hardware + skills + repos) ·
    interactive interests Gallery · markdown blog · i18n. */
 
-import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS,
-         PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_NOTE, RESEARCH_NOTE_AR,
-         CALISTHENICS, I18N, IMG } from "./data.js";
-import { renderGallery } from "./gallery.js";
+import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
+         TEACHING, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_NOTE, RESEARCH_NOTE_AR,
+         I18N, IMG } from "./data.js?v=9";
+import { renderGallery } from "./gallery.js?v=9";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -64,7 +64,11 @@ function showPage(name) {
   if (name === "articles") renderArticles();
   if (name === "gallery") galleryCtx();
   if (name === "projects") wireFlow();
-  if (name === "home") wireJourneyPath();
+  if (name === "home") wireJourney();
+  // tab transition — CSS re-triggered by re-adding the class (resting opacity is 1,
+  // so a page is never left invisible even if the animation doesn't run)
+  const pageEl = $("#page-" + name);
+  if (pageEl && !reduced) { pageEl.classList.remove("page-in"); void pageEl.offsetWidth; pageEl.classList.add("page-in"); }
   requestAnimationFrame(() => { ST.refresh(); revealIn("#page-" + name); });
 }
 $$("[data-nav]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); showPage(a.dataset.nav); closeMenu(); }));
@@ -117,9 +121,8 @@ function renderDynamic() {
   const rp = $("#repos"); rp.innerHTML = "";
   REPOS.forEach(r => { const a = el("a", "card repo"); a.href = r.url; a.target = "_blank"; a.rel = "noopener"; a.innerHTML = `<div class="repo-top"><span class="repo-name">${r.name}</span><span class="repo-star">★ ${r.stars}</span></div><p>${pick(r, "desc")}</p><span class="repo-lang">${r.lang}</span>`; rp.append(a); });
 
-  // calisthenics
-  const cal = $("#calList"); cal.innerHTML = "";
-  (lang === "ar" ? CALISTHENICS.list_ar : CALISTHENICS.list).forEach(m => cal.append(el("span", null, m)));
+  renderOrgs();
+  renderTeaching();
 
   renderPubs();
   window.__cursorBind?.();
@@ -129,12 +132,36 @@ function renderDynamic() {
 function renderJourney() {
   const tl = $("#journey"); if (!tl) return; tl.innerHTML = "";
   const kindLabel = { edu: T().j_edu, work: T().j_work, milestone: T().j_milestone, next: T().j_next };
-  JOURNEY.forEach((j, i) => {
-    const n = el("article", `tl-item j-${j.kind}` + (i % 2 ? " right" : ""));
-    n.innerHTML = `<div class="tl-dot"></div><div class="tl-card card">
-      <span class="tl-year">${j.year}</span><span class="tl-tag j-tag-${j.kind}">${kindLabel[j.kind] || pick(j, "tag")}</span>
+  JOURNEY.forEach(j => {
+    const n = el("article", `jrny-item j-${j.kind}`);
+    n.innerHTML = `<span class="jrny-dot"></span><div class="jrny-card card">
+      <div class="jrny-top"><span class="tl-year">${j.year}</span><span class="tl-tag j-tag-${j.kind}">${kindLabel[j.kind] || pick(j, "tag")}</span></div>
       <h3>${pick(j, "title")}</h3><p class="tl-org">${pick(j, "org")}</p><p class="tl-note">${pick(j, "note")}</p></div>`;
     tl.append(n);
+  });
+}
+
+/* ── Teaching page ── */
+function renderTeaching() {
+  const stats = $("#teachStats");
+  if (stats) { stats.innerHTML = ""; TEACHING.stats.forEach(s => stats.append(el("div", "tstat", `<span class="tstat-n">${s.n}</span><span class="tstat-l">${pick(s, "label")}</span>`))); }
+  const card = c => `<article class="teach-card card"><div class="teach-when">${pick(c, "when")}</div>
+    <div class="teach-body"><div class="teach-head"><h4>${c.code ? `<span class="teach-code">${c.code}</span> ` : ""}${pick(c, "title")}</h4></div>
+    <p class="teach-org">${pick(c, "org")}</p><p class="teach-note">${pick(c, "note")}</p>
+    <div class="teach-tags">${(c.tags || []).map(t => `<span>${t}</span>`).join("")}</div></div></article>`;
+  const co = $("#teachCourses"); if (co) co.innerHTML = TEACHING.courses.map(card).join("");
+  const ws = $("#teachWorkshops"); if (ws) ws.innerHTML = TEACHING.workshops.map(card).join("");
+}
+
+/* ── Organizations (Projects page) ── */
+function renderOrgs() {
+  const og = $("#orgs"); if (!og) return; og.innerHTML = "";
+  ORGS.forEach(o => {
+    const c = el("article", "card org");
+    c.innerHTML = `<div class="org-top"><span class="org-name">${o.name}</span><span class="org-handle">@${o.handle}</span></div>
+      <p class="org-role">${pick(o, "role")}</p><p class="org-desc">${pick(o, "desc")}</p>
+      <div class="org-links"><a href="${o.url}" target="_blank" rel="noopener">${T().org_follow}</a>${o.site ? `<a href="${o.site}" target="_blank" rel="noopener">${T().org_site}</a>` : ""}</div>`;
+    og.append(c);
   });
 }
 
@@ -204,6 +231,13 @@ function renderResearchMap() {
   const plat = $("#rmPlatforms"); if (plat) {
     plat.innerHTML = `<span class="rm-plabel">${T().rm_platforms}</span>` +
       RESEARCH_MAP.platforms.map(p => `<span class="rm-pchip">${pick(p, "label")}</span>`).join("");
+  }
+  // mobile stacked version (SVG hidden < 720px)
+  const mob = $("#rmMobile"); if (mob) {
+    mob.innerHTML = `<div class="rm-hub-m"><b>${pick(RESEARCH_MAP.center, "label")}</b><span>${pick(RESEARCH_MAP.center, "sub")}</span></div>` +
+      RESEARCH_MAP.domains.map(d => `<div class="rm-mcard" style="--c:${d.color}"><b>${pick(d, "label")}</b>
+        <div class="rm-chips">${(lang === "ar" ? d.topics_ar : d.topics).map(t => `<span>${t}</span>`).join("")}</div>
+        <p>${pick(d, "work")}</p></div>`).join("");
   }
 }
 
@@ -430,7 +464,7 @@ function applyLang() {
   if (active === "articles") renderArticles();
   if (active === "gallery") galleryCtx();
   if (active === "projects") wireFlow();
-  if (active === "home") wireJourneyPath();
+  if (active === "home") wireJourney();
   requestAnimationFrame(() => ST.refresh());
 }
 $("#langToggle").addEventListener("click", () => { lang = lang === "en" ? "ar" : "en"; applyLang(); });
@@ -461,21 +495,22 @@ if (heroVid) {
 }
 if (!reduced) gsap.to(".hero-art img, .hero-vid", { yPercent: 10, ease: "none", scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.4 } });
 
-/* ── journey glowing path (scroll-scrubbed, re-wireable per page show) ── */
-function wireJourneyPath() {
-  const path = $("#tlPath"); if (!path) return;
-  const len = path.getTotalLength();
-  path.style.strokeDasharray = len;
-  if (reduced) { path.style.strokeDashoffset = 0; return; }
-  path.style.strokeDashoffset = len;
+/* ── journey vertical timeline: a fill line grows + dots light with scroll ── */
+function wireJourney() {
+  const fill = $("#jrnyFill"); if (!fill) return;
+  const dots = $$("#journey .jrny-dot");
+  if (reduced) { fill.style.height = "100%"; dots.forEach(d => d.classList.add("on")); return; }
   journeyST?.kill();
   journeyST = ST.create({
-    trigger: "#journey-sec", start: "top 75%", end: "bottom 65%", scrub: true,
-    onUpdate: s => { path.style.strokeDashoffset = len * (1 - s.progress); },
-    onRefresh: s => { path.style.strokeDashoffset = len * (1 - s.progress); },
+    trigger: "#jrny", start: "top 72%", end: "bottom 62%", scrub: true,
+    onUpdate: s => {
+      fill.style.height = (s.progress * 100).toFixed(1) + "%";
+      const lit = s.progress * dots.length + 0.25;
+      dots.forEach((d, i) => d.classList.toggle("on", i < lit));
+    },
   });
 }
-wireJourneyPath();
+wireJourney();
 
 /* ── hardware flow gallery: rows drift as #galleries scrolls by ── */
 function wireFlow() {
@@ -513,4 +548,4 @@ addEventListener("scroll", () => $(".navbar").classList.toggle("scrolled", scrol
 $("#hamburger").addEventListener("click", () => { $("#hamburger").classList.toggle("active"); $("#navMenu").classList.toggle("active"); });
 
 /* ── initial route ── */
-if (["#research", "#projects", "#gallery", "#articles", "#beyond"].includes(location.hash)) showPage(location.hash.slice(1));
+if (["#research", "#projects", "#gallery", "#articles", "#teaching"].includes(location.hash)) showPage(location.hash.slice(1));

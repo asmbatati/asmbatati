@@ -230,8 +230,60 @@ export const REPOS = [
   { name: "ros2_mavros", lang: "Python", stars: 3, desc: "ROS 2 Humble offboard UAV control via MAVROS.", desc_ar: "تحكّم خارجي بالطائرات عبر MAVROS على ROS 2 Humble.", url: "https://github.com/asmbatati/ros2_mavros" },
   { name: "awesome-ros", lang: "Python", stars: 1, desc: "Community dataset of the ROS ecosystem.", desc_ar: "مجموعة بيانات مجتمعية لمنظومة ROS.", url: "https://github.com/asmbatati/awesome-ros" },
   { name: "d2dtracker_interception", lang: "Python", stars: 1, desc: "Drone-to-drone trajectory interception in ROS 2.", desc_ar: "اعتراض مسار درون بدرون في ROS 2.", url: "https://github.com/asmbatati/d2dtracker_interception" },
+  { name: "text-3d-printing", lang: "TypeScript", stars: 0, desc: "Type a name, print it — browser text-to-STL, printable across meshes.", desc_ar: "اكتب اسمًا فتُطبعه — تحويل نصّ إلى STL في المتصفّح.", url: "https://github.com/asmbatati/text-3d-printing" },
+  { name: "AeroGym-PX4", lang: "Python", stars: 0, desc: "A PX4 reinforcement-learning gym for UAV control.", desc_ar: "بيئة تعلّم معزّز على PX4 للتحكّم بالطائرات.", url: "https://github.com/asmbatati/AeroGym-PX4" },
+  { name: "SAFEMRS", lang: "TeX", stars: 0, desc: "Safe agentic framework for LLM-planned multi-robot systems.", desc_ar: "إطار وكيلي آمن لأنظمة روبوتات متعددة مخطّطة بـLLM.", url: "https://github.com/asmbatati/SAFEMRS" },
   { name: "cad_2_mesh", lang: "Python", stars: 0, desc: "CAD → mesh conversion for simulation pipelines.", desc_ar: "تحويل CAD إلى مجسّمات لخطوط المحاكاة.", url: "https://github.com/asmbatati/cad_2_mesh" },
+  { name: "interception suite", lang: "C++ · Python", stars: 0, desc: "A 10-package D2DTracker stack: detection · estimation · prediction · planning · MPC control.", desc_ar: "منظومة D2DTracker من ١٠ حزم: كشف · تقدير · توقّع · تخطيط · تحكّم MPC.", url: "https://github.com/asmbatati?tab=repositories&q=interception" },
 ];
+
+/* ── GitHub organizations I build under ── */
+export const ORGS = [
+  { name: "RIOTU-Lab", handle: "riotu-lab", role: "Robotics & IoT Lab · Prince Sultan University",
+    role_ar: "معمل الروبوتات وإنترنت الأشياء · جامعة الأمير سلطان",
+    desc: "Where my UAV autonomy, GPS-denied localization and multi-robot research ships.",
+    desc_ar: "حيث تُنشر أبحاثي في استقلالية الطائرات والتموضع دون GPS والروبوتات المتعددة.",
+    url: "https://github.com/riotu-lab", site: "https://riotu-lab.github.io" },
+  { name: "NEUROS-X", handle: "neuros-x", role: "Agentic & safety-verified multi-robot systems",
+    role_ar: "أنظمة روبوتات متعددة وكيلة ومُتحقَّقة السلامة",
+    desc: "The program behind SAFEMRS — pre-execution safety for LLM-based robot task planning.",
+    desc_ar: "البرنامج خلف SAFEMRS — سلامة ما قبل التنفيذ لتخطيط مهام الروبوتات بالنماذج اللغوية.",
+    url: "https://github.com/neuros-x", site: "https://neuros-x.github.io/safemrs/" },
+];
+
+/* ── Teaching: courses + workshops I've taught (Teaching page) ── */
+export const TEACHING = {
+  courses: [
+    { code: "CS460", title: "Mobile Robots", title_ar: "الروبوتات المتنقّلة",
+      org: "Prince Sultan University", org_ar: "جامعة الأمير سلطان", when: "2022 — now", when_ar: "٢٠٢٢ — الآن",
+      note: "Teaching assistant / instructor — ROS 2, motion planning, SLAM, and hands-on autonomous-robot labs.",
+      note_ar: "معيد / مُحاضر — ROS 2 وتخطيط الحركة وSLAM ومختبرات عملية للروبوتات المستقلة.", tags: ["ROS 2", "SLAM", "planning"] },
+    { code: "ME 218", title: "Engineering Design Process for Robotic Systems", title_ar: "منهجية التصميم الهندسي للأنظمة الروبوتية",
+      org: "KFUPM (adapted from MIT 6.141)", org_ar: "جامعة الملك فهد (مقتبس من MIT 6.141)", when: "2024", when_ar: "٢٠٢٤",
+      note: "Authored + delivered a 96-slide workshop on the robotics-modified engineering design process (digital-twin + Sim2Real stages).",
+      note_ar: "تأليف وتقديم ورشة من ٩٦ شريحة حول منهجية التصميم الهندسي المعدّلة للروبوتات (مراحل التوأم الرقمي وSim2Real).", tags: ["design process", "V-model", "Sim2Real"] },
+  ],
+  workshops: [
+    { title: "Managing a Fleet of Robots with ROS 2", title_ar: "إدارة أسطول روبوتات بـROS 2",
+      org: "PSU · RIOTU Lab", org_ar: "جامعة الأمير سلطان · معمل RIOTU", when: "2023", when_ar: "٢٠٢٣",
+      note: "Multi-robot coordination, namespacing, and Nav2 across a fleet — from bring-up to a shared world model.",
+      note_ar: "تنسيق روبوتات متعددة والفضاءات الاسمية وNav2 عبر أسطول — من التشغيل إلى نموذج عالم مشترك.", tags: ["ROS 2", "Nav2", "multi-robot"] },
+    { title: "Drone Building Workshop", title_ar: "ورشة بناء الطائرات المسيّرة",
+      org: "PSU · outreach", org_ar: "جامعة الأمير سلطان · توعية", when: "2022 — 2024", when_ar: "٢٠٢٢ — ٢٠٢٤",
+      note: "From frame + flight controller to a first PX4 flight — mechanical build, wiring, tuning, and safety.",
+      note_ar: "من الهيكل ومتحكّم الطيران إلى أول إقلاع على PX4 — البناء الميكانيكي والتوصيل والضبط والسلامة.", tags: ["PX4", "hardware", "flight"] },
+    { title: "Robotics & ROS 2 Bootcamps", title_ar: "معسكرات الروبوتات وROS 2",
+      org: "PSU summer school", org_ar: "المدرسة الصيفية بجامعة الأمير سلطان", when: "2023 — 2024", when_ar: "٢٠٢٣ — ٢٠٢٤",
+      note: "Intro-to-autonomy bootcamps: nodes, topics, TF, Gazebo simulation, and a capstone robot behavior.",
+      note_ar: "معسكرات مقدّمة في الاستقلالية: العُقد والمواضيع وTF ومحاكاة Gazebo ومشروع سلوك روبوت ختامي.", tags: ["ROS 2", "Gazebo", "teaching"] },
+  ],
+  stats: [
+    { n: "1", label: "university course", label_ar: "مقرّر جامعي" },
+    { n: "4+", label: "workshops led", label_ar: "ورش قُدتها" },
+    { n: "100+", label: "students & trainees", label_ar: "طالب ومتدرّب" },
+    { n: "96", label: "slides authored (EDP)", label_ar: "شريحة من تأليفي (EDP)" },
+  ],
+};
 
 /* ── Research taxonomy + full publications database ── */
 export const TAXONOMY = [
@@ -520,23 +572,22 @@ export const CALISTHENICS = {
 /* ── Blog: posts live in posts/*.md, indexed by posts/posts.json.
    Publish a vault note with:  python tools/publish_post.py "<path-to-note.md>"  ── */
 
-/* ── Interactive interests gallery (page #gallery) ── */
+/* ── Interactive interests gallery (page #gallery) ──
+   5 ways (v9). Each cat.icon → img/gal/<icon>.webp (generated engraved icons). */
 export const GALLERY = {
   cats: [
-    { id: "cad", icon: "⌗", label: "CAD", label_ar: "التصميم CAD",
-      tease: "Parts, assemblies, renders", tease_ar: "قطع وتجميعات وتصييرات" },
-    { id: "print", icon: "⬢", label: "3D Printing", label_ar: "الطباعة ثلاثية الأبعاد",
-      tease: "A rotating table of parts", tease_ar: "طاولة دوّارة من القطع" },
-    { id: "model", icon: "∿", label: "Physics & Math", label_ar: "الفيزياء والرياضيات",
-      tease: "A live second-order system", tease_ar: "نظام حيّ من الدرجة الثانية" },
-    { id: "sim", icon: "▦", label: "Simulation", label_ar: "المحاكاة",
-      tease: "Close the loop before flight", tease_ar: "أغلِق الحلقة قبل الطيران" },
-    { id: "design", icon: "✎", label: "Design", label_ar: "التصميم الصناعي",
-      tease: "Machines, start to finish", tease_ar: "آلات من الفكرة إلى الواقع" },
-    { id: "robotics", icon: "✣", label: "Robotics", label_ar: "الروبوتات",
-      tease: "My platforms, rendered in 3D", tease_ar: "منصّاتي مجسّمةً أمامك" },
+    { id: "caddesign", icon: "cad", label: "CAD & Design", label_ar: "التصميم CAD والهندسي",
+      tease: "Parts, assemblies, whole machines", tease_ar: "قطع وتجميعات وآلات كاملة" },
+    { id: "hardware", icon: "hardware", label: "Fabrication & Integration", label_ar: "التصنيع والدمج",
+      tease: "Print, assemble, integrate", tease_ar: "طباعة وتجميع ودمج" },
+    { id: "model", icon: "physics", label: "Physics & Math", label_ar: "الفيزياء والرياضيات",
+      tease: "The theory under the machines", tease_ar: "النظرية خلف الآلات" },
+    { id: "sim", icon: "sim", label: "Simulation", label_ar: "المحاكاة",
+      tease: "ROS 2 worlds before flight", tease_ar: "عوالم ROS 2 قبل الطيران" },
+    { id: "robotics", icon: "robotics", label: "Robotics", label_ar: "الروبوتات",
+      tease: "My platforms — 3D + real", tease_ar: "منصّاتي — مجسّمة وحقيقية" },
   ],
-  cad: {
+  caddesign: {
     tools: ["SolidWorks", "Siemens NX", "Generative design", "cad_2_mesh"],
     images: [
       { id: "proj-taer", cap: "TAER — tilt-tail VTOL, full SolidWorks assembly", cap_ar: "طائر — VTOL بذيل دوّار، تجميع SolidWorks كامل" },
@@ -546,16 +597,6 @@ export const GALLERY = {
       { id: "proj-faseeh", cap: "FASEEH — Ackermann UGV with long-travel suspension", cap_ar: "فصيح — مركبة أرضية بتوجيه أكرمان وتعليق طويل" },
       { id: "proj-roboeye", cap: "RoboEye — stereo-VIO enclosure, 125 g in PETG", cap_ar: "عين الروبوت — حاوية كاميرات ثنائية، ١٢٥ غرامًا" },
     ],
-  },
-  print: {
-    photos: [
-      { id: "print-stereo", cap: "RoboEye stereo enclosure — PETG, 125 g", cap_ar: "حاوية عين الروبوت — PETG، ١٢٥ غ" },
-      { id: "print-kacst-1", cap: "Impeller, housings, mechanisms — KACST Industry 4.0", cap_ar: "مروحة وحاويات وآليّات — كاكست للصناعة ٤٫٠" },
-      { id: "print-kacst-2", cap: "Piston, turbine & centrifugal housing — printed for testing", cap_ar: "مكبس وتوربين وحاوية طاردة — للاختبار" },
-      { id: "patent-vtol", cap: "1:7 VTOL prototype — scale model", cap_ar: "نموذج VTOL بمقياس ١:٧" },
-    ],
-  },
-  design: {
     projects: [
       { id: "proj-vtol-build", name: "VTOL UAV Platform", name_ar: "منصة VTOL", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "A long-endurance mission needs both a helicopter's take-off and an airplane's cruise — so: a hybrid.", d_ar: "مهمة طويلة المدى تحتاج إقلاع المروحية وانسياب الطائرة — إذن: هجينة." },
@@ -601,37 +642,96 @@ export const GALLERY = {
   },
   robotics: {
     platforms: [
-      { id: "vtol", name: "VTOL hybrid UAV", name_ar: "طائرة VTOL هجينة",
+      { id: "vtol", photo: "proj-vtol-build", name: "VTOL hybrid UAV", name_ar: "طائرة VTOL هجينة",
         desc: "Vertical take-off, fixed-wing cruise. Designed, fabricated and flown in-house for long-endurance missions.",
         desc_ar: "إقلاع عمودي وانسياب ثابت الجناح. صُمّمت وصُنّعت وطارت داخليًا لمهام طويلة المدى.", tags: ["PX4", "long endurance"] },
-      { id: "quad", name: "Research quadrotor", name_ar: "رباعية بحثية",
+      { id: "quad", photo: "rob-quad-gym", name: "Research quadrotor", name_ar: "رباعية بحثية",
         desc: "The flight-test workhorse behind the trajectory-prediction and interception papers.",
         desc_ar: "منصة اختبار الطيران خلف أبحاث توقّع المسار والاعتراض.", tags: ["D2DTracker", "VECTOR"] },
-      { id: "hexa", name: "Heavy-lift hexacopter", name_ar: "سداسية ثقيلة الحمولة",
+      { id: "hexa", photo: "proj-agridrone", name: "Heavy-lift hexacopter", name_ar: "سداسية ثقيلة الحمولة",
         desc: "Two builds: an agricultural sprayer with a carbon payload bay, and a gimbal-stabilized surveillance craft.",
         desc_ar: "نسختان: رشّاشة زراعية بحجيرة كربونية، وطائرة مراقبة بجيمبال مثبّت.", tags: ["AgriDrone", "gimbal"] },
       { id: "go2", name: "Quadruped — Unitree Go2", name_ar: "الروبوت الرباعي — Unitree Go2",
         desc: "The legged platform behind the quadruped perception · locomotion · VLA survey and the QuadroRL rough-terrain reinforcement-learning work.",
         desc_ar: "المنصة ذات الأرجل خلف مسح الروبوتات الرباعية (إدراك · حركة · نماذج VLA) وأعمال QuadroRL لعبور التضاريس بالتعلّم المعزّز.", tags: ["Go2", "RL locomotion", "VLA"] },
-      { id: "rover", name: "FASEEH — outdoor UGV", name_ar: "فصيح — مركبة أرضية",
+      { id: "rover", photo: "proj-faseeh", name: "FASEEH — outdoor UGV", name_ar: "فصيح — مركبة أرضية",
         desc: "Ackermann-steered rover with long-travel suspension for autonomy on uneven terrain.",
         desc_ar: "مركبة بتوجيه أكرمان وتعليق طويل المدى للاستقلالية على التضاريس الوعرة.", tags: ["Ackermann", "outdoor"] },
-      { id: "agv", name: "AMIR — warehouse AGV", name_ar: "عامر — روبوت مستودعات",
+      { id: "agv", photo: "proj-amir", name: "AMIR — warehouse AGV", name_ar: "عامر — روبوت مستودعات",
         desc: "Low-profile tote-carrier with onboard navigation. Granted industrial-design patent.",
         desc_ar: "حامل صناديق منخفض بملاحة ذاتية. حاصل على براءة تصميم صناعي.", tags: ["patent", "logistics"] },
-      { id: "bot", name: "RoboHotel — service robot", name_ar: "روبو-هوتيل — روبوت خدمة",
+      { id: "bot", photo: "proj-robohotel", name: "RoboHotel — service robot", name_ar: "روبو-هوتيل — روبوت خدمة",
         desc: "A bellhop AMR: luggage deck, guest touchscreen, hospitality-grade shell.",
         desc_ar: "روبوت حمّال: سطح أمتعة وشاشة نزلاء وهيكل بمستوى الضيافة.", tags: ["patent", "service"] },
     ],
   },
-  sim: { chips: ["Gazebo", "PX4 SITL", "FLIGHTGEN", "ROSNavBench", "ROS 2"] },
+  // Fabrication & Integration — real STLs rendered one-by-one as spotlit trophies + real print photos
+  hardware: {
+    intro: "Every part below is a real STL I designed and printed — mostly for the Tarot-960 drone build. Each spins under a spotlight; step through them.",
+    intro_ar: "كل قطعة أدناه مجسّم STL حقيقي صمّمته وطبعته — أغلبها لبناء درون Tarot-960. تدور كلٌّ منها تحت ضوء كاشف؛ تنقّل بينها.",
+    trophies: [
+      { file: "tarot-cover.stl", name: "Tarot 960 top cover", name_ar: "غطاء Tarot 960 العلوي", note: "Electronics lid for the heavy-lift frame", note_ar: "غطاء إلكترونيات الهيكل ثقيل الحمولة" },
+      { file: "payload-box.stl", name: "Modular payload box", name_ar: "صندوق حمولة معياري", note: "Split-print carrier for sensors & battery", note_ar: "حاوية مطبوعة مجزّأة للحساسات والبطارية" },
+      { file: "xavier-holder.stl", name: "Jetson Xavier mount arm", name_ar: "ذراع تثبيت Jetson Xavier", note: "Onboard-compute holder for autonomy", note_ar: "حامل الحوسبة الطائرة للاستقلالية" },
+      { file: "pcb-mount.stl", name: "Flight-controller PCB mount", name_ar: "حامل لوحة متحكّم الطيران", note: "Vibration-isolating board tray", note_ar: "صينية لوحة عازلة للاهتزاز" },
+      { file: "holder-arm.stl", name: "Payload holder arm", name_ar: "ذراع حمل الحمولة", note: "Adjustable under-frame gimbal arm", note_ar: "ذراع جيمبال قابل للضبط أسفل الهيكل" },
+      { file: "latch.stl", name: "Payload quick-latch", name_ar: "مزلاج الحمولة السريع", note: "Tool-free box release", note_ar: "تحرير الصندوق دون أدوات" },
+      { file: "cover-bracket.stl", name: "Cover mounting bracket", name_ar: "كتيفة تثبيت الغطاء", note: "Snap bracket for the frame cover", note_ar: "كتيفة تعشيق لغطاء الهيكل" },
+      { file: "calibration-cube.stl", name: "Printer calibration cube", name_ar: "مكعّب معايرة الطابعة", note: "Dimensional-accuracy test print", note_ar: "طبعة اختبار دقّة الأبعاد" },
+    ],
+    photos: [
+      { id: "print-stereo", cap: "RoboEye stereo enclosure — PETG, 125 g", cap_ar: "حاوية عين الروبوت — PETG، ١٢٥ غ" },
+      { id: "print-kacst-1", cap: "Impeller, housings, mechanisms — KACST Industry 4.0", cap_ar: "مروحة وحاويات وآليّات — كاكست للصناعة ٤٫٠" },
+      { id: "print-kacst-2", cap: "Piston, turbine & centrifugal housing — printed for testing", cap_ar: "مكبس وتوربين وحاوية طاردة — للاختبار" },
+      { id: "patent-vtol", cap: "1:7 VTOL prototype — scale model", cap_ar: "نموذج VTOL بمقياس ١:٧" },
+    ],
+  },
+  // Physics & Math — a live demo + the theory that actually shows up in the work
+  model: {
+    intro: "Not decoration — this is the math I use. One live demo, and the theory behind the machines.",
+    intro_ar: "ليست زينة — هذه هي الرياضيات التي أستعملها. عرضٌ حيّ واحد، والنظرية خلف الآلات.",
+    topics: [
+      { t: "Second-order dynamics", t_ar: "ديناميكا الدرجة الثانية", eq: "ẍ + 2ζωₙẋ + ωₙ²x = 0",
+        note: "Every mount, arm and airframe rings like this — damping ζ and natural frequency ωₙ set how it settles. Live demo above.",
+        note_ar: "كل حامل وذراع وهيكل يرنّ هكذا — التخميد ζ والتردد الطبيعي ωₙ يحدّدان كيف يستقرّ. العرض الحيّ أعلاه." },
+      { t: "State estimation — Kalman / EKF", t_ar: "تقدير الحالة — كالمان / EKF", eq: "x̂ₖ = x̂ₖ⁻ + Kₖ (zₖ − h(x̂ₖ⁻))",
+        note: "Fuse noisy sensors into one best estimate — the backbone of GPS-denied localization (TSR-EKF, RoboEye).",
+        note_ar: "دمج حساسات ضوضائية في أفضل تقدير — العمود الفقري للتموضع دون GPS (TSR-EKF، RoboEye)." },
+      { t: "Rigid-body rotation — SO(3)", t_ar: "دوران الجسم الصلب — SO(3)", eq: "Ṙ = R [ω]×,   R ∈ SO(3)",
+        note: "Attitude lives on a manifold, not in Euler angles. The geometry my PhD leans into (Lie theory on SE(3)).",
+        note_ar: "الاتّجاه يعيش على متعدّدة طيّات لا في زوايا أويلر. الهندسة التي تتوجّه إليها دكتوراتي (نظرية لي على SE(3))." },
+      { t: "Rotational dynamics — Euler", t_ar: "الديناميكا الدورانية — أويلر", eq: "I ω̇ + ω × I ω = τ",
+        note: "Why a quadrotor needs fast inner loops: cross-coupling torques you must fight in real time.",
+        note_ar: "لماذا تحتاج الرباعية حلقات داخلية سريعة: عزوم اقتران يجب مقاومتها آنيًا." },
+      { t: "Optimal control — LQR", t_ar: "التحكّم الأمثل — LQR", eq: "J = ∫ (xᵀQx + uᵀRu) dt",
+        note: "Trade tracking error against effort — the cost that shapes smooth, stable trajectories.",
+        note_ar: "موازنة خطأ التتبّع مقابل الجهد — الكلفة التي تصوغ مسارات سلسة مستقرّة." },
+      { t: "Feedback control — PID", t_ar: "التحكّم بالتغذية الراجعة — PID", eq: "u = Kₚe + Kᵢ∫e + K_d ė",
+        note: "The workhorse under PX4 — still the first loop I reach for on real hardware.",
+        note_ar: "الحصان العامل تحت PX4 — لا تزال أول حلقة ألجأ إليها على العتاد الحقيقي." },
+    ],
+  },
+  // Simulation — the ROS 2 sim + viz stack, plus a live GPS-denied estimate demo
+  sim: {
+    intro: "I close every loop in simulation first. The ROS 2 stack I reach for — and Rviz 2 to see what the robot believes.",
+    intro_ar: "أُغلق كل حلقة في المحاكاة أولًا. منظومة ROS 2 التي أعتمدها — وRviz 2 لأرى ما يعتقده الروبوت.",
+    simulators: [
+      { name: "Gazebo (Harmonic + Classic)", note: "Primary physics sim, bridged to ROS 2 via ros_gz", note_ar: "محاكي الفيزياء الأساسي، موصولٌ بـROS 2 عبر ros_gz", tag: "physics" },
+      { name: "PX4 SITL", note: "Software-in-the-loop for the flight stack — every UAV mission dry-runs here", note_ar: "برمجيات في الحلقة لمنظومة الطيران — كل مهمة طائرة تُجرّب هنا", tag: "flight" },
+      { name: "NVIDIA Isaac Sim", note: "GPU-accelerated worlds for reinforcement learning (QuadroRL)", note_ar: "عوالم مُسرَّعة بالمعالج الرسومي للتعلّم المعزّز (QuadroRL)", tag: "RL" },
+      { name: "Webots", note: "ROS 2-supported sim for quick multi-robot setups", note_ar: "محاكٍ مدعوم بـROS 2 لإعدادات سريعة متعددة الروبوتات", tag: "multi-robot" },
+      { name: "Rviz 2", note: "The robot's-eye view — TF trees, point clouds, costmaps, planned paths", note_ar: "منظور الروبوت — أشجار TF، سُحُب النقاط، خرائط الكلفة، المسارات المخطّطة", tag: "viz" },
+      { name: "FLIGHTGEN", note: "My automated ROS 2 UAV dataset generator", note_ar: "مولّد بيانات الطائرات الآلي بـROS 2", tag: "mine" },
+      { name: "ROSNavBench", note: "My automated Nav2 trajectory-planner benchmark in Gazebo", note_ar: "أداتي لقياس مخطّطات مسار Nav2 في Gazebo", tag: "mine" },
+    ],
+  },
 };
 
 /* ── UI strings ── */
 export const I18N = {
   en: {
     nav_about: "About", nav_research: "Research", nav_projects: "Projects", nav_gallery: "Gallery", nav_experience: "Experience",
-    nav_cta: "Get in touch", lang_btn: "ع",
+    nav_cta: "Get in touch", lang_btn: "عربي",
     hero_kicker: "Robotics & Autonomous Intelligent Systems",
     hero_l1: "I build robots that", hero_l2: "fly, drive, and see.",
     hero_sub: "Senior Research Assistant at PSU's Robotics & IoT Lab — designing UAVs, ground robots, and the perception that keeps them located when GPS goes dark. Next stop: a PhD at KFUPM.",
@@ -697,6 +797,16 @@ export const I18N = {
     projpg_kicker: "Projects", projpg_title: "The machines.",
     proj_intro: "Built to leave the bench. Filter by kind, then open any one for the full story.",
     proj_all: "All", proj_aerial: "Aerial", proj_ground: "Ground", proj_sensor: "Sensors & kits", proj_view: "View project",
+    /* ── v9 ── */
+    tab_teaching: "Teaching",
+    teach_kicker: "Teaching", teach_title: "Courses & workshops.",
+    teach_lead: "What I teach when I'm not building — ROS 2, autonomy, and the engineering design process, hands-on.",
+    teach_courses: "University courses", teach_workshops: "Workshops & bootcamps",
+    eb_orgs: "Organizations", t_orgs: "Where I build.", orgs_lead: "The labs and programs my research ships under.",
+    org_follow: "View organization ↗", org_site: "Project site ↗",
+    gp_photo: "Photo", gp_3d: "3D model",
+    gp_trophy_hint: "Real STLs I designed and printed — use ‹ › to step through the collection.",
+    gp_theory: "The theory behind it", sim_stack: "My ROS 2 sim + viz stack", gp_prints_h: "And in the real world",
   },
   ar: {
     nav_about: "نبذة", nav_research: "الأبحاث", nav_projects: "المشاريع", nav_gallery: "المعرض", nav_experience: "الخبرة",
@@ -766,5 +876,15 @@ export const I18N = {
     projpg_kicker: "المشاريع", projpg_title: "الآلات.",
     proj_intro: "بُنيت لتغادر الطاولة. صفِّ حسب النوع، ثم افتح أيّها لقراءة القصة كاملة.",
     proj_all: "الكل", proj_aerial: "جوية", proj_ground: "أرضية", proj_sensor: "حساسات وعُدد", proj_view: "عرض المشروع",
+    /* ── v9 ── */
+    tab_teaching: "التدريس",
+    teach_kicker: "التدريس", teach_title: "مقرّرات وورش.",
+    teach_lead: "ما أُدرّسه حين لا أبني — ROS 2 والاستقلالية ومنهجية التصميم الهندسي، عمليًّا.",
+    teach_courses: "مقرّرات جامعية", teach_workshops: "ورش ومعسكرات",
+    eb_orgs: "المنظّمات", t_orgs: "أين أبني.", orgs_lead: "المعامل والبرامج التي تُنشر تحتها أبحاثي.",
+    org_follow: "زيارة المنظّمة ↗", org_site: "موقع المشروع ↗",
+    gp_photo: "صورة", gp_3d: "مجسّم ثلاثي",
+    gp_trophy_hint: "مجسّمات STL حقيقية صمّمتها وطبعتها — استخدم ‹ › للتنقّل في المجموعة.",
+    gp_theory: "النظرية خلفه", sim_stack: "منظومة المحاكاة والعرض بـROS 2", gp_prints_h: "وفي الواقع",
   },
 };
