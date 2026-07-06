@@ -331,6 +331,57 @@ export const QUALS = {
   ],
 };
 
+/* ── Research areas, illustrated (engraved plates in img/research/) ── */
+export const RESEARCH_PLATES = [
+  { img: "gps-denied", title: "GPS-denied localization", title_ar: "التموضع دون GPS",
+    note: "Keeping a UAV located indoors and in the field when the satellites go dark.",
+    note_ar: "إبقاء الطائرة متموضِعة داخليًا وفي الميدان حين تنقطع الأقمار." },
+  { img: "sensor-fusion", title: "State estimation & sensor fusion", title_ar: "تقدير الحالة ودمج الحساسات",
+    note: "Camera, IMU, LiDAR and terrain fused into one best estimate — EKF and learned residuals.",
+    note_ar: "دمج الكاميرا وIMU والليدار والتضاريس في أفضل تقدير — EKF وبقايا متعلَّمة." },
+  { img: "slam", title: "SLAM & mapping", title_ar: "SLAM ورسم الخرائط",
+    note: "Building the map and locating within it at once — the ground robot's sense of place.",
+    note_ar: "بناء الخريطة والتموضع فيها معًا — إحساس الروبوت بالمكان." },
+  { img: "rl", title: "Reinforcement learning", title_ar: "التعلّم المعزّز",
+    note: "Policies that learn agile control and rough-terrain locomotion from experience.",
+    note_ar: "سياسات تتعلّم التحكّم الرشيق وعبور التضاريس من التجربة." },
+  { img: "swarm", title: "Multi-robot & swarm", title_ar: "الروبوتات المتعددة والأسراب",
+    note: "Coordinating fleets of UAVs and UGVs — agentic task allocation and safe teamwork.",
+    note_ar: "تنسيق أساطيل الطائرات والروبوتات الأرضية — توزيع مهام وكيلي وعملٌ جماعي آمن." },
+  { img: "ros2", title: "ROS 2 & systems", title_ar: "ROS 2 والأنظمة",
+    note: "The distributed nervous system tying perception, planning and control together.",
+    note_ar: "الجهاز العصبي الموزّع الذي يربط الإدراك والتخطيط والتحكّم." },
+];
+
+/* ── Websites I've built — web & product work (thumbnails in img/webwork/) ── */
+export const WEBWORK = [
+  { id: "self", title: "This portfolio", title_ar: "هذا الموقع",
+    blurb: "The bilingual, engraved-illustration site you're reading — GSAP + Three.js, seven pages, zero build step.",
+    blurb_ar: "الموقع ثنائي اللغة بالرسوم المحفورة الذي تتصفّحه — GSAP + Three.js، سبع صفحات، دون خطوة بناء.",
+    tech: ["GSAP", "Three.js", "Lenis", "EN/AR"], live: "https://asmbatati.vercel.app", repo: "https://github.com/asmbatati/asmbatati",
+    tag: "You're here", tag_ar: "أنت هنا" },
+  { id: "shelf", title: "The Shelf", title_ar: "الرفّ",
+    blurb: "A personal media OS — movies, series, games. Tier lists, cloud sync, and my real PlayStation + TV watch history.",
+    blurb_ar: "نظام وسائط شخصي — أفلام ومسلسلات وألعاب. قوائم تصنيف ومزامنة سحابية وتاريخ لعبي ومشاهدتي الحقيقي.",
+    tech: ["Vanilla JS", "Supabase", "PSN + TVtime"], live: "https://the-shelf-mu.vercel.app/", repo: null,
+    tag: "Live", tag_ar: "مباشر" },
+  { id: "maha", title: "Maha Lens · عدسة مها", title_ar: "عدسة مها",
+    blurb: "A bilingual photography portfolio — a lens-first landing and filterable collections, built for a photographer.",
+    blurb_ar: "معرض تصوير ثنائي اللغة — واجهة بعدسة وتجميعات قابلة للتصفية، لمصوّرة فوتوغرافية.",
+    tech: ["Photography", "Supabase", "EN/AR"], live: null, repo: "https://github.com/asmbatati/maha-lens",
+    tag: "Client build", tag_ar: "لعميلة" },
+  { id: "noja", title: "Noja Canvas", title_ar: "لوحة نوجا",
+    blurb: "An Awwwards-style art site for a visual artist — scroll-driven gallery, GSAP reveals, gold-leaf aesthetic.",
+    blurb_ar: "موقع فنّي بأسلوب Awwwards لفنّانة تشكيلية — معرض بالتمرير وكشوفات GSAP وجمالية ورق الذهب.",
+    tech: ["GSAP", "Scroll-driven", "Art gallery"], live: null, repo: "https://github.com/asmbatati/noja_canvas",
+    tag: "Client build", tag_ar: "لعميلة" },
+  { id: "agentic", title: "Agentic OS — Mission Control", title_ar: "النظام الوكيلي — مركز التحكّم",
+    blurb: "A localhost dashboard over my 970-note knowledge vault — a memory galaxy, a drag-drop Kanban, and a console that dispatches AI agents.",
+    blurb_ar: "لوحة محلية فوق قبو معرفتي (٩٧٠ ملاحظة) — مجرّة ذاكرة ولوحة كانبان بالسحب وطرفية تُشغّل وكلاء الذكاء.",
+    tech: ["Node", "Zero-dep server", "Vault data"], live: null, repo: null,
+    tag: "Personal tool", tag_ar: "أداة شخصية" },
+];
+
 /* ── Research taxonomy + full publications database ── */
 export const TAXONOMY = [
   { id: "all", en: "All", ar: "الكل" },
@@ -713,6 +764,7 @@ export const GALLERY = {
     intro: "Every part below is a real STL I designed and printed — mostly for the Tarot-960 drone build. Each spins under a spotlight; step through them.",
     intro_ar: "كل قطعة أدناه مجسّم STL حقيقي صمّمته وطبعته — أغلبها لبناء درون Tarot-960. تدور كلٌّ منها تحت ضوء كاشف؛ تنقّل بينها.",
     trophies: [
+      { file: "drone-mount.glb", name: "Motor-mount arm — textured", name_ar: "ذراع تثبيت المحرّك — مُكسّى", note: "A CAD-designed drone motor mount, rendered in full material", note_ar: "ذراع تثبيت محرّك مصمَّم على CAD، بخاماته الكاملة" },
       { file: "tarot-cover.stl", name: "Tarot 960 top cover", name_ar: "غطاء Tarot 960 العلوي", note: "Electronics lid for the heavy-lift frame", note_ar: "غطاء إلكترونيات الهيكل ثقيل الحمولة" },
       { file: "payload-box.stl", name: "Modular payload box", name_ar: "صندوق حمولة معياري", note: "Split-print carrier for sensors & battery", note_ar: "حاوية مطبوعة مجزّأة للحساسات والبطارية" },
       { file: "xavier-holder.stl", name: "Jetson Xavier mount arm", name_ar: "ذراع تثبيت Jetson Xavier", note: "Onboard-compute holder for autonomy", note_ar: "حامل الحوسبة الطائرة للاستقلالية" },
@@ -870,6 +922,11 @@ export const I18N = {
     q_edu: "Education", q_certs: "Professional certifications", q_programs: "Specializations & programs",
     q_awards: "Awards & honors", q_courses: "courses",
     gp_skills: "Skills", soft_orgs: "Organizations", soft_repos: "Selected repositories", soft_gh: "Everything on GitHub ↗",
+    eb_areas: "Research areas", t_areas: "Six problems I work on.",
+    lead_areas: "The recurring questions behind the publications — each an engraving.",
+    eb_web: "Web & product", t_web: "Websites I've built.",
+    lead_web: "Beyond robots, I ship the web. A few sites I designed and built end-to-end.",
+    web_live: "Visit ↗", web_repo: "Code ↗",
   },
   ar: {
     nav_about: "نبذة", nav_research: "الأبحاث", nav_projects: "المشاريع", nav_gallery: "المعرض", nav_experience: "الخبرة",
@@ -956,5 +1013,10 @@ export const I18N = {
     q_edu: "التعليم", q_certs: "اعتمادات مهنية", q_programs: "تخصّصات وبرامج",
     q_awards: "جوائز وتكريم", q_courses: "مقرّرًا",
     gp_skills: "مهارات", soft_orgs: "المنظّمات", soft_repos: "مستودعات مختارة", soft_gh: "كل شيء على GitHub ↗",
+    eb_areas: "مجالات البحث", t_areas: "ستّ مسائل أعمل عليها.",
+    lead_areas: "الأسئلة المتكرّرة خلف المنشورات — كلٌّ منها لوحة محفورة.",
+    eb_web: "الويب والمنتجات", t_web: "مواقع بنيتُها.",
+    lead_web: "أبني الويب أيضًا، لا الروبوتات فحسب. مواقع صمّمتُها وبنيتُها من الفكرة إلى النشر.",
+    web_live: "زيارة ↗", web_repo: "الشيفرة ↗",
   },
 };

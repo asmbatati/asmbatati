@@ -5,9 +5,9 @@
    interactive interests Gallery · markdown blog · i18n. */
 
 import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
-         TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_NOTE, RESEARCH_NOTE_AR,
-         I18N, IMG } from "./data.js?v=10";
-import { renderGallery } from "./gallery.js?v=10";
+         TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK,
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=11";
+import { renderGallery } from "./gallery.js?v=11";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -125,8 +125,10 @@ function renderDynamic() {
   renderJourney();
   renderFocus();
   renderResearchMap();
+  renderAreas();
   renderArch();
   renderProjects();
+  renderWebwork();
 
   // hardware flow gallery (rows drift with scroll)
   const flow = (sel, items) => {
@@ -230,6 +232,36 @@ function renderFocus() {
       <p>${(lang === "ar" ? d.topics_ar : d.topics).join(" · ")}</p>`;
     c.addEventListener("click", () => showPage("research"));
     host.append(c);
+  });
+}
+
+/* ── Research areas, illustrated (engraved plates) ── */
+function renderAreas() {
+  const host = $("#areasGrid"); if (!host) return; host.innerHTML = "";
+  RESEARCH_PLATES.forEach(p => host.append(el("article", "area-card",
+    `<div class="area-plate"><img src="img/research/w480/${p.img}.webp" alt="${pick(p, "title")}" loading="lazy"></div>
+     <div class="area-body"><h3>${pick(p, "title")}</h3><p>${pick(p, "note")}</p></div>`)));
+}
+
+/* ── Web & product work: websites I've built ── */
+function renderWebwork() {
+  const host = $("#webGrid"); if (!host) return; host.innerHTML = "";
+  WEBWORK.forEach(w => {
+    const card = el("article", "web-card");
+    const link = w.live || w.repo;
+    const cover = w.id === "self"
+      ? `<img src="img/w960/hero-generated.webp" alt="${pick(w, "title")}" loading="lazy">`
+      : `<img src="img/webwork/w480/${w.id}.webp" alt="${pick(w, "title")}" loading="lazy">`;
+    const links = [
+      w.live ? `<a href="${w.live}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_live}</a>` : "",
+      w.repo ? `<a href="${w.repo}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_repo}</a>` : "",
+    ].filter(Boolean).join("");
+    card.innerHTML = `<div class="web-cover">${cover}<span class="web-tag">${pick(w, "tag")}</span></div>
+      <div class="web-body"><h3>${pick(w, "title")}</h3><p>${pick(w, "blurb")}</p>
+        <div class="web-tech">${w.tech.map(t => `<span>${t}</span>`).join("")}</div>
+        <div class="web-links">${links || `<span class="web-nolink">local · not deployed</span>`}</div></div>`;
+    if (link) { card.style.cursor = "pointer"; card.addEventListener("click", () => window.open(link, "_blank", "noopener")); }
+    host.append(card);
   });
 }
 

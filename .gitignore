@@ -4,3 +4,7 @@ Thumbs.db
 desktop.ini
 
 _gen/
+
+# Higgsfield raw staging (huge; derived assets live in img/research, img/webwork, assets/models)
+img/higgsfield/
+_webprev/

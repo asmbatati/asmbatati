@@ -9,7 +9,8 @@
 
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
-import { GALLERY, REPOS, ORGS, IMG } from "./data.js?v=10";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
+import { GALLERY, REPOS, ORGS, IMG } from "./data.js?v=11";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -450,28 +451,35 @@ function viewFab(host) {
     // pedestal + gold ring
     sc.root.add(mesh(new THREE.CylinderGeometry(0.95, 1.12, 0.34, 56), new THREE.MeshStandardMaterial({ color: 0x161a1f, roughness: 0.85 }), 0, -1.05, 0));
     sc.root.add(mesh(new THREE.CylinderGeometry(0.97, 0.97, 0.02, 56), new THREE.MeshStandardMaterial({ color: 0xb6803a, roughness: 0.4, metalness: 0.5 }), 0, -0.87, 0));
-    const loader = new STLLoader();
+    const stlLoader = new STLLoader(), gltfLoader = new GLTFLoader();
     const trophies = GALLERY.fabrication.trophies;
-    let current = null, idx = 0, rot = 0, vel = 0, dragging = false, px = 0;
+    let current = null, idx = 0, rot = 0, vel = 0, dragging = false, px = 0, token = 0;
     const mat = new THREE.MeshStandardMaterial({ color: 0x4f9b74, roughness: 0.42, metalness: 0.12 });
+    // scale + centre an object into the trophy pose, then swap it in
+    const place = obj => {
+      const box = new THREE.Box3().setFromObject(obj), c = new THREE.Vector3(), size = new THREE.Vector3();
+      box.getCenter(c); box.getSize(size);
+      obj.position.sub(c);
+      const maxd = Math.max(size.x, size.y, size.z) || 1;
+      const g = new THREE.Group(); g.add(obj); g.scale.setScalar(1.6 / maxd); g.position.y = 0.15;
+      if (current) sc.root.remove(current);
+      current = g; sc.root.add(g);
+      if (window.gsap && !ctx.reduced) { const s = 1.6 / maxd; g.scale.setScalar(0.01); gsap.to(g.scale, { x: s, y: s, z: s, duration: 0.7, ease: "expo.out" }); }
+    };
     function show(i) {
       idx = (i + trophies.length) % trophies.length;
-      const tr = trophies[idx];
+      const tr = trophies[idx], my = ++token;
       cap.innerHTML = `<h3>${ctx.pick(tr, "name")}</h3><p>${ctx.pick(tr, "note")}</p><span class="trophy-count">${idx + 1} / ${trophies.length}</span>`;
-      loader.load(`assets/stl/${tr.file}`, geo => {
-        if (current) sc.root.remove(current);
-        geo.computeBoundingBox();
-        const c = new THREE.Vector3(), size = new THREE.Vector3();
-        geo.boundingBox.getCenter(c); geo.boundingBox.getSize(size);
-        geo.translate(-c.x, -c.y, -c.z);
-        const maxd = Math.max(size.x, size.y, size.z) || 1;
-        const m = new THREE.Mesh(geo, mat);
-        m.scale.setScalar(1.6 / maxd);
-        m.rotation.x = -Math.PI / 2;               // STLs are Z-up → stand upright
-        const g = new THREE.Group(); g.add(m); g.position.y = 0.15;
-        current = g; sc.root.add(g);
-        if (window.gsap && !ctx.reduced) { g.scale.setScalar(0.01); gsap.to(g.scale, { x: 1, y: 1, z: 1, duration: 0.7, ease: "expo.out" }); }
-      }, undefined, () => { cap.innerHTML += `<p class="gp-hint">(mesh failed to load)</p>`; });
+      const fail = () => { if (my === token) cap.innerHTML += `<p class="gp-hint">(mesh failed to load)</p>`; };
+      if (/\.glb$/i.test(tr.file)) {                 // textured GLB — keep its own materials, Y-up
+        gltfLoader.load(`assets/models/${tr.file}`, gltf => { if (my !== token) return; place(gltf.scene); }, undefined, fail);
+      } else {                                       // STL — solid material, Z-up → upright
+        stlLoader.load(`assets/stl/${tr.file}`, geo => {
+          if (my !== token) return;
+          const m = new THREE.Mesh(geo, mat); m.rotation.x = -Math.PI / 2;
+          place(m);
+        }, undefined, fail);
+      }
     }
     nav.querySelector(".trophy-prev").addEventListener("click", () => show(idx - 1));
     nav.querySelector(".trophy-next").addEventListener("click", () => show(idx + 1));
