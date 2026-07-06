@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=12";
-import { renderGallery } from "./gallery.js?v=12";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=13";
+import { renderGallery } from "./gallery.js?v=13";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -565,7 +565,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=12").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=13").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
