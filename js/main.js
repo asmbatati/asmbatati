@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=11";
-import { renderGallery } from "./gallery.js?v=11";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=12";
+import { renderGallery } from "./gallery.js?v=12";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -560,6 +560,12 @@ $("#cEmail").href = "mailto:" + PROFILE.email; $("#cEmail").textContent = PROFIL
 $("#cGithub").href = PROFILE.links.github; $("#cLinkedin").href = PROFILE.links.linkedin; $("#cScholar").href = PROFILE.links.scholar;
 
 applyLang();
+
+/* ── owner-editable content: merge cloud overrides over data.js, then re-render;
+   mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
+   failure can never break the public site. ── */
+const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
+import("./admin.js?v=12").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
