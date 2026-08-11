@@ -381,6 +381,23 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .contact-links a:hover { border-color: var(--green-2); color: var(--green-2); }
 .footer { text-align: center; color: var(--dim); padding: 2.4rem; font-size: .85rem; border-top: 1px solid var(--line); }
 
+/* ── admin entry marker ──
+   A faint diamond at the end of the footer line: the owner knows to look at the
+   end of the footer, a visitor reads it as punctuation. Hover or keyboard focus
+   brings it up to the gold accent and slides out an "Admin" label. Deliberately
+   no `title` attribute — a native browser tooltip would advertise it to anyone
+   who happens to hover. The 2rem box keeps it a real tap target on phones. */
+.admin-dot { position: relative; display: inline-grid; place-items: center; width: 2rem; height: 2rem; vertical-align: middle; color: inherit; opacity: .2; text-decoration: none; transition: opacity .3s var(--ease), color .3s var(--ease); }
+.admin-dot i { font-style: normal; font-size: .62rem; line-height: 1; }
+/* Label sits ABOVE the dot, not beside it: the dot butts straight up against the
+   footer text, so a side-placed label lands on top of that text. Above is also
+   direction-agnostic (no LTR/RTL special-casing) and uses the footer's padding. */
+.admin-dot .admin-dot-label { position: absolute; bottom: calc(100% - 4px); left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity .3s var(--ease); }
+.admin-dot:hover, .admin-dot:focus-visible { opacity: 1; color: var(--gold); }
+.admin-dot:hover .admin-dot-label, .admin-dot:focus-visible .admin-dot-label { opacity: .75; }
+.admin-dot:focus-visible { outline: 1px dotted currentColor; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .admin-dot, .admin-dot .admin-dot-label { transition: none; } }
+
 /* panels / lightbox */
 .panel, .lightbox { position: fixed; inset: 0; z-index: 8000; background: rgba(22,53,42,0.55); backdrop-filter: blur(8px); display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .45s var(--ease); }
 .panel.active, .lightbox.active { opacity: 1; pointer-events: auto; }

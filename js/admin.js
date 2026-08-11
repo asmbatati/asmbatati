@@ -5,15 +5,16 @@
      and deep-merges it over the static data.js defaults, so saved edits show
      for everyone. If Supabase is unreachable the site silently uses defaults —
      the editing layer never breaks the public page.
-   • Owner: open the panel (Ctrl+Shift+E, or the URL hash #admin), sign in with
-     your email via a one-time code, then edit ANY content section as JSON with
+   • Owner: open the panel — click the faint ◆ at the end of the site footer,
+     or press Ctrl+Shift+E, or load the URL hash #admin — sign in with your
+     email via a one-time code, then edit ANY content section as JSON with
      a live preview, and Save to the cloud.
 
    Security rests on Postgres RLS: the anon key is public (fine), but only a
    signed-in session whose email = OWNER can write (see admin-schema.sql).
    ═══════════════════════════════════════════════════════════════════ */
 
-import * as DATA from "./data.js?v=13";
+import * as DATA from "./data.js?v=15";
 
 const SB_URL = "https://pvconwkeshzoovchvzqm.supabase.co";
 const SB_KEY = "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ";
@@ -147,10 +148,24 @@ export function mountAdmin(rerender) {
   panel.querySelector(".admin-x").addEventListener("click", () => toggle(false));
   panel.addEventListener("click", e => { if (e.target === panel) toggle(false); });
 
-  function toggle(v) { open = v ?? !open; panel.classList.toggle("on", open); if (open) render(); }
-  // triggers: Ctrl+Shift+E  ·  #admin hash
+  function toggle(v) {
+    open = v ?? !open; panel.classList.toggle("on", open); if (open) render();
+    // Don't leave #admin in the URL after closing: the footer marker is an
+    // <a href="#admin">, so a stale hash means the next click fires no
+    // hashchange and the marker would look dead.
+    if (!open && location.hash === "#admin") history.replaceState(null, "", location.pathname + location.search);
+  }
+  // triggers: Ctrl+Shift+E  ·  #admin hash  ·  the footer's ◆ marker
   addEventListener("keydown", e => { if (e.ctrlKey && e.shiftKey && (e.key === "E" || e.key === "e")) { e.preventDefault(); toggle(); } });
   if (location.hash === "#admin") setTimeout(() => toggle(true), 300);
+  // The footer marker is an <a href="#admin">. The SPA router whitelists its own
+  // page hashes and has no hashchange listener, so #admin never routes anywhere —
+  // but it also means a click after load only mutates the hash. Catch it here.
+  addEventListener("hashchange", () => { if (location.hash === "#admin") toggle(true); });
+  // …and wire the marker directly too. The hash alone is not enough: if the hash
+  // is already #admin, clicking fires no hashchange and nothing would happen.
+  document.querySelectorAll("a.admin-dot").forEach(a =>
+    a.addEventListener("click", e => { e.preventDefault(); toggle(true); }));
 
   const msg = (m, ok) => { const s = box.querySelector(".admin-msg"); if (s) { s.textContent = m; s.className = "admin-msg" + (ok ? " ok" : m ? " err" : ""); } };
 
