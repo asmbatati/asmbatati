@@ -14,7 +14,7 @@
    signed-in session whose email = OWNER can write (see admin-schema.sql).
    ═══════════════════════════════════════════════════════════════════ */
 
-import * as DATA from "./data.js?v=15";
+import * as DATA from "./data.js?v=17";
 
 const SB_URL = "https://pvconwkeshzoovchvzqm.supabase.co";
 const SB_KEY = "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ";
@@ -121,15 +121,33 @@ function snapshot() {
 /* ── load the override blob and apply it, then re-render (best-effort) ── */
 export async function initContent(rerender) {
   sb = await getSb(); if (!sb) return;
+  let dirty = false;
+
+  // Owner-only UI. Repo links on the "Websites I've built" cards are hidden from
+  // visitors (several of those repos are private and would 404 for them); they
+  // render only when body.is-owner is set. Failing closed is deliberate — any
+  // error here leaves the visitor view.
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const email = session?.user?.email || "";
+    if (email.toLowerCase() === OWNER.toLowerCase()) { markOwner(); dirty = true; }
+  } catch (e) { /* not signed in → visitor view */ }
+
   try {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), 3500);
     const { data, error } = await sb.from(TABLE).select("data").eq("id", ROW_ID).abortSignal(ctrl.signal).maybeSingle();
     clearTimeout(t);
-    if (error) { console.warn("[admin] content read skipped:", error.message); return; }
-    if (data && data.data && Object.keys(data.data).length) { applyOverrides(data.data); rerender?.(); }
+    if (error) console.warn("[admin] content read skipped:", error.message);
+    else if (data && data.data && Object.keys(data.data).length) { applyOverrides(data.data); dirty = true; }
   } catch (e) { /* offline / table missing / timeout → keep defaults */ }
+
+  if (dirty) rerender?.();
 }
+
+// Exported so the panel can flip the view the moment a sign-in completes,
+// without waiting for a reload.
+export function markOwner() { document.body.classList.add("is-owner"); }
 
 /* ════════════ admin panel (owner-only editing UI) ════════════ */
 export function mountAdmin(rerender) {
@@ -176,6 +194,9 @@ export function mountAdmin(rerender) {
     const email = session?.user?.email || null;
     if (!email) return renderLogin();
     if (email.toLowerCase() !== OWNER.toLowerCase()) return renderDenied(email);
+    // Signing in mid-session should reveal the owner-only repo links immediately,
+    // not on the next reload.
+    if (!document.body.classList.contains("is-owner")) { markOwner(); rerender?.(); }
     renderEditor(email);
   }
 

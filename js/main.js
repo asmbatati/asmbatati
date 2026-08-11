@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=15";
-import { renderGallery } from "./gallery.js?v=15";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=17";
+import { renderGallery } from "./gallery.js?v=17";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -248,13 +248,24 @@ function renderWebwork() {
   const host = $("#webGrid"); if (!host) return; host.innerHTML = "";
   WEBWORK.forEach(w => {
     const card = el("article", "web-card");
-    const link = w.live || w.repo;
+    // Repo links are owner-only. admin.js adds body.is-owner once a signed-in
+    // session matching OWNER is confirmed, then re-renders. Visitors get the live
+    // link and nothing else — several of these repos are private and would 404 for
+    // them anyway. (The URLs still sit in this public data.js; this hides the links,
+    // it is not a secret store.)
+    const owner = document.body.classList.contains("is-owner");
+    const link = w.live || (owner ? w.repo : null);
+    // Cover art is optional: the typographic tile renders behind the image, and the
+    // image deletes itself if there's no img/webwork/w480/<id>.webp. Without this a
+    // new entry ships a broken image, since the src is derived from the entry id.
     const cover = w.id === "self"
       ? `<img src="img/w960/hero-generated.webp" alt="${pick(w, "title")}" loading="lazy">`
-      : `<img src="img/webwork/w480/${w.id}.webp" alt="${pick(w, "title")}" loading="lazy">`;
+      : `<span class="web-tile" aria-hidden="true"><b>${pick(w, "title")}</b><i>${pick(w, "tag")}</i></span>
+         <img src="img/webwork/w480/${w.id}.webp" alt="${pick(w, "title")}" loading="lazy" onerror="this.remove()">`;
     const links = [
       w.live ? `<a href="${w.live}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_live}</a>` : "",
-      w.repo ? `<a href="${w.repo}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_repo}</a>` : "",
+      (owner && w.repo) ? `<a href="${w.repo}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_repo}</a>` : "",
+      w.cta ? `<a href="${w.cta}" onclick="event.stopPropagation()">${T().web_contact}</a>` : "",
     ].filter(Boolean).join("");
     card.innerHTML = `<div class="web-cover">${cover}<span class="web-tag">${pick(w, "tag")}</span></div>
       <div class="web-body"><h3>${pick(w, "title")}</h3><p>${pick(w, "blurb")}</p>
@@ -565,7 +576,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=15").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=17").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {

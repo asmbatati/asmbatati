@@ -770,7 +770,14 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .web-card { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--card); display: flex; flex-direction: column; transition: transform .4s var(--ease), box-shadow .4s; }
 .web-card:hover { transform: translateY(-5px); box-shadow: 0 20px 46px rgba(22,53,42,0.12); }
 .web-cover { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--paper-2); }
-.web-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
+.web-cover img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
+/* Cover fallback. Entries without a generated thumbnail would otherwise render a
+   broken image, because the cover <img> src is derived from the entry id. The tile
+   sits *behind* the image; if the image 404s it removes itself (see renderWebwork)
+   and the tile shows through. So a new WEBWORK entry never needs art to ship. */
+.web-tile { position: absolute; inset: 0; z-index: 0; display: grid; align-content: center; gap: .4rem; padding: 1.2rem 1.35rem; background: linear-gradient(135deg, var(--paper) 0%, var(--paper-2) 65%, var(--green-3) 340%); }
+.web-tile b { font-family: var(--disp); font-size: 1.16rem; font-weight: 600; line-height: 1.25; color: var(--green-1); }
+.web-tile i { font-style: normal; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--green-2); opacity: .7; }
 .web-card:hover .web-cover img { transform: scale(1.05); }
 .web-tag { position: absolute; top: 12px; inset-inline-start: 12px; background: color-mix(in srgb, var(--green-0) 80%, transparent); color: #fff; font-size: .7rem; letter-spacing: .04em; padding: 4px 11px; border-radius: 99px; backdrop-filter: blur(6px); }
 .web-body { padding: 1.1rem 1.3rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
