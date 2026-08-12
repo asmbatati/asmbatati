@@ -5,9 +5,9 @@
    interactive interests Gallery · markdown blog · i18n. */
 
 import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
-         TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=17";
-import { renderGallery } from "./gallery.js?v=17";
+         TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=19";
+import { renderGallery } from "./gallery.js?v=19";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -129,6 +129,7 @@ function renderDynamic() {
   renderArch();
   renderProjects();
   renderWebwork();
+  renderSectionIndex();
 
   // hardware flow gallery (rows drift with scroll)
   const flow = (sel, items) => {
@@ -243,36 +244,121 @@ function renderAreas() {
      <div class="area-body"><h3>${pick(p, "title")}</h3><p>${pick(p, "note")}</p></div>`)));
 }
 
-/* ── Web & product work: websites I've built ── */
+/* ── Web & product work: websites I've built ──
+   Rendered as colour-coded blocks (Personal · Tools · Project pages) from
+   WEBWORK_GROUPS, with WEBWORK_STANDALONE cards pulled out below them as a wide
+   callout. Grouping is layout only — see the note above WEBWORK_GROUPS in data.js. */
+function webCard(w) {
+  const card = el("article", "web-card");
+  // Repo links are owner-only. admin.js adds body.is-owner once a signed-in
+  // session matching OWNER is confirmed, then re-renders. Visitors get the live
+  // link and nothing else — several of these repos are private and would 404 for
+  // them anyway. (The URLs still sit in this public data.js; this hides the links,
+  // it is not a secret store.)
+  const owner = document.body.classList.contains("is-owner");
+  const link = w.live || (owner ? w.repo : null);
+  // Cover art is optional: the typographic tile renders behind the image, and the
+  // image deletes itself if there's no img/webwork/w480/<id>.webp. Without this a
+  // new entry ships a broken image, since the src is derived from the entry id.
+  const cover = w.id === "self"
+    ? `<img src="img/w960/hero-generated.webp" alt="${pick(w, "title")}" loading="lazy">`
+    : `<span class="web-tile" aria-hidden="true"><b>${pick(w, "title")}</b><i>${pick(w, "tag")}</i></span>
+       <img src="img/webwork/w480/${w.id}.webp" alt="${pick(w, "title")}" loading="lazy" onerror="this.remove()">`;
+  const links = [
+    w.live ? `<a href="${w.live}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_live}</a>` : "",
+    (owner && w.repo) ? `<a href="${w.repo}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_repo}</a>` : "",
+  ].filter(Boolean).join("");
+  // `note` flags an access caveat (e.g. a sign-in wall) so a visitor isn't sent
+  // to a door they can't open.
+  const note = w.note ? `<span class="web-note">${pick(w, "note")}</span>` : "";
+  card.innerHTML = `<div class="web-cover">${cover}<span class="web-tag">${pick(w, "tag")}</span></div>
+    <div class="web-body"><h3>${pick(w, "title")}</h3><p>${pick(w, "blurb")}</p>
+      <div class="web-tech">${w.tech.map(t => `<span>${t}</span>`).join("")}</div>
+      <div class="web-links">${links || `<span class="web-nolink">local · not deployed</span>`}${note}</div></div>`;
+  if (link) { card.style.cursor = "pointer"; card.addEventListener("click", () => window.open(link, "_blank", "noopener")); }
+  return card;
+}
+
 function renderWebwork() {
   const host = $("#webGrid"); if (!host) return; host.innerHTML = "";
-  WEBWORK.forEach(w => {
-    const card = el("article", "web-card");
-    // Repo links are owner-only. admin.js adds body.is-owner once a signed-in
-    // session matching OWNER is confirmed, then re-renders. Visitors get the live
-    // link and nothing else — several of these repos are private and would 404 for
-    // them anyway. (The URLs still sit in this public data.js; this hides the links,
-    // it is not a secret store.)
-    const owner = document.body.classList.contains("is-owner");
-    const link = w.live || (owner ? w.repo : null);
-    // Cover art is optional: the typographic tile renders behind the image, and the
-    // image deletes itself if there's no img/webwork/w480/<id>.webp. Without this a
-    // new entry ships a broken image, since the src is derived from the entry id.
-    const cover = w.id === "self"
-      ? `<img src="img/w960/hero-generated.webp" alt="${pick(w, "title")}" loading="lazy">`
-      : `<span class="web-tile" aria-hidden="true"><b>${pick(w, "title")}</b><i>${pick(w, "tag")}</i></span>
-         <img src="img/webwork/w480/${w.id}.webp" alt="${pick(w, "title")}" loading="lazy" onerror="this.remove()">`;
-    const links = [
-      w.live ? `<a href="${w.live}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_live}</a>` : "",
-      (owner && w.repo) ? `<a href="${w.repo}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${T().web_repo}</a>` : "",
-      w.cta ? `<a href="${w.cta}" onclick="event.stopPropagation()">${T().web_contact}</a>` : "",
-    ].filter(Boolean).join("");
-    card.innerHTML = `<div class="web-cover">${cover}<span class="web-tag">${pick(w, "tag")}</span></div>
-      <div class="web-body"><h3>${pick(w, "title")}</h3><p>${pick(w, "blurb")}</p>
+  const byId = new Map(WEBWORK.map(w => [w.id, w]));
+  const placed = new Set(WEBWORK_STANDALONE);
+
+  const block = (g, items) => {
+    const sec = el("section", `web-block wb-${g.id}`);
+    sec.innerHTML = `<header class="wb-head">
+        <span class="wb-dot" aria-hidden="true"></span>
+        <h3>${pick(g, "label")}</h3>
+        <span class="wb-count">${items.length}</span>
+        ${pick(g, "note") ? `<p class="wb-note">${pick(g, "note")}</p>` : ""}
+      </header>`;
+    const grid = el("div", "web-grid");
+    items.forEach(w => grid.append(webCard(w)));
+    sec.append(grid);
+    return sec;
+  };
+
+  WEBWORK_GROUPS.forEach(g => {
+    const items = g.ids.map(id => byId.get(id)).filter(Boolean);
+    items.forEach(w => placed.add(w.id));
+    if (items.length) host.append(block(g, items));
+  });
+
+  // Safety net: an entry added to WEBWORK but not to any group still renders.
+  const rest = WEBWORK.filter(w => !placed.has(w.id));
+  if (rest.length) host.append(block({ id: "more", label: T().web_more, label_ar: T().web_more, note: "", note_ar: "" }, rest));
+
+  // Standalone: the local-only builds get a wide callout with a real CTA button
+  // rather than a card in the grid — nobody can visit them, so the ask is the point.
+  WEBWORK_STANDALONE.map(id => byId.get(id)).filter(Boolean).forEach(w => {
+    const sec = el("section", "web-standalone");
+    sec.innerHTML = `<div class="ws-inner">
+        <span class="web-tag ws-tag">${pick(w, "tag")}</span>
+        <h3>${pick(w, "title")}</h3>
+        <p>${pick(w, "blurb")}</p>
         <div class="web-tech">${w.tech.map(t => `<span>${t}</span>`).join("")}</div>
-        <div class="web-links">${links || `<span class="web-nolink">local · not deployed</span>`}</div></div>`;
-    if (link) { card.style.cursor = "pointer"; card.addEventListener("click", () => window.open(link, "_blank", "noopener")); }
-    host.append(card);
+        ${w.cta ? `<a class="ws-cta magnetic" href="${w.cta}">${T().web_contact}</a>` : ""}
+      </div>`;
+    host.append(sec);
+  });
+}
+
+/* ── Projects-page section index ──
+   The showcase used to sit seven sections down, so a visitor had to scroll the whole
+   page to discover it existed. This puts every section on screen immediately and lets
+   them pick one. Labels reuse each section's existing eyebrow key, so nothing new
+   needs translating. */
+const PAGE_SECTIONS = [
+  { sel: "#projects", key: "projpg_kicker" },
+  { sel: "#patents-sec", key: "eb_patents" },
+  { sel: "#galleries", key: "eb_gallery" },
+  { sel: "#skills-sec", key: "eb_toolkit" },
+  { sel: "#orgs-sec", key: "eb_orgs" },
+  { sel: "#repos-sec", key: "eb_oss" },
+  { sel: "#webwork-sec", key: "eb_web" },
+];
+/* Lenis's animated scrollTo silently does nothing on the long pages: after an SPA page
+   switch its cached dimensions are stale (it reported limit 3403 for a 10469px document),
+   and even after resize() the animated path never advances — only `immediate` lands.
+   So: try the smooth scroll, then verify and hard-land if the page didn't actually move.
+   A navigation button that quietly does nothing is worse than one that jumps. */
+function scrollToSection(t) {
+  const y = Math.max(0, t.getBoundingClientRect().top + scrollY - 70);
+  if (!lenis) { scrollTo({ top: y, behavior: "smooth" }); return; }
+  lenis.resize?.();
+  lenis.scrollTo(y, { duration: 1 });
+  setTimeout(() => { if (Math.abs(scrollY - y) > 24) lenis.scrollTo(y, { immediate: true }); }, 700);
+}
+
+function renderSectionIndex() {
+  const host = $("#secIndex"); if (!host) return; host.innerHTML = "";
+  PAGE_SECTIONS.forEach((s, i) => {
+    if (!$(s.sel)) return;                       // section removed → chip disappears too
+    const b = el("button", "sec-chip");
+    b.type = "button";
+    b.innerHTML = `<span class="sc-n">${String(i + 1).padStart(2, "0")}</span><span class="sc-l">${T()[s.key] || s.key}</span>`;
+    b.addEventListener("click", () => { const t = $(s.sel); if (t) scrollToSection(t); });
+    host.append(b);
   });
 }
 
@@ -576,7 +662,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=17").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=19").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {

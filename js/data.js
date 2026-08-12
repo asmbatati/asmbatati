@@ -430,12 +430,37 @@ export const WEBWORK = [
     blurb_ar: "تطبيق ويب عربيّ أولًا يحوّل النص أو الصورة أو الرسم إلى مجسّم STL جاهز للطباعة — تسع أدوات، وفحص إحكام المجسّم، وحزم تفريغ للطباعة الفعلية.",
     tech: ["Vite + React", "Three.js", "STL", "Arabic-first"], live: "https://text-3d-printing.vercel.app", repo: "https://github.com/asmbatati/text-3d-printing",
     tag: "Product", tag_ar: "منتج" },
+  { id: "cfmm-noma", title: "Cell-Free Massive MIMO · NOMA", title_ar: "MIMO الضخم اللاخلوي مع NOMA",
+    blurb: "The interactive companion to a cell-free massive-MIMO paper — parameter sweeps and simulation figures rendered live from the experiment data. I contributed to the repository; the research is Nouf Al-Batati's.",
+    blurb_ar: "الرفيق التفاعلي لورقة بحثية في أنظمة MIMO الضخمة اللاخلوية — مسوحات للمعاملات ورسوم محاكاة تُبنى مباشرة من بيانات التجارب. ساهمتُ في المستودع، والبحث لنُوف البطاطي.",
+    tech: ["Streamlit", "Python", "Plotly"], live: "https://cfmm-website.streamlit.app/", repo: "https://github.com/Nouf-Batati/cfmm_website",
+    note: "Sign-in required", note_ar: "يتطلّب تسجيل الدخول",
+    tag: "Contributor", tag_ar: "مساهم" },
   { id: "family-tree", title: "Al-Batati Family Tree", title_ar: "شجرة عائلة البطاطي",
     blurb: "A bilingual family tree — a pannable graph, a page per person, event suggestions, and a moderation queue so relatives can propose edits without touching the data directly.",
     blurb_ar: "شجرة عائلة ثنائية اللغة — رسم قابل للتنقّل، وصفحة لكل شخص، واقتراح المناسبات، وقائمة مراجعة تتيح للأقارب اقتراح التعديلات دون المساس بالبيانات مباشرة.",
     tech: ["Next.js", "Supabase", "EN/AR"], live: "https://batati-family-tree.vercel.app/", repo: "https://github.com/asmbatati/batati-family-tree",
     tag: "Family app", tag_ar: "تطبيق عائلي" },
 ];
+
+/* ── Showcase grouping ──
+   Layout, not content: which cards sit in which block and in what order. Kept out of
+   WEBWORK (and out of admin.js's editable KEYS) so reordering the showcase never means
+   editing the entries. Any WEBWORK id not listed here still renders — it falls into a
+   trailing "More" block — so a new entry can never silently vanish from the page.
+   Ids in `standalone` render on their own, below the blocks. */
+export const WEBWORK_GROUPS = [
+  { id: "personal", label: "Personal", label_ar: "شخصية",
+    note: "Built for myself and my family.", note_ar: "بنيتُها لنفسي ولعائلتي.",
+    ids: ["self", "shelf", "maha", "family-tree", "noja"] },
+  { id: "tools", label: "Tools", label_ar: "أدوات",
+    note: "Things other people use to get work done.", note_ar: "أدوات يستخدمها الآخرون لإنجاز أعمالهم.",
+    ids: ["ros-database", "latex-converter", "khattat3d"] },
+  { id: "papers", label: "Project pages", label_ar: "صفحات الأبحاث",
+    note: "Landing pages for research — mine and my labs'.", note_ar: "صفحات تعريفية لأبحاث — لي ولمختبراتي.",
+    ids: ["ros2-survey", "gen3d-ros2", "safemrs", "gps-denied-sim", "neuros-x", "cfmm-noma"] },
+];
+export const WEBWORK_STANDALONE = ["private-builds"];
 
 /* ── Research taxonomy + full publications database ── */
 export const TAXONOMY = [
@@ -981,7 +1006,7 @@ export const I18N = {
     lead_areas: "The recurring questions behind the publications — each an engraving.",
     eb_web: "Web & product", t_web: "Websites I've built.",
     lead_web: "Beyond robots, I ship the web. A few sites I designed and built end-to-end.",
-    web_live: "Visit ↗", web_repo: "Code ↗", web_contact: "Ask me to build one ↗",
+    web_live: "Visit ↗", web_repo: "Code ↗", web_contact: "Ask me to build one ↗", web_more: "More",
   },
   ar: {
     nav_about: "نبذة", nav_research: "الأبحاث", nav_projects: "المشاريع", nav_gallery: "المعرض", nav_experience: "الخبرة",
@@ -1072,6 +1097,6 @@ export const I18N = {
     lead_areas: "الأسئلة المتكرّرة خلف المنشورات — كلٌّ منها لوحة محفورة.",
     eb_web: "الويب والمنتجات", t_web: "مواقع بنيتُها.",
     lead_web: "أبني الويب أيضًا، لا الروبوتات فحسب. مواقع صمّمتُها وبنيتُها من الفكرة إلى النشر.",
-    web_live: "زيارة ↗", web_repo: "الشيفرة ↗", web_contact: "اطلب واحدًا مثله ↗",
+    web_live: "زيارة ↗", web_repo: "الشيفرة ↗", web_contact: "اطلب واحدًا مثله ↗", web_more: "أخرى",
   },
 };

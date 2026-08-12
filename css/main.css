@@ -13,6 +13,7 @@
   --green-2: #2f6b4f;     /* mid green accent */
   --green-3: #4d8a6a;     /* light green */
   --gold: #b6803a;        /* warm gold accent */
+  --slate: #4a6b7c;       /* cool counterpoint — the research/paper accent */
   --ink: #16352a;
   --mid: #5c6f63;         /* muted green-gray text */
   --dim: #8a978c;
@@ -766,7 +767,47 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .area-body h3 { font-family: var(--disp); font-size: 1.15rem; color: var(--green-0); font-weight: 600; }
 .area-body p { color: var(--mid); font-size: .9rem; margin-top: .4rem; line-height: 1.55; }
 
-.web-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px,100%),1fr)); gap: 1.4rem; margin-top: 2.8rem; }
+/* ── Projects-page section index ──
+   Sits at the top of the page so every section is discoverable without scrolling.
+   Buttons, not anchors: they scroll via Lenis, and an href would fight the router. */
+/* Top padding clears the fixed 70px navbar — the sections below get away with it via
+   their own clamp(4.5rem,…) padding, this row would sit under the bar without it. The
+   max-width/gutter mirror `.section` so the chips line up with everything beneath them. */
+.sec-index { display: flex; flex-wrap: wrap; gap: .6rem; max-width: 1320px; margin: 0 auto; padding: calc(70px + 1.8rem) clamp(1.1rem,5vw,4rem) 0; }
+.sec-chip { display: inline-flex; align-items: center; gap: .55rem; padding: .5rem .95rem .5rem .7rem; border: 1px solid var(--line); border-radius: 99px; background: var(--card); color: var(--green-0); font-size: .84rem; cursor: pointer; transition: border-color .3s var(--ease), transform .3s var(--ease), box-shadow .3s; }
+.sec-chip:hover, .sec-chip:focus-visible { border-color: var(--green-2); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22,53,42,.10); }
+.sec-chip .sc-n { font-family: var(--disp); font-size: .74rem; color: var(--gold); letter-spacing: .04em; }
+.sec-chip .sc-l { font-weight: 600; }
+@media (max-width: 640px) { .sec-index { gap: .45rem; } .sec-chip { font-size: .78rem; padding: .42rem .8rem .42rem .6rem; } }
+
+/* ── Showcase blocks (Personal · Tools · Project pages) ──
+   Each block carries its own accent so the three kinds are separable at a glance;
+   the accent drives the dot, the count pill and the card tags inside it. */
+.web-blocks { margin-top: 2.4rem; display: grid; gap: 3rem; }
+.web-block { --wb: var(--green-2); }
+.wb-personal { --wb: var(--green-1); }
+.wb-tools    { --wb: var(--gold); }
+.wb-papers   { --wb: var(--slate); }
+.wb-head { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: .7rem; padding-bottom: .9rem; border-bottom: 1px solid var(--line); }
+.wb-head h3 { font-family: var(--disp); font-size: 1.35rem; font-weight: 600; color: var(--green-0); }
+.wb-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--wb); box-shadow: 0 0 0 4px color-mix(in srgb, var(--wb) 18%, transparent); }
+.wb-count { font-size: .74rem; color: var(--wb); border: 1px solid color-mix(in srgb, var(--wb) 40%, transparent); background: color-mix(in srgb, var(--wb) 8%, transparent); border-radius: 99px; padding: 1px 9px; }
+.wb-note { grid-column: 1 / -1; color: var(--mid); font-size: .9rem; margin-top: -.2rem; }
+.web-block .web-tag { background: color-mix(in srgb, var(--wb) 86%, transparent); }
+.web-block .web-card:hover { border-color: color-mix(in srgb, var(--wb) 45%, var(--line)); }
+.web-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px,100%),1fr)); gap: 1.4rem; margin-top: 1.6rem; }
+
+/* ── Standalone: the local-only builds ──
+   A wide callout rather than a card. Nobody can visit these, so the commission ask
+   is the point of the block — it gets a real button instead of a text link. */
+.web-standalone { border: 1px solid var(--line); border-radius: 18px; padding: clamp(1.4rem, 3vw, 2.4rem); background: linear-gradient(135deg, var(--paper) 0%, var(--paper-2) 55%, color-mix(in srgb, var(--green-3) 22%, var(--paper-2)) 100%); }
+.ws-inner { max-width: 68ch; display: grid; gap: .75rem; justify-items: start; }
+.ws-tag { position: static; background: var(--green-0); }
+.web-standalone h3 { font-family: var(--disp); font-size: clamp(1.4rem, 2.4vw, 1.9rem); color: var(--green-0); font-weight: 600; }
+.web-standalone p { color: var(--mid); font-size: .96rem; line-height: 1.6; }
+.ws-cta { display: inline-block; margin-top: .5rem; padding: .7rem 1.5rem; border-radius: 99px; background: var(--green-1); color: var(--snow); font-weight: 700; font-size: .92rem; transition: background .3s var(--ease), transform .3s var(--ease); }
+.ws-cta:hover, .ws-cta:focus-visible { background: var(--gold); transform: translateY(-2px); }
+.web-note { color: var(--dim); font-size: .8rem; font-style: italic; }
 .web-card { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--card); display: flex; flex-direction: column; transition: transform .4s var(--ease), box-shadow .4s; }
 .web-card:hover { transform: translateY(-5px); box-shadow: 0 20px 46px rgba(22,53,42,0.12); }
 .web-cover { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--paper-2); }
