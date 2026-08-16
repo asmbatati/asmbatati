@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=19";
-import { renderGallery } from "./gallery.js?v=19";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=21";
+import { renderGallery } from "./gallery.js?v=21";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -106,10 +106,22 @@ function showPage(name) {
 $$("[data-nav]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); showPage(a.dataset.nav); closeMenu(); }));
 $$("[data-scroll]").forEach(a => a.addEventListener("click", e => {
   e.preventDefault();
-  if (!$("#page-home").classList.contains("active")) { showPage("home"); requestAnimationFrame(() => go(a.dataset.scroll)); }
-  else go(a.dataset.scroll);
+  if (!$("#page-home").classList.contains("active")) {
+    showPage("home");
+    // showPage runs a ~1.3s curtain before switchPage swaps the page in. The old
+    // requestAnimationFrame fired ~16ms later, while Home was still display:none —
+    // so the target measured 0 and the scroll went nowhere. Wait for it to be real.
+    const t0 = Date.now();
+    (function waitForTarget() {
+      const t = $(a.dataset.scroll);
+      if (t && t.getBoundingClientRect().height > 0) return go(a.dataset.scroll);
+      if (Date.now() - t0 < 3000) setTimeout(waitForTarget, 100);
+    })();
+  } else go(a.dataset.scroll);
   closeMenu();
-  function go(sel) { const t = $(sel); if (t) lenis ? lenis.scrollTo(t, { offset: -60 }) : t.scrollIntoView(); }
+  // scrollToSection verifies the scroll actually happened — Lenis's animated scrollTo
+  // silently no-ops on the long pages (stale cached limit after a page switch).
+  function go(sel) { const t = $(sel); if (t) scrollToSection(t); }
 }));
 // re-run reveals for the freshly shown page (elements were display:none, so triggers didn't fire)
 function revealIn(pageSel) {
@@ -525,26 +537,40 @@ const CONTRIB = p => {
   return { key: "co", label: T().role_co };
 };
 let pubFilter = { taxo: "all", type: "all", year: "all", status: "all", q: "", sort: null, dir: 1 };
+
+/* ── Unpublished work is owner-only ──
+   Papers still under review or in progress are not public: a visitor sees neither the
+   rows nor the status options that would filter to them (leaving the options in would
+   just produce a conspicuously empty table). The owner sees everything, flagged, and
+   can still edit them through the admin editor, which reads PUBS directly.
+   admin.js sets body.is-owner from a confirmed OWNER session and re-renders. */
+const PUB_OWNER_ONLY = ["review", "progress"];
+const isOwnerView = () => document.body.classList.contains("is-owner");
+const visiblePubs = () => isOwnerView() ? PUBS : PUBS.filter(p => !PUB_OWNER_ONLY.includes(p.status));
 function renderTaxo() {
   const row = $("#taxoRow"); row.innerHTML = "";
   TAXONOMY.forEach(tx => { const b = el("button", "taxo" + (pubFilter.taxo === tx.id ? " on" : ""), tx[lang]); b.addEventListener("click", () => { pubFilter.taxo = tx.id; renderTaxo(); renderPubs(); }); row.append(b); });
 }
 function buildSelects() {
-  const ys = [...new Set(PUBS.map(p => p.year))].sort((a, b) => b - a);
+  const pool = visiblePubs();                    // year/type options must not leak hidden rows either
+  const ys = [...new Set(pool.map(p => p.year))].sort((a, b) => b - a);
   $("#pubYear").innerHTML = `<option value="all">${T().pubdb_allyears}</option>` + ys.map(y => `<option value="${y}">${y}</option>`).join("");
   $("#pubYear").value = pubFilter.year;
-  const tps = [...new Set(PUBS.map(p => p.type))];
+  const tps = [...new Set(pool.map(p => p.type))];
   $("#pubType").innerHTML = `<option value="all">${T().pubdb_alltype}</option>` + tps.map(t => `<option value="${t}">${t}</option>`).join("");
   $("#pubType").value = pubFilter.type;
-  const sts = [["all", T().pubdb_allstatus], ["published", T().st_published], ["accepted", T().st_accepted], ["review", T().st_review], ["progress", T().st_progress]];
+  const sts = [["all", T().pubdb_allstatus], ["published", T().st_published], ["accepted", T().st_accepted],
+    ...(isOwnerView() ? [["review", T().st_review], ["progress", T().st_progress]] : [])];
   $("#pubStatus").innerHTML = sts.map(([v, l]) => `<option value="${v}">${l}</option>`).join("");
+  // a stale filter (e.g. owner picked "review", then signed out) would show nothing
+  if (!sts.some(([v]) => v === pubFilter.status)) pubFilter.status = "all";
   $("#pubStatus").value = pubFilter.status;
   $("#pubSearch").placeholder = T().pubdb_search;
 }
 function renderPubs() {
   renderTaxo(); buildSelects();
   const body = $("#pubBody"); body.innerHTML = "";
-  let rows = PUBS.map((p, i) => ({ p, i })).filter(({ p }) =>
+  let rows = visiblePubs().map((p, i) => ({ p, i })).filter(({ p }) =>
     (pubFilter.taxo === "all" || p.taxo === pubFilter.taxo) &&
     (pubFilter.type === "all" || p.type === pubFilter.type) &&
     (pubFilter.year === "all" || String(p.year) === pubFilter.year) &&
@@ -662,7 +688,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=19").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=21").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
