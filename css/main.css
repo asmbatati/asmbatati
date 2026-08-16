@@ -655,6 +655,8 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .q-courses { list-style: none; margin: .6rem 0 .2rem; display: grid; gap: .3rem; }
 .q-courses li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: .86rem; color: var(--mid); padding: .22rem 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
 .q-courses li b { color: var(--green-1); font-weight: 700; font-size: .82rem; flex: none; }
+.q-courses li.q-phase { display: block; border-bottom: none; color: var(--green-2); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; margin-top: .55rem; padding-bottom: .1rem; }
+.q-courses li.q-phase:first-child { margin-top: 0; }
 
 .org-handle { color: var(--gold); font-size: .85rem; }
 /* Non-GitHub affiliations show the relationship where the handle would sit; the ones

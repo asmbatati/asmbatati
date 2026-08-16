@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=23";
-import { renderGallery } from "./gallery.js?v=23";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=25";
+import { renderGallery } from "./gallery.js?v=25";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -212,6 +212,9 @@ function renderQuals() {
   const courseList = list => `<ul class="q-courses">${list.map(c => {
     const name = typeof c === "string" ? c : pick(c, "name");
     const grade = typeof c === "string" ? "" : (c.grade || "");
+    // `head: true` marks a group divider (the Masterclass phases) rather than a course,
+    // so it doesn't read as an ungraded subject in the list.
+    if (c && c.head) return `<li class="q-phase">${name}</li>`;
     return `<li><span>${name}</span>${grade ? `<b>${grade}</b>` : ""}</li>`;
   }).join("")}</ul>`;
   const expander = (list, count) => list && list.length
@@ -736,7 +739,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=23").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=25").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {

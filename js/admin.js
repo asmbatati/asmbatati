@@ -14,7 +14,7 @@
    signed-in session whose email = OWNER can write (see admin-schema.sql).
    ═══════════════════════════════════════════════════════════════════ */
 
-import * as DATA from "./data.js?v=23";
+import * as DATA from "./data.js?v=25";
 
 const SB_URL = "https://pvconwkeshzoovchvzqm.supabase.co";
 const SB_KEY = "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ";
