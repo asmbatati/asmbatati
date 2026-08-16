@@ -10,7 +10,7 @@
   <!-- ?v must be bumped with the JS modules: without it a returning visitor keeps a
        cached stylesheet while the new JS renders new markup, so fresh sections render
        completely unstyled. Missing until 12 Aug 2026. -->
-  <link rel="stylesheet" href="css/main.css?v=25">
+  <link rel="stylesheet" href="css/main.css?v=26">
   <link rel="icon" type="image/png" sizes="64x64" href="img/favicon.png">
   <link rel="icon" type="image/png" sizes="256x256" href="img/logo-mark.png">
   <link rel="apple-touch-icon" href="img/logo-mark.png">
@@ -122,11 +122,12 @@
     </div></section>
 
     <!-- WHAT I RESEARCH — teaser cards → Research page -->
-    <section class="section" id="focus">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_focus">What I research</span><h2 class="section-title" data-i18n="t_focus">Four questions, one autonomous robot.</h2>
-        <p class="section-lead" data-i18n="lead_focus"></p></div>
-      <div class="focus-grid" id="focusCards"></div>
-      <div class="focus-cta reveal"><a class="btn btn-solid magnetic" data-nav="research" data-i18n="focus_cta">Open the research map →</a></div>
+    <!-- SITE MAP — replaced the "Four questions" teaser 12 Aug 2026: that section only
+         pointed at Research, so every other page was undiscoverable from Home. -->
+    <section class="section" id="sitemap-sec">
+      <div class="reveal"><span class="eyebrow" data-i18n="sm_eb">Explore</span><h2 class="section-title" data-i18n="sm_title">Where to go next.</h2>
+        <p class="section-lead" data-i18n="sm_lead"></p></div>
+      <div class="sm-grid" id="siteMap"></div>
     </section>
 
     <!-- CONTACT -->
@@ -147,6 +148,12 @@
 
   <!-- ════════ PAGE: RESEARCH ════════ -->
   <div class="page" id="page-research">
+    <!-- HIGHLIGHTS — the numbers first, before the map -->
+    <section class="section" id="rstats-sec">
+      <div class="reveal"><span class="eyebrow" data-i18n="rs_eb">Highlights</span><h2 class="section-title" data-i18n="rs_title">Research at a glance.</h2></div>
+      <div class="rs-band" id="researchStats"></div>
+    </section>
+
     <!-- research-interests map -->
     <section class="section" id="researchmap-sec">
       <div class="reveal"><span class="eyebrow" data-i18n="rm_kicker">Research interests</span><h2 class="section-title" data-i18n="rm_title">Where my research lives.</h2>
@@ -156,23 +163,6 @@
       <div class="rm-mobile" id="rmMobile"></div>
       <div class="rm-platforms" id="rmPlatforms"></div>
     </section>
-
-    <!-- RESEARCH AREAS, ILLUSTRATED (engraved plates) -->
-    <section class="section" id="areas-sec">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_areas">Research areas</span><h2 class="section-title" data-i18n="t_areas">Six problems I work on.</h2>
-        <p class="section-lead" data-i18n="lead_areas"></p></div>
-      <div class="areas-grid" id="areasGrid"></div>
-    </section>
-
-    <!-- ROBOTICS ARCHITECTURE — closed-loop mental model -->
-    <section class="section alt" id="stack-sec"><div class="section-inner">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_stack">How an autonomous robot thinks</span><h2 class="section-title" data-i18n="t_stack">My mental model of an autonomous robot.</h2>
-        <p class="section-lead" data-i18n="lead_stack"></p></div>
-      <div class="arch-figure" id="arch"></div>
-      <p class="arch-sim" id="archSim"></p>
-      <h3 class="arch-work-h" data-i18n="arch_work_title">Where my work lives</h3>
-      <div class="arch-cards" id="archCards"></div>
-    </div></section>
 
     <!-- PUBLICATIONS DATABASE -->
     <section class="section" id="pubdb-sec">
@@ -332,10 +322,28 @@
   <!-- ════════ PAGE: WRITING (markdown blog) ════════ -->
   <div class="page" id="page-articles">
     <section class="section">
-      <div class="reveal"><span class="eyebrow" data-i18n="art_eb">Writing</span><h2 class="section-title" data-i18n="art_title">Notes &amp; articles.</h2><p class="section-lead" data-i18n="art_lead"></p></div>
+      <div class="reveal"><span class="eyebrow" data-i18n="art_eb">Blog</span><h2 class="section-title" data-i18n="art_title">Notes &amp; blog posts.</h2><p class="section-lead" data-i18n="art_lead"></p></div>
       <div class="articles-grid" id="articlesGrid"></div>
       <div class="article-read" id="articleRead" style="display:none"></div>
     </section>
+
+    <!-- Two long-form posts moved here from the Research page (12 Aug 2026). They stay
+         as live sections rather than markdown because both are interactive — a rendered
+         SVG diagram and the engraved plate grid — which a .md post could not carry. -->
+    <article class="section post-feature" id="areas-sec">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_areas">Research areas</span><h2 class="section-title" data-i18n="t_areas">Six problems I work on.</h2>
+        <p class="section-lead" data-i18n="lead_areas"></p></div>
+      <div class="areas-grid" id="areasGrid"></div>
+    </article>
+
+    <article class="section alt post-feature" id="stack-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_stack">How an autonomous robot thinks</span><h2 class="section-title" data-i18n="t_stack">My mental model of an autonomous robot.</h2>
+        <p class="section-lead" data-i18n="lead_stack"></p></div>
+      <div class="arch-figure" id="arch"></div>
+      <p class="arch-sim" id="archSim"></p>
+      <h3 class="arch-work-h" data-i18n="arch_work_title">Where my work lives</h3>
+      <div class="arch-cards" id="archCards"></div>
+    </div></article>
   </div>
 
   <footer class="footer">© <span id="year">2026</span> Abdulrahman S. Al-Batati · Robotics &amp; Autonomous Intelligent Systems<a class="admin-dot" href="#admin" aria-label="Admin sign-in"><span class="admin-dot-label" aria-hidden="true">Admin</span><i aria-hidden="true">◆</i></a></footer>
@@ -352,6 +360,6 @@
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
-  <script type="module" src="js/main.js?v=25"></script>
+  <script type="module" src="js/main.js?v=26"></script>
 </body>
 </html>

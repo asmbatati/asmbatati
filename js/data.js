@@ -39,6 +39,43 @@ export const PROFILE = {
   languages_ar: ["العربية — اللغة الأم", "الإنجليزية — احترافية", "الصينية — HSK2"],
 };
 
+/* ── Research highlights (top of the Research page) ──
+   Scholar figures are a snapshot, not a live feed: they come from the CV dated
+   12 Aug 2026 and go stale silently, so `asof` is rendered next to them. Publication
+   count is derived from PUBS at runtime (published + accepted) rather than hardcoded,
+   so it can't drift from the table underneath it. */
+export const RESEARCH_STATS = {
+  asof: "Aug 2026", asof_ar: "أغسطس ٢٠٢٦",
+  scholar: "https://scholar.google.com/citations?hl=en&user=cxrJK64AAAAJ",
+  items: [
+    { key: "pubs", n: null, label: "publications", label_ar: "منشورًا" },   // n filled from PUBS
+    { n: "268", label: "citations", label_ar: "استشهادًا" },
+    { n: "6", label: "h-index", label_ar: "معامل h" },
+    { n: "6", label: "i10-index", label_ar: "معامل i10" },
+    { n: "2", label: "patents granted", label_ar: "براءتا تصميم" },
+  ],
+};
+
+/* ── Site map (Home) ──
+   Replaces the old "Four questions" teaser: every page reachable from one place,
+   instead of a section that only pointed at Research. `nav` matches the router key. */
+export const SITEMAP = [
+  { nav: "research", title: "Research", title_ar: "الأبحاث",
+    desc: "Publications, the research map, and what I'm asking.", desc_ar: "المنشورات وخريطة الأبحاث والأسئلة التي أطرحها." },
+  { nav: "projects", title: "Projects", title_ar: "المشاريع",
+    desc: "Active funded research, finished builds, and patents.", desc_ar: "أبحاث جارية ممولة، وأعمال مكتملة، وبراءات." },
+  { nav: "gallery", title: "Gallery", title_ar: "المعرض",
+    desc: "Six ways I build — plus hardware, open source and websites.", desc_ar: "ستّ طرق أبني بها — والعتاد ومفتوح المصدر والمواقع." },
+  { nav: "teaching", title: "Teaching", title_ar: "التدريس",
+    desc: "Courses and workshops I run.", desc_ar: "المقرّرات والورش التي أقدّمها." },
+  { nav: "affil", title: "Affiliations", title_ar: "الانتماءات",
+    desc: "Labs, universities and organizations I build with.", desc_ar: "المختبرات والجامعات والمنظمات التي أبني معها." },
+  { nav: "quals", title: "Qualifications", title_ar: "المؤهلات",
+    desc: "Degrees with full course records, certifications, and my CV.", desc_ar: "الدرجات بسجلّ المقرّرات كاملًا، والشهادات، وسيرتي الذاتية." },
+  { nav: "articles", title: "Blog", title_ar: "المدوّنة",
+    desc: "Notes on robotics, research, and building things.", desc_ar: "ملاحظات عن الروبوتات والبحث وبناء الأشياء." },
+];
+
 export const STATS = [
   { n: "10", label: "papers published", label_ar: "بحثًا منشورًا" },
   { n: "2", label: "patents granted", label_ar: "براءتا تصميم" },
@@ -1194,7 +1231,7 @@ export const I18N = {
     pubdb_count: "results", col_paper: "Paper", col_year: "Year", col_area: "Area", col_status: "Status", col_doi: "DOI",
     col_type: "Type", col_rank: "Rank", col_links: "Links", col_contrib: "Contribution", col_project: "Project page", pubdb_alltype: "All types", pub_copy: "Copy BibTeX", pub_copied: "Copied ✓", pub_project: "Project ↗", pub_page: "Visit ↗",
     role_first: "1st author", role_equal: "Equal contributor", role_co: "Co-author",
-    tab_articles: "Writing", art_eb: "Writing", art_title: "Notes & blog posts.", art_lead: "A personal blog.",
+    tab_articles: "Blog", art_eb: "Blog", art_title: "Notes & blog posts.", art_lead: "A personal blog.",
     art_empty: "No articles yet — coming soon.", art_min: "min read", art_back: "← All articles",
     st_published: "Published", st_accepted: "Accepted", st_review: "Under review", st_progress: "In progress",
     beyond_kicker: "Off the clock", beyond_title: "Beyond the lab.", beyond_lead: "The same discipline that builds robots — pointed at a mountain and a pull-up bar.",
@@ -1223,6 +1260,8 @@ export const I18N = {
     rm_hint: "Hover or tap a field", rm_platforms: "Platforms I build on",
     researchpg_lead: "The map, the mental model, and every publication — in one place.",
     projpg_kicker: "Projects", projpg_title: "The machines.",
+    rs_eb: "Highlights", rs_title: "Research at a glance.", rs_asof: "as of", rs_scholar: "Google Scholar ↗",
+    sm_eb: "Explore", sm_title: "Where to go next.", sm_lead: "Every part of the site, from one place.",
     eb_active: "Active", t_active: "What I'm building now.",
     lead_active: "Funded research running today — who leads each one, what backs it, and where it stands.",
     eb_finished: "Finished", t_finished: "Built, flown, and shipped.",
@@ -1291,7 +1330,7 @@ export const I18N = {
     pubdb_count: "نتيجة", col_paper: "البحث", col_year: "السنة", col_area: "المجال", col_status: "الحالة", col_doi: "DOI",
     col_type: "النوع", col_rank: "التصنيف", col_links: "روابط", col_contrib: "المساهمة", col_project: "صفحة المشروع", pubdb_alltype: "كل الأنواع", pub_copy: "انسخ BibTeX", pub_copied: "تم النسخ ✓", pub_project: "المشروع ↗", pub_page: "زيارة ↗",
     role_first: "مؤلف أول", role_equal: "مساهم مكافئ", role_co: "مؤلف مشارك",
-    tab_articles: "مقالات", art_eb: "كتابات", art_title: "ملاحظات ومنشورات.", art_lead: "مدونة شخصية.",
+    tab_articles: "المدوّنة", art_eb: "المدوّنة", art_title: "ملاحظات ومنشورات.", art_lead: "مدونة شخصية.",
     art_empty: "لا مقالات بعد — قريبًا.", art_min: "دقيقة قراءة", art_back: "← كل المقالات",
     st_published: "منشور", st_accepted: "مقبول", st_review: "قيد المراجعة", st_progress: "قيد العمل",
     beyond_kicker: "خارج الدوام", beyond_title: "خارج المختبر.", beyond_lead: "الانضباط نفسه الذي يبني الروبوتات — موجّهًا نحو جبلٍ وعقلة.",
@@ -1320,6 +1359,8 @@ export const I18N = {
     rm_hint: "مرّر أو اضغط على حقل", rm_platforms: "المنصّات التي أبني عليها",
     researchpg_lead: "الخارطة، والنموذج الذهني، وكل منشور — في مكان واحد.",
     projpg_kicker: "المشاريع", projpg_title: "الآلات.",
+    rs_eb: "أبرز الأرقام", rs_title: "البحث في لمحة.", rs_asof: "حتى", rs_scholar: "الباحث العلمي ↗",
+    sm_eb: "استكشف", sm_title: "إلى أين بعد؟", sm_lead: "كل أقسام الموقع من مكان واحد.",
     eb_active: "جارية", t_active: "ما أبنيه الآن.",
     lead_active: "أبحاث مموّلة جارية اليوم — من يقودها، وما الذي يدعمها، وأين وصلت.",
     eb_finished: "مكتملة", t_finished: "بُنيت وطارت وسُلّمت.",

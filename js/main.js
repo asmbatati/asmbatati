@@ -4,10 +4,10 @@
    Projects (filterable showcase + patents + hardware + skills + repos) ·
    interactive interests Gallery · markdown blog · i18n. */
 
-import { PROFILE, STATS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
+import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=25";
-import { renderGallery } from "./gallery.js?v=25";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=26";
+import { renderGallery } from "./gallery.js?v=26";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -135,7 +135,8 @@ function renderDynamic() {
   $("#langs").innerHTML = (lang === "ar" ? PROFILE.languages_ar : PROFILE.languages).map(l => `<span class="chip">${l}</span>`).join("");
 
   renderJourney();
-  renderFocus();
+  renderSitemap();
+  renderResearchStats();
   renderResearchMap();
   renderAreas();
   renderArch();
@@ -270,16 +271,38 @@ function renderOrgs() {
 }
 
 /* ── Home research teaser cards → Research page ── */
-function renderFocus() {
-  const host = $("#focusCards"); if (!host) return; host.innerHTML = "";
-  RESEARCH_MAP.domains.forEach(d => {
-    const c = el("article", "focus-card");
-    c.style.setProperty("--c", d.color);
-    c.innerHTML = `<span class="fc-dot"></span><h3>${pick(d, "label")}</h3>
-      <p>${(lang === "ar" ? d.topics_ar : d.topics).join(" · ")}</p>`;
-    c.addEventListener("click", () => showPage("research"));
+/* ── Site map (Home) ──
+   Replaced the old research teaser, which only linked to one page. Buttons rather than
+   anchors: navigation goes through the router, and an href would fight it. */
+function renderSitemap() {
+  const host = $("#siteMap"); if (!host) return; host.innerHTML = "";
+  SITEMAP.forEach((s, i) => {
+    if (!$("#page-" + s.nav)) return;              // a removed page drops out of the map
+    const c = el("button", "sm-card");
+    c.type = "button";
+    c.innerHTML = `<span class="sm-n">${String(i + 1).padStart(2, "0")}</span>
+      <h3>${pick(s, "title")}</h3><p>${pick(s, "desc")}</p><span class="sm-go">→</span>`;
+    c.addEventListener("click", () => showPage(s.nav));
     host.append(c);
   });
+  window.__cursorBind?.();
+}
+
+/* ── Research highlights ──
+   The publication count is derived from PUBS (published + accepted) so it can never
+   disagree with the table below it. Scholar figures are a dated snapshot and say so. */
+function renderResearchStats() {
+  const host = $("#researchStats"); if (!host) return; host.innerHTML = "";
+  const pubCount = PUBS.filter(p => p.status === "published" || p.status === "accepted").length;
+  RESEARCH_STATS.items.forEach(it => {
+    const n = it.key === "pubs" ? String(pubCount) : it.n;
+    host.append(el("div", "rs-item", `<span class="rs-n">${n}</span><span class="rs-l">${pick(it, "label")}</span>`));
+  });
+  const foot = el("p", "rs-foot",
+    `${T().rs_asof} ${pick(RESEARCH_STATS, "asof")} · <a href="${RESEARCH_STATS.scholar}" target="_blank" rel="noopener">${T().rs_scholar}</a>`);
+  host.after(foot);
+  // avoid stacking a new footnote on every re-render (language toggle re-runs this)
+  [...host.parentElement.querySelectorAll(".rs-foot")].slice(0, -1).forEach(n => n.remove());
 }
 
 /* ── Research areas, illustrated (engraved plates) ── */
@@ -739,7 +762,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=25").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=26").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
