@@ -470,6 +470,30 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 /* the in-flight clone: fixed to the viewport, above everything, never interactive */
 .gp-morph { position: fixed; z-index: 900; object-fit: contain; border-radius: 8px; background: var(--paper); pointer-events: none; box-shadow: 0 20px 50px rgba(22,53,42,.18); }
 
+/* ── Photos / Awards emblems (Gallery page) ──
+   Deliberately echoes the hub emblem above: a round plate you click, not a heading
+   you scroll past. */
+.em-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px,100%),1fr)); gap: 1.6rem; margin-top: 3rem; max-width: 860px; margin-inline: auto; }
+.em-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: .5rem; padding: 2rem 1.6rem 1.6rem; border: 1px solid var(--line); border-radius: 20px; background: var(--card); cursor: pointer; transition: transform .4s var(--ease), box-shadow .4s, border-color .3s; }
+.em-card:hover, .em-card:focus-visible { transform: translateY(-5px); border-color: var(--green-2); box-shadow: 0 22px 54px rgba(22,53,42,.14); }
+.em-card.on { border-color: var(--green-2); background: var(--paper); }
+.em-ring { position: relative; width: clamp(120px, 20vw, 168px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; transition: transform .5s var(--ease); }
+.em-card:hover .em-ring, .em-card.on .em-ring { transform: scale(1.05) rotate(-3deg); }
+.em-ring img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; box-shadow: 0 12px 30px rgba(22,53,42,.12); }
+.em-card b { font-family: var(--disp); font-size: 1.35rem; color: var(--green-0); font-weight: 600; margin-top: .6rem; }
+.em-tease { font-size: .88rem; color: var(--mid); max-width: 32ch; }
+.em-cta { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--green-2); margin-top: .4rem; }
+.em-card.on .em-cta { color: var(--gold); }
+.em-panel { margin-top: 2.6rem; }
+.em-panel[hidden] { display: none; }
+
+/* awards, as plates rather than the Qualifications page's rows */
+.gaw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px,100%),1fr)); gap: 1.1rem; }
+.gaw-card { position: relative; border: 1px solid var(--line); border-top: 3px solid var(--gold); border-radius: 14px; padding: 1.3rem 1.3rem 1.2rem; background: var(--card); }
+.gaw-year { font-family: var(--disp); font-size: 1.5rem; color: var(--gold); font-weight: 600; line-height: 1; }
+.gaw-card b { display: block; font-family: var(--disp); font-size: 1.06rem; color: var(--green-0); margin: .5rem 0 .35rem; line-height: 1.25; }
+.gaw-card p { font-size: .86rem; color: var(--mid); }
+
 /* ── Engineering Design Process strip (Design gallery) ── */
 .edp-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px,100%),1fr)); gap: 12px; }
 .edp-step { position: relative; border: 1px solid var(--line); border-top: 3px solid var(--green-3); border-radius: 14px; padding: 1.1rem 1rem 1rem; background: var(--card); }

@@ -14,7 +14,7 @@
    signed-in session whose email = OWNER can write (see admin-schema.sql).
    ═══════════════════════════════════════════════════════════════════ */
 
-import * as DATA from "./data.js?v=30";
+import * as DATA from "./data.js?v=31";
 
 const SB_URL = "https://pvconwkeshzoovchvzqm.supabase.co";
 const SB_KEY = "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ";
@@ -53,12 +53,15 @@ const TEXT_GROUPS = [
   ["Projects page", [
     ["projpg_kicker", "Eyebrow"], ["projpg_title", "Title"], ["proj_intro", "Intro"],
     ["eb_patents", "Patents eyebrow"], ["t_patents", "Patents title"],
-    ["eb_gallery", "Gallery eyebrow"], ["t_gallery", "Gallery title"], ["gal_flow_hint", "Gallery hint"],
     ["eb_toolkit", "Toolkit eyebrow"], ["t_toolkit", "Toolkit title"],
-    ["eb_orgs", "Orgs eyebrow"], ["t_orgs", "Orgs title"], ["orgs_lead", "Orgs lead"],
-    ["eb_oss", "Open-source eyebrow"], ["t_oss", "Open-source title"], ["lead_oss", "Open-source lead"],
-    ["eb_web", "Web eyebrow"], ["t_web", "Web title"], ["lead_web", "Web lead"]]],
-  ["Gallery page", [["hub_kicker", "Eyebrow"], ["hub_title", "Title"], ["hub_sub", "Sub / hint"]]],
+    ["eb_orgs", "Orgs eyebrow"], ["t_orgs", "Orgs title"], ["orgs_lead", "Orgs lead"]]],
+  // Open-source and Web & product are headings INSIDE the Software Pkgs gallery now
+  // (16 Aug 2026), which is why they sit under the Gallery page rather than Projects.
+  ["Gallery page", [
+    ["hub_kicker", "Hub eyebrow"], ["hub_sub", "Hub hint"],
+    ["sh_eb", "Emblems eyebrow"], ["sh_title", "Emblems title"], ["sh_lead", "Emblems lead"],
+    ["t_oss", "Open-source heading"], ["lead_oss", "Open-source lead"],
+    ["t_web", "Web & product heading"], ["lead_web", "Web & product lead"]]],
   ["Teaching page", [
     ["teach_kicker", "Eyebrow"], ["teach_title", "Title"], ["teach_lead", "Lead"],
     ["teach_courses", "Courses heading"], ["teach_workshops", "Workshops heading"]]],

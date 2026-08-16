@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="An engraved camera aperture emblem">
+  <defs>
+    <radialGradient id="pg" cx="50%" cy="42%" r="62%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eae2d4"/>
+    </radialGradient>
+  </defs>
+  <circle cx="120" cy="120" r="118" fill="url(#pg)"/>
+  <circle cx="120" cy="120" r="113" fill="none" stroke="#16352a" stroke-opacity=".16" stroke-width="1.2"/>
+  <circle cx="120" cy="120" r="106" fill="none" stroke="#b6803a" stroke-opacity=".55" stroke-width="1.6" stroke-dasharray="2 6" stroke-linecap="round"/>
+  <!-- aperture blades -->
+  <g transform="translate(120 120)" fill="none" stroke="#21503d" stroke-width="3.2" stroke-linejoin="round">
+    <g>
+      <path d="M0 -68 L58.9 -34 L48.4 -15.8 L-21 -55.9 Z" fill="#eef4f0"/>
+      <path d="M0 -68 L58.9 -34 L48.4 -15.8 L-21 -55.9 Z" transform="rotate(60)" fill="#eef4f0"/>
+      <path d="M0 -68 L58.9 -34 L48.4 -15.8 L-21 -55.9 Z" transform="rotate(120)" fill="#eef4f0"/>
+      <path d="M0 -68 L58.9 -34 L48.4 -15.8 L-21 -55.9 Z" transform="rotate(180)" fill="#eef4f0"/>
+      <path d="M0 -68 L58.9 -34 L48.4 -15.8 L-21 -55.9 Z" transform="rotate(240)" fill="#eef4f0"/>
+      <path d="M0 -68 L58.9 -34 L48.4 -15.8 L-21 -55.9 Z" transform="rotate(300)" fill="#eef4f0"/>
+    </g>
+    <circle r="68" stroke="#16352a" stroke-width="4"/>
+    <circle r="24" fill="#16352a" stroke="none"/>
+    <circle r="24" stroke="#b6803a" stroke-width="2"/>
+    <circle r="10" fill="#2f6b4f" stroke="none"/>
+    <circle cx="-8" cy="-9" r="3.6" fill="#fbfaf6" stroke="none" opacity=".7"/>
+  </g>
+  <!-- engraved rays -->
+  <g stroke="#4d8a6a" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round">
+    <path d="M120 14 v12"/><path d="M120 214 v-12"/><path d="M14 120 h12"/><path d="M214 120 h-12"/>
+    <path d="M45 45 l8.5 8.5"/><path d="M195 195 l-8.5 -8.5"/><path d="M195 45 l-8.5 8.5"/><path d="M45 195 l8.5 -8.5"/>
+  </g>
+</svg>

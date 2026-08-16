@@ -4,10 +4,10 @@
    Projects (filterable showcase + patents + hardware + skills + repos) ·
    interactive interests Gallery · markdown blog · i18n. */
 
-import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
+import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=30";
-import { renderGallery } from "./gallery.js?v=30";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=31";
+import { renderGallery } from "./gallery.js?v=31";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -141,6 +141,7 @@ function renderDynamic() {
   renderAreas();
   renderArch();
   renderMindmaps();
+  renderShowcase();
   renderProjects();
   renderActiveProjects();
   renderWebwork();
@@ -168,8 +169,14 @@ function renderDynamic() {
   SKILLS.forEach(g => sk.append(el("div", "skill-group card", `<h4>${pick(g, "group")}</h4><div class="chips-wrap">` + (lang === "ar" ? g.items_ar : g.items).map(i => `<span class="chip">${i}</span>`).join("") + "</div>")));
 
   // repos
-  const rp = $("#repos"); rp.innerHTML = "";
-  REPOS.forEach(r => { const a = el("a", "card repo"); a.href = r.url; a.target = "_blank"; a.rel = "noopener"; a.innerHTML = `<div class="repo-top"><span class="repo-name">${r.name}</span><span class="repo-star">★ ${r.stars}</span></div><p>${pick(r, "desc")}</p><span class="repo-lang">${r.lang}</span>`; rp.append(a); });
+  // The standalone Open-source section left the Gallery page on 16 Aug 2026 — the
+  // repos live inside the Software Pkgs gallery now. Guarded rather than deleted so
+  // the block still works if the section is ever put back.
+  const rp = $("#repos");
+  if (rp) {
+    rp.innerHTML = "";
+    REPOS.forEach(r => { const a = el("a", "card repo"); a.href = r.url; a.target = "_blank"; a.rel = "noopener"; a.innerHTML = `<div class="repo-top"><span class="repo-name">${r.name}</span><span class="repo-star">★ ${r.stars}</span></div><p>${pick(r, "desc")}</p><span class="repo-lang">${r.lang}</span>`; rp.append(a); });
+  }
 
   renderOrgs();
   renderTeaching();
@@ -304,6 +311,52 @@ function renderResearchStats() {
   host.after(foot);
   // avoid stacking a new footnote on every re-render (language toggle re-runs this)
   [...host.parentElement.querySelectorAll(".rs-foot")].slice(0, -1).forEach(n => n.remove());
+}
+
+/* ── Gallery page: the Photos / Awards emblems ──
+   The flat "Gallery" band became one of these, so the page reads as emblems you
+   open rather than three sections you scroll past. Opening one closes the other;
+   clicking the open one closes it. Awards render from QUALS.awards — the same list
+   the Qualifications page uses, presented differently rather than duplicated. */
+function renderShowcase() {
+  const row = $("#emblemRow"); if (!row) return; row.innerHTML = "";
+  SHOWCASE.forEach(s => {
+    const b = el("button", "em-card",
+      `<span class="em-ring"><img src="${s.img}" alt="" loading="lazy"></span>
+       <b>${pick(s, "label")}</b><span class="em-tease">${pick(s, "tease")}</span>
+       <span class="em-cta">${T().sh_open} →</span>`);
+    b.addEventListener("click", () => toggleShowcase(s.id));
+    row.append(b);
+  });
+  const aw = $("#galAwards");
+  if (aw) aw.innerHTML = QUALS.awards.map(a =>
+    `<article class="gaw-card"><span class="gaw-year">${a.year}</span>
+     <b>${pick(a, "title")}</b><p>${pick(a, "org")}</p></article>`).join("");
+  syncShowcase();
+}
+
+let openEmblem = null;
+function syncShowcase() {
+  const cards = $$("#emblemRow .em-card");
+  SHOWCASE.forEach((s, i) => {
+    const panel = $(`#em${s.id[0].toUpperCase()}${s.id.slice(1)}`);
+    const on = openEmblem === s.id;
+    if (panel) panel.hidden = !on;
+    cards[i]?.classList.toggle("on", on);
+    const cta = cards[i]?.querySelector(".em-cta");
+    if (cta) cta.textContent = on ? T().sh_close : `${T().sh_open} →`;
+  });
+}
+function toggleShowcase(id) {
+  openEmblem = openEmblem === id ? null : id;
+  syncShowcase();
+  if (!openEmblem) return;
+  const panel = $(`#em${id[0].toUpperCase()}${id.slice(1)}`);
+  if (window.gsap && !reduced) gsap.from(panel, { opacity: 0, y: 20, duration: 0.55, ease: "expo.out" });
+  // The rows were measured while hidden, so both the drift tween and every
+  // ScrollTrigger on the page need re-measuring now that the panel has height.
+  if (id === "photos") wireFlow();
+  requestAnimationFrame(() => ST.refresh());
 }
 
 /* ── Mind maps (Blog page) ──
@@ -729,7 +782,10 @@ $$("#pubdb th[data-sort]").forEach(th => th.addEventListener("click", () => { co
 
 /* ════════════ INTERESTS GALLERY (page #gallery) ════════════ */
 function galleryCtx() {
-  renderGallery({ pick, t: T, lang, reduced, lightbox: (items, idx) => openLightbox(items, idx) });
+  // `webwork` is passed in rather than imported by gallery.js: the showcase renderer
+  // lives here, gallery.js is imported BY this module, and a cycle to reach one
+  // function is not worth it.
+  renderGallery({ pick, t: T, lang, reduced, lightbox: (items, idx) => openLightbox(items, idx), webwork: renderWebwork });
 }
 
 /* ════════════ BLOG (markdown posts) ════════════ */
@@ -840,7 +896,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=30").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=31").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
@@ -882,17 +938,19 @@ function wireJourney() {
 }
 wireJourney();
 
-/* ── hardware flow gallery: rows drift as #galleries scrolls by ── */
+/* ── hardware flow gallery: rows drift as the Photos panel scrolls by ── */
 function wireFlow() {
   flowSTs.forEach(s => s.kill()); flowSTs = [];
-  if (reduced) return;
+  // The panel starts closed and has no height; measuring then would pin the drift
+  // at 0 for the rest of the session. toggleShowcase re-runs this on open.
+  if (reduced || $("#emPhotos")?.hidden) return;
   const dir = document.documentElement.dir === "rtl" ? -1 : 1;
   [["#flowRobots", -1], ["#flowPrints", 1]].forEach(([sel, sign]) => {
     const row = $(sel); if (!row) return;
     const drift = () => Math.max(0, row.scrollWidth - row.parentElement.clientWidth + 80);
     flowSTs.push(gsap.fromTo(row, { x: sign * dir < 0 ? 0 : -drift() }, {
       x: sign * dir < 0 ? -drift() : 0, ease: "none",
-      scrollTrigger: { trigger: "#galleries", start: "top 85%", end: "bottom 15%", scrub: 0.6, invalidateOnRefresh: true },
+      scrollTrigger: { trigger: "#emPhotos", start: "top 85%", end: "bottom 15%", scrub: 0.6, invalidateOnRefresh: true },
     }).scrollTrigger);
   });
 }

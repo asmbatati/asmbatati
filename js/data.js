@@ -1094,6 +1094,17 @@ export const MINDMAPS = [
 
 /* ── Interactive interests gallery (page #gallery) ──
    SIX ways (v10). Each cat.icon → img/gal/<icon>.webp (generated engraved icons). */
+/* ── Gallery page: the two emblems below the interests hub (16 Aug 2026) ──
+   Same idiom as the hub emblem — click to open, click again to close. The awards
+   panel renders QUALS.awards, so there is one source of truth for that list and
+   the Qualifications page cannot drift from this one. */
+export const SHOWCASE = [
+  { id: "photos", img: "img/gal/photos.svg", label: "Selected photos", label_ar: "صور مختارة",
+    tease: "The machines and the printed parts, in the metal", tease_ar: "الآلات والقطع المطبوعة في الواقع" },
+  { id: "awards", img: "img/gal/awards.svg", label: "Awards", label_ar: "الجوائز",
+    tease: "Competitions won, and the teams I coached", tease_ar: "مسابقاتٌ فُزت بها وفرقٌ دربتها" },
+];
+
 export const GALLERY = {
   cats: [
     { id: "design", icon: "cad", label: "Design Gallery", label_ar: "معرض التصميم",
@@ -1379,6 +1390,9 @@ export const I18N = {
     tab_gallery: "Gallery",
     hub_kicker: "Interests & craft", hub_title: "Six ways I build.", hub_sub: "Click the emblem to open it.",
     hub_back: "↩ All six", gal_flow_hint: "keep scrolling",
+    sh_eb: "More to see", sh_title: "Two more doors.",
+    sh_lead: "One opens on the machines and the printed parts as they actually came out. The other on the competitions.",
+    sh_open: "Open", sh_close: "Close",
     gp_drag: "drag ⟲ to spin · it also turns on its own", gp_pick: "Platforms",
     math_zeta: "damping ζ", math_wn: "frequency ωₙ",
     math_note: "A live second-order system — the mathematics under every mount, arm and airframe I tune.",
@@ -1478,6 +1492,9 @@ export const I18N = {
     tab_gallery: "المعرض",
     hub_kicker: "اهتمامات", hub_title: "ستّ طرق أبني بها.", hub_sub: "اضغط على الشعار لفتحه.",
     hub_back: "↩ الستّ كلّها", gal_flow_hint: "تابع التصفح",
+    sh_eb: "المزيد", sh_title: "بابان آخران.",
+    sh_lead: "أحدهما يفتح على الآلات والقطع المطبوعة كما خرجت فعلًا، والآخر على المسابقات.",
+    sh_open: "افتح", sh_close: "إغلاق",
     gp_drag: "اسحب ⟲ للتدوير · وهو يدور من تلقاء نفسه", gp_pick: "المنصّات",
     math_zeta: "التخميد ζ", math_wn: "التردد الطبيعي ωₙ",
     math_note: "نظام حيّ من الدرجة الثانية — الرياضيات الكامنة خلف كل حاملٍ وذراعٍ وهيكلٍ أضبطه.",

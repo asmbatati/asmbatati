@@ -10,7 +10,7 @@
   <!-- ?v must be bumped with the JS modules: without it a returning visitor keeps a
        cached stylesheet while the new JS renders new markup, so fresh sections render
        completely unstyled. Missing until 12 Aug 2026. -->
-  <link rel="stylesheet" href="css/main.css?v=30">
+  <link rel="stylesheet" href="css/main.css?v=31">
   <link rel="icon" type="image/png" sizes="64x64" href="img/favicon.png">
   <link rel="icon" type="image/png" sizes="256x256" href="img/logo-mark.png">
   <link rel="apple-touch-icon" href="img/logo-mark.png">
@@ -257,27 +257,25 @@
       </div>
     </section>
 
-    <!-- HARDWARE FLOW GALLERY — rows drift with scroll (moved here 12 Aug 2026) -->
-    <section class="section flow-sec" id="galleries">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_gallery">Gallery</span><h2 class="section-title" data-i18n="t_gallery">Hardware, in the metal.</h2>
-        <p class="section-lead" data-i18n="gal_flow_hint"></p></div>
-      <div class="flow-wrap">
-        <div class="flow-row" id="flowRobots"></div>
-        <div class="flow-row rev" id="flowPrints"></div>
+    <!-- TWO MORE EMBLEMS — Photos and Awards (16 Aug 2026).
+         Replaces three stacked sections: the flat "Gallery" band became the Photos
+         emblem, and Open source + Web & product moved INSIDE the Software Pkgs
+         gallery above (see viewSoftware) rather than repeating the page's own
+         scroll. #emPhotos keeps the flow-row ids so wireFlow() still finds them. -->
+    <section class="section alt" id="showcase-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="sh_eb">More to see</span><h2 class="section-title" data-i18n="sh_title">Two more doors.</h2>
+        <p class="section-lead" data-i18n="sh_lead"></p></div>
+      <div class="em-row" id="emblemRow"></div>
+      <div class="em-panel" id="emPhotos" hidden>
+        <div class="flow-wrap">
+          <div class="flow-row" id="flowRobots"></div>
+          <div class="flow-row rev" id="flowPrints"></div>
+        </div>
       </div>
-    </section>
-
-    <!-- REPOS -->
-    <section class="section alt" id="repos-sec"><div class="section-inner">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_oss">Open source</span><h2 class="section-title" data-i18n="t_oss">Code on GitHub.</h2><p class="section-lead" data-i18n="lead_oss"></p></div>
-      <div class="repo-grid" id="repos"></div>
+      <div class="em-panel" id="emAwards" hidden>
+        <div class="gaw-grid" id="galAwards"></div>
+      </div>
     </div></section>
-
-    <!-- WEB & PRODUCT — websites I've built -->
-    <section class="section" id="webwork-sec">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_web">Web &amp; product</span><h2 class="section-title" data-i18n="t_web">Websites I've built.</h2><p class="section-lead" data-i18n="lead_web"></p></div>
-      <div class="web-blocks" id="webGrid"></div>
-    </section>
   </div>
 
   <!-- ════════ PAGE: TEACHING ════════ -->
@@ -368,6 +366,6 @@
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
-  <script type="module" src="js/main.js?v=30"></script>
+  <script type="module" src="js/main.js?v=31"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, IMG } from "./data.js?v=30";
+import { GALLERY, REPOS, IMG } from "./data.js?v=31";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -256,7 +256,10 @@ function viewSoftware(host) {
   const T = ctx.t();
   host.append(el("p", "gp-hint center", ctx.pick(GALLERY.software, "intro")));
   skillChips(host, GALLERY.software.skills, T.gp_skills);
-  host.append(el("h3", "gp-subh", T.soft_repos));
+  // Open source — the standalone section moved in here 16 Aug 2026, and brought its
+  // own copy with it (t_oss / lead_oss read better than the bare "Selected repositories").
+  host.append(el("h3", "gp-subh", T.t_oss));
+  host.append(el("p", "gp-hint center", T.lead_oss));
   const rg = el("div", "repo-grid soft-repos");
   REPOS.forEach(r => {
     const a = el("a", "card repo");
@@ -266,6 +269,14 @@ function viewSoftware(host) {
   });
   host.append(rg);
   host.append(el("p", "gp-hint center", `<a class="soft-gh" href="https://github.com/asmbatati" target="_blank" rel="noopener">${T.soft_gh}</a>`));
+
+  // Web & product — same move. renderWebwork owns the grouping and the owner-only
+  // repo links, so it is handed in through ctx rather than reimplemented here.
+  host.append(el("h3", "gp-subh", T.t_web));
+  host.append(el("p", "gp-hint center", T.lead_web));
+  const web = el("div", "web-blocks"); web.id = "webGrid";
+  host.append(web);
+  ctx.webwork?.();
 }
 
 /* ══════════ Three.js helpers ══════════ */

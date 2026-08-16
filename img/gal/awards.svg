@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="An engraved laurel and medal emblem">
+  <defs>
+    <radialGradient id="ag" cx="50%" cy="40%" r="64%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f2ece1"/>
+    </radialGradient>
+  </defs>
+  <circle cx="120" cy="120" r="118" fill="url(#ag)"/>
+  <circle cx="120" cy="120" r="113" fill="none" stroke="#16352a" stroke-opacity=".16" stroke-width="1.2"/>
+  <circle cx="120" cy="120" r="106" fill="none" stroke="#b6803a" stroke-opacity=".55" stroke-width="1.6" stroke-dasharray="2 6" stroke-linecap="round"/>
+
+  <!-- laurel: one branch, mirrored -->
+  <g fill="none" stroke="#2f6b4f" stroke-width="3" stroke-linecap="round">
+    <path d="M74 62 C48 92 46 136 66 172"/>
+    <path d="M166 62 C192 92 194 136 174 172"/>
+  </g>
+  <g fill="#4d8a6a" fill-opacity=".85">
+    <g>
+      <ellipse cx="58" cy="92"  rx="12" ry="6.4" transform="rotate(-38 58 92)"/>
+      <ellipse cx="51" cy="114" rx="12.5" ry="6.6" transform="rotate(-14 51 114)"/>
+      <ellipse cx="52" cy="137" rx="12" ry="6.4" transform="rotate(12 52 137)"/>
+      <ellipse cx="60" cy="158" rx="11" ry="6" transform="rotate(34 60 158)"/>
+      <ellipse cx="74" cy="76"  rx="10" ry="5.6" transform="rotate(-56 74 76)"/>
+    </g>
+    <g transform="translate(240 0) scale(-1 1)">
+      <ellipse cx="58" cy="92"  rx="12" ry="6.4" transform="rotate(-38 58 92)"/>
+      <ellipse cx="51" cy="114" rx="12.5" ry="6.6" transform="rotate(-14 51 114)"/>
+      <ellipse cx="52" cy="137" rx="12" ry="6.4" transform="rotate(12 52 137)"/>
+      <ellipse cx="60" cy="158" rx="11" ry="6" transform="rotate(34 60 158)"/>
+      <ellipse cx="74" cy="76"  rx="10" ry="5.6" transform="rotate(-56 74 76)"/>
+    </g>
+  </g>
+
+  <!-- ribbon -->
+  <path d="M104 150 L94 196 L120 182 L146 196 L136 150 Z" fill="#eef4f0" stroke="#21503d" stroke-width="2.6" stroke-linejoin="round"/>
+  <!-- medal -->
+  <circle cx="120" cy="118" r="40" fill="#16352a"/>
+  <circle cx="120" cy="118" r="40" fill="none" stroke="#b6803a" stroke-width="3"/>
+  <circle cx="120" cy="118" r="31" fill="none" stroke="#b6803a" stroke-opacity=".5" stroke-width="1.2"/>
+  <!-- star -->
+  <path d="M120 96 l6.6 13.9 15.2 2.1 -11 10.8 2.7 15.2 -13.5 -7.3 -13.5 7.3 2.7 -15.2 -11 -10.8 15.2 -2.1 Z"
+        fill="#b6803a"/>
+</svg>
