@@ -7,7 +7,10 @@
   <meta name="description" content="Abdulrahman S. Al-Batati — robotics researcher. UAV/UGV/quadruped autonomy, GPS-denied localization, reinforcement learning, ROS 2. 10 papers, 2 patents, 8 robots built.">
   <meta property="og:title" content="Abdulrahman S. Al-Batati — Robotics Researcher">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="css/main.css">
+  <!-- ?v must be bumped with the JS modules: without it a returning visitor keeps a
+       cached stylesheet while the new JS renders new markup, so fresh sections render
+       completely unstyled. Missing until 12 Aug 2026. -->
+  <link rel="stylesheet" href="css/main.css?v=22">
   <link rel="icon" type="image/png" sizes="64x64" href="img/favicon.png">
   <link rel="icon" type="image/png" sizes="256x256" href="img/logo-mark.png">
   <link rel="apple-touch-icon" href="img/logo-mark.png">
@@ -53,6 +56,7 @@
         <li><a data-nav="projects" data-i18n="tab_projects">Projects</a></li>
         <li><a data-nav="gallery" data-i18n="tab_gallery">Gallery</a></li>
         <li><a data-nav="teaching" data-i18n="tab_teaching">Teaching</a></li>
+        <li><a data-nav="affil" data-i18n="tab_affil">Affiliations</a></li>
         <li><a data-nav="quals" data-i18n="tab_quals">Qualifications</a></li>
         <li><a data-nav="articles" data-i18n="tab_articles">Writing</a></li>
       </ul>
@@ -208,51 +212,33 @@
     <!-- section index: every section on this page, visible before any scrolling -->
     <nav class="sec-index" id="secIndex" aria-label="Sections on this page"></nav>
 
-    <section class="section" id="projects">
-      <div class="reveal"><span class="eyebrow" data-i18n="projpg_kicker">Projects</span><h2 class="section-title" data-i18n="projpg_title">The machines.</h2>
+    <!-- ACTIVE — funded research running now -->
+    <section class="section" id="active-sec">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_active">Active</span><h2 class="section-title" data-i18n="t_active">What I'm building now.</h2>
+        <p class="section-lead" data-i18n="lead_active"></p></div>
+      <div class="ap-grid" id="activeGrid"></div>
+    </section>
+
+    <!-- FINISHED — the built hardware -->
+    <section class="section alt" id="projects"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_finished">Finished</span><h2 class="section-title" data-i18n="t_finished">Built, flown, and shipped.</h2>
         <p class="section-lead" data-i18n="proj_intro"></p></div>
       <div class="proj-filter" id="projFilter"></div>
       <div class="proj-grid" id="projGrid"></div>
-    </section>
+    </div></section>
 
     <!-- PATENTS -->
-    <section class="section alt" id="patents-sec"><div class="section-inner">
+    <section class="section" id="patents-sec">
       <div class="reveal"><span class="eyebrow" data-i18n="eb_patents">Patents</span><h2 class="section-title" data-i18n="t_patents">Two granted industrial designs.</h2></div>
       <div class="patent-grid" id="patents"></div>
-    </div></section>
-
-    <!-- HARDWARE FLOW GALLERY — rows drift with scroll -->
-    <section class="section flow-sec" id="galleries">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_gallery">Gallery</span><h2 class="section-title" data-i18n="t_gallery">Hardware, in the metal.</h2>
-        <p class="section-lead" data-i18n="gal_flow_hint"></p></div>
-      <div class="flow-wrap">
-        <div class="flow-row" id="flowRobots"></div>
-        <div class="flow-row rev" id="flowPrints"></div>
-      </div>
     </section>
+  </div>
 
-    <!-- SKILLS -->
-    <section class="section alt" id="skills-sec"><div class="section-inner">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_toolkit">Toolkit</span><h2 class="section-title" data-i18n="t_toolkit">What I work with.</h2></div>
-      <div class="skill-grid" id="skills"></div>
-    </div></section>
-
-    <!-- ORGANIZATIONS -->
+  <!-- ════════ PAGE: AFFILIATIONS ════════ -->
+  <div class="page" id="page-affil">
     <section class="section" id="orgs-sec">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_orgs">Organizations</span><h2 class="section-title" data-i18n="t_orgs">Where I build.</h2><p class="section-lead" data-i18n="orgs_lead"></p></div>
+      <div class="reveal"><span class="eyebrow" data-i18n="affil_kicker">Affiliations</span><h2 class="section-title" data-i18n="affil_title">Where I build.</h2><p class="section-lead" data-i18n="orgs_lead"></p></div>
       <div class="org-grid" id="orgs"></div>
-    </section>
-
-    <!-- REPOS -->
-    <section class="section alt" id="repos-sec"><div class="section-inner">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_oss">Open source</span><h2 class="section-title" data-i18n="t_oss">Code on GitHub.</h2><p class="section-lead" data-i18n="lead_oss"></p></div>
-      <div class="repo-grid" id="repos"></div>
-    </div></section>
-
-    <!-- WEB & PRODUCT — websites I've built -->
-    <section class="section" id="webwork-sec">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_web">Web &amp; product</span><h2 class="section-title" data-i18n="t_web">Websites I've built.</h2><p class="section-lead" data-i18n="lead_web"></p></div>
-      <div class="web-blocks" id="webGrid"></div>
     </section>
   </div>
 
@@ -278,6 +264,28 @@
         </div>
         <div class="gp-view" id="gpView"></div>
       </div>
+    </section>
+
+    <!-- HARDWARE FLOW GALLERY — rows drift with scroll (moved here 12 Aug 2026) -->
+    <section class="section flow-sec" id="galleries">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_gallery">Gallery</span><h2 class="section-title" data-i18n="t_gallery">Hardware, in the metal.</h2>
+        <p class="section-lead" data-i18n="gal_flow_hint"></p></div>
+      <div class="flow-wrap">
+        <div class="flow-row" id="flowRobots"></div>
+        <div class="flow-row rev" id="flowPrints"></div>
+      </div>
+    </section>
+
+    <!-- REPOS -->
+    <section class="section alt" id="repos-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_oss">Open source</span><h2 class="section-title" data-i18n="t_oss">Code on GitHub.</h2><p class="section-lead" data-i18n="lead_oss"></p></div>
+      <div class="repo-grid" id="repos"></div>
+    </div></section>
+
+    <!-- WEB & PRODUCT — websites I've built -->
+    <section class="section" id="webwork-sec">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_web">Web &amp; product</span><h2 class="section-title" data-i18n="t_web">Websites I've built.</h2><p class="section-lead" data-i18n="lead_web"></p></div>
+      <div class="web-blocks" id="webGrid"></div>
     </section>
   </div>
 
@@ -309,6 +317,12 @@
       <h3 class="teach-h reveal" data-i18n="q_awards">Awards &amp; honors</h3>
       <div class="award-list" id="qAwards"></div>
     </section>
+
+    <!-- SKILLS / TOOLKIT (moved here from Projects, 12 Aug 2026) -->
+    <section class="section alt" id="skills-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_toolkit">Toolkit</span><h2 class="section-title" data-i18n="t_toolkit">What I work with.</h2></div>
+      <div class="skill-grid" id="skills"></div>
+    </div></section>
   </div>
 
   <!-- ════════ PAGE: WRITING (markdown blog) ════════ -->
@@ -334,6 +348,6 @@
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
-  <script type="module" src="js/main.js?v=21"></script>
+  <script type="module" src="js/main.js?v=22"></script>
 </body>
 </html>

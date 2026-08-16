@@ -4,10 +4,10 @@
    Projects (filterable showcase + patents + hardware + skills + repos) ·
    interactive interests Gallery · markdown blog · i18n. */
 
-import { PROFILE, STATS, PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
+import { PROFILE, STATS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=21";
-import { renderGallery } from "./gallery.js?v=21";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=22";
+import { renderGallery } from "./gallery.js?v=22";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -63,7 +63,7 @@ function switchPage(name) {
   if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
   if (name === "articles") renderArticles();
   if (name === "gallery") galleryCtx();
-  if (name === "projects") wireFlow();
+  if (name === "gallery") wireFlow();
   if (name === "home") wireJourney();
   requestAnimationFrame(() => { ST.refresh(); revealIn("#page-" + name); });
 }
@@ -140,6 +140,7 @@ function renderDynamic() {
   renderAreas();
   renderArch();
   renderProjects();
+  renderActiveProjects();
   renderWebwork();
   renderSectionIndex();
 
@@ -341,13 +342,9 @@ function renderWebwork() {
    them pick one. Labels reuse each section's existing eyebrow key, so nothing new
    needs translating. */
 const PAGE_SECTIONS = [
-  { sel: "#projects", key: "projpg_kicker" },
+  { sel: "#active-sec", key: "eb_active" },
+  { sel: "#projects", key: "eb_finished" },
   { sel: "#patents-sec", key: "eb_patents" },
-  { sel: "#galleries", key: "eb_gallery" },
-  { sel: "#skills-sec", key: "eb_toolkit" },
-  { sel: "#orgs-sec", key: "eb_orgs" },
-  { sel: "#repos-sec", key: "eb_oss" },
-  { sel: "#webwork-sec", key: "eb_web" },
 ];
 /* Lenis's animated scrollTo silently does nothing on the long pages: after an SPA page
    switch its cached dimensions are stale (it reported limit 3403 for a 10469px document),
@@ -439,6 +436,27 @@ function renderResearchMap() {
 
 /* ════════════ PROJECTS showcase (filterable grid) ════════════ */
 let projCat = "all";
+/* ── Active research projects ──
+   No cover images — these are funded research tracks, so the card leads with the
+   facts that matter for one: who leads it, what funds it, where it stands. */
+function renderActiveProjects() {
+  const grid = $("#activeGrid"); if (!grid) return; grid.innerHTML = "";
+  ACTIVE_PROJECTS.forEach(p => {
+    const c = el("article", "ap-card");
+    const row = (label, val) => val ? `<div class="ap-row"><dt>${label}</dt><dd>${val}</dd></div>` : "";
+    c.innerHTML = `
+      <div class="ap-head"><h3>${pick(p, "title")}</h3><span class="ap-state">${pick(p, "state")}</span></div>
+      <p class="ap-blurb">${pick(p, "blurb")}</p>
+      <dl class="ap-meta">
+        ${row(T().ap_lead, pick(p, "lead"))}
+        ${row(T().ap_fund, pick(p, "fund"))}
+      </dl>
+      <div class="ap-tech">${(p.tech || []).map(t => `<span>${t}</span>`).join("")}</div>`;
+    grid.append(c);
+  });
+  window.__cursorBind?.();
+}
+
 const PROJ_CATS = () => [["all", T().proj_all], ["aerial", T().proj_aerial], ["ground", T().proj_ground], ["sensor", T().proj_sensor]];
 function renderProjects() {
   const fr = $("#projFilter"); if (!fr) return; fr.innerHTML = "";
@@ -688,7 +706,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=21").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=22").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
@@ -766,4 +784,4 @@ addEventListener("scroll", () => $(".navbar").classList.toggle("scrolled", scrol
 $("#hamburger").addEventListener("click", () => { $("#hamburger").classList.toggle("active"); $("#navMenu").classList.toggle("active"); });
 
 /* ── initial route (no curtain on first load — the loader already covers) ── */
-if (["#research", "#projects", "#gallery", "#teaching", "#quals", "#articles"].includes(location.hash)) switchPage(location.hash.slice(1));
+if (["#research", "#projects", "#gallery", "#teaching", "#affil", "#quals", "#articles"].includes(location.hash)) switchPage(location.hash.slice(1));
