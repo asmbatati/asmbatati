@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 560" preserveAspectRatio="xMidYMid meet"
+     role="img" aria-labelledby="t d">
+  <title id="t">The interception mission, as a state machine</title>
+  <desc id="d">A four-state interception mission. Idle transitions to surveillance ten seconds after arming. Surveillance sweeps a pattern and returns to idle after five minutes with no detection. A detected target moves to pursuit, which follows a delayed prediction of the target. Within attack range the machine enters attack, which drives the target's velocity to zero. Losing the target and neutralizing it both return to surveillance.</desc>
+  <defs>
+  <marker id="m-flow"  markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#21503d"/></marker>
+  <marker id="m-share" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#4d8a6a"/></marker>
+  <marker id="m-react" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#8a978c"/></marker>
+  <marker id="m-emerg" markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#b6803a"/></marker>
+  <marker id="m-sup"   markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#2f6b4f"/></marker>
+</defs>
+  <style>
+  .bg   { fill: #fbfaf6 }
+  .nd   { fill: #ffffff; stroke: rgba(22,53,42,0.14); stroke-width: 1 }
+  .nd.perc   { fill: #eef4f0 }
+  .nd.cog    { fill: #f7f3ec }
+  .nd.hw     { fill: #eae2d4 }
+  .nd.paper  { fill: #f2ece1 }
+  .nd.dark   { fill: #16352a; stroke: #16352a }
+  .nd.sup    { fill: #f1ece2; stroke: #4d8a6a; stroke-dasharray: 5 4 }
+  .nd.mine   { stroke: #2f6b4f; stroke-width: 1.6 }
+  .nd.gold   { fill: #f7efe1; stroke: #b6803a }
+  .nd.slate  { fill: #eef2f4; stroke: #4a6b7c }
+  .panel     { fill: none; stroke: rgba(22,53,42,0.14); stroke-width: 1; stroke-dasharray: 6 5 }
+  .panel.solid { stroke-dasharray: none }
+  .band      { stroke: rgba(22,53,42,0.05); stroke-width: 1 }
+  .band.delib  { fill: rgba(77,138,106,0.05) }
+  .band.react  { fill: rgba(47,107,79,0.045) }
+  .band.reflex { fill: rgba(182,128,58,0.055) }
+  .ttl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl.on-dark { fill: #fbfaf6 }
+  .sub  { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #5c6f63 }
+  .sub.on-dark { fill: #b9d0c3 }
+  .col  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #2f6b4f }
+  .edge { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #8a978c }
+  .edge.gold  { fill: #b6803a; font-weight: 600 }
+  .edge.green { fill: #2f6b4f; font-weight: 600 }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; fill: #21503d }
+  .flow  { stroke: #21503d; stroke-width: 2.2; fill: none; marker-end: url(#m-flow) }
+  .share { stroke: #4d8a6a; stroke-width: 1.6; fill: none; marker-start: url(#m-share); marker-end: url(#m-share) }
+  .react { stroke: #8a978c; stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; marker-end: url(#m-react) }
+  .emerg { stroke: #b6803a; stroke-width: 2.6; fill: none; stroke-dasharray: 7 4; marker-end: url(#m-emerg) }
+  .super { stroke: #2f6b4f; stroke-width: 1.4; fill: none; stroke-dasharray: 3 4; opacity: .8; marker-start: url(#m-sup); marker-end: url(#m-sup) }
+  .thin  { stroke: #4d8a6a; stroke-width: 1.4; fill: none; marker-end: url(#m-share) }
+  .dot   { fill: #2f6b4f }
+</style>
+  <rect width="1180" height="560" class="bg"/>
+  <text x="590" y="34" class="ttl" font-size="22" text-anchor="middle">The interception mission, as a state machine</text>
+<path d="M242,176 L338,176" class="flow"/>
+<text x="290" y="166" class="edge green" font-size="10" text-anchor="middle">armed 10 s</text>
+<path d="M522,176 L638,176" class="flow"/>
+<text x="580" y="166" class="edge green" font-size="10" text-anchor="middle">target detected</text>
+<path d="M822,176 L938,176" class="flow"/>
+<text x="880" y="166" class="edge green" font-size="10" text-anchor="middle">within attack range</text>
+<path d="M390,130 C390,76 470,76 470,130" class="react"/>
+<text x="430" y="68" class="edge" font-size="9.5" text-anchor="middle">&lt; 5 min</text>
+<path d="M690,130 C690,76 770,76 770,130" class="react"/>
+<text x="730" y="68" class="edge" font-size="9.5" text-anchor="middle">keep following</text>
+<path d="M990,130 C990,76 1070,76 1070,130" class="react"/>
+<text x="1030" y="68" class="edge" font-size="9.5" text-anchor="middle">keep attacking</text>
+<path d="M430,222 L430,262 L150,262 L150,222" class="react"/>
+<text x="290" y="276" class="edge" font-size="9.5" text-anchor="middle">&gt; 5 min with no detection</text>
+<path d="M730,222 L730,296 L460,296 L460,222" class="emerg"/>
+<text x="580" y="310" class="edge gold" font-size="9.5" text-anchor="middle">lost target</text>
+<path d="M1030,222 L1030,330 L400,330 L400,222" class="emerg"/>
+<text x="730" y="344" class="edge gold" font-size="9.5" text-anchor="middle">target neutralized</text>
+<rect x="58" y="130" width="184" height="92" rx="12" class="nd perc"/><text x="150" y="173.5" class="lbl" font-size="14" text-anchor="middle">Idle</text><text x="150" y="191.6" class="sub" font-size="9.5" text-anchor="middle">armed · on ground · v = 0</text>
+<rect x="338" y="130" width="184" height="92" rx="12" class="nd perc"/><text x="430" y="173.5" class="lbl" font-size="14" text-anchor="middle">Surveillance</text><text x="430" y="191.6" class="sub" font-size="9.5" text-anchor="middle">airborne, sweeping a pattern</text>
+<rect x="638" y="130" width="184" height="92" rx="12" class="nd perc"/><text x="730" y="173.5" class="lbl" font-size="14" text-anchor="middle">Pursuit</text><text x="730" y="191.6" class="sub" font-size="9.5" text-anchor="middle">following a delayed prediction</text>
+<rect x="938" y="130" width="184" height="92" rx="12" class="nd perc"/><text x="1030" y="173.5" class="lbl" font-size="14" text-anchor="middle">Attack</text><text x="1030" y="191.6" class="sub" font-size="9.5" text-anchor="middle">drive the target's velocity to 0</text>
+<polygon points="290,362 383,424 290,486 197,424" class="nd gold"/><text x="290" y="420.4" class="sub" font-size="9.2" text-anchor="middle">the mission starts</text><text x="290" y="433.5" class="sub" font-size="9.2" text-anchor="middle">10 s after arming</text>
+<polygon points="580,362 673,424 580,486 487,424" class="nd gold"/><text x="580" y="420.4" class="sub" font-size="9.2" text-anchor="middle">a target enters</text><text x="580" y="433.5" class="sub" font-size="9.2" text-anchor="middle">the detection volume</text>
+<polygon points="880,362 973,424 880,486 787,424" class="nd gold"/><text x="880" y="420.4" class="sub" font-size="9.2" text-anchor="middle">the target is</text><text x="880" y="433.5" class="sub" font-size="9.2" text-anchor="middle">within attack range</text>
+<text x="590" y="512" class="edge" font-size="11.5" text-anchor="middle">The four states are the easy part. Every arrow that points backwards is the part that decides whether the thing is safe to fly.</text>
+<text x="590" y="534" class="edge" font-size="11.5" text-anchor="middle">Gold edges are the ones that end an engagement — losing the target and neutralizing it both return to surveillance.</text>
+</svg>

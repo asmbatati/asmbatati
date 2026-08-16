@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 620" preserveAspectRatio="xMidYMid meet"
+     role="img" aria-labelledby="t d">
+  <title id="t">How the trajectory dataset is made</title>
+  <desc id="d">A dataset-generation pipeline. Gazebo and PX4 fly randomised trajectories commanded through MAVROS by a trajectory manager, and each flight is written to CSV. The build stage resamples each flight to a fixed timestep, computes statistics including mean, covariance, Cholesky factor, maximum speed and maximum distance, then sequences the flights into input and output segments with spline features, producing a position dataset and a velocity dataset.</desc>
+  <defs>
+  <marker id="m-flow"  markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#21503d"/></marker>
+  <marker id="m-share" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#4d8a6a"/></marker>
+  <marker id="m-react" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#8a978c"/></marker>
+  <marker id="m-emerg" markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#b6803a"/></marker>
+  <marker id="m-sup"   markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#2f6b4f"/></marker>
+</defs>
+  <style>
+  .bg   { fill: #fbfaf6 }
+  .nd   { fill: #ffffff; stroke: rgba(22,53,42,0.14); stroke-width: 1 }
+  .nd.perc   { fill: #eef4f0 }
+  .nd.cog    { fill: #f7f3ec }
+  .nd.hw     { fill: #eae2d4 }
+  .nd.paper  { fill: #f2ece1 }
+  .nd.dark   { fill: #16352a; stroke: #16352a }
+  .nd.sup    { fill: #f1ece2; stroke: #4d8a6a; stroke-dasharray: 5 4 }
+  .nd.mine   { stroke: #2f6b4f; stroke-width: 1.6 }
+  .nd.gold   { fill: #f7efe1; stroke: #b6803a }
+  .nd.slate  { fill: #eef2f4; stroke: #4a6b7c }
+  .panel     { fill: none; stroke: rgba(22,53,42,0.14); stroke-width: 1; stroke-dasharray: 6 5 }
+  .panel.solid { stroke-dasharray: none }
+  .band      { stroke: rgba(22,53,42,0.05); stroke-width: 1 }
+  .band.delib  { fill: rgba(77,138,106,0.05) }
+  .band.react  { fill: rgba(47,107,79,0.045) }
+  .band.reflex { fill: rgba(182,128,58,0.055) }
+  .ttl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl.on-dark { fill: #fbfaf6 }
+  .sub  { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #5c6f63 }
+  .sub.on-dark { fill: #b9d0c3 }
+  .col  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #2f6b4f }
+  .edge { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #8a978c }
+  .edge.gold  { fill: #b6803a; font-weight: 600 }
+  .edge.green { fill: #2f6b4f; font-weight: 600 }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; fill: #21503d }
+  .flow  { stroke: #21503d; stroke-width: 2.2; fill: none; marker-end: url(#m-flow) }
+  .share { stroke: #4d8a6a; stroke-width: 1.6; fill: none; marker-start: url(#m-share); marker-end: url(#m-share) }
+  .react { stroke: #8a978c; stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; marker-end: url(#m-react) }
+  .emerg { stroke: #b6803a; stroke-width: 2.6; fill: none; stroke-dasharray: 7 4; marker-end: url(#m-emerg) }
+  .super { stroke: #2f6b4f; stroke-width: 1.4; fill: none; stroke-dasharray: 3 4; opacity: .8; marker-start: url(#m-sup); marker-end: url(#m-sup) }
+  .thin  { stroke: #4d8a6a; stroke-width: 1.4; fill: none; marker-end: url(#m-share) }
+  .dot   { fill: #2f6b4f }
+</style>
+  <rect width="1160" height="620" class="bg"/>
+  <text x="580" y="34" class="ttl" font-size="22" text-anchor="middle">How the trajectory dataset is made</text>
+<rect x="34" y="92" width="470" height="180" rx="14" class="panel"/><rect x="50" y="83.36" width="130.64000000000001" height="17.4" fill="#fbfaf6"/><text x="57" y="96.32" class="col" font-size="12">Flight (simulated)</text>
+<rect x="56" y="128" width="128" height="60" rx="12" class="nd hw"/><text x="120" y="155.2" class="lbl" font-size="12" text-anchor="middle">Gazebo</text><text x="120" y="171.0" class="sub" font-size="9" text-anchor="middle">physics · sensors</text>
+<rect x="56" y="202" width="128" height="52" rx="12" class="nd hw"/><text x="120" y="231.4" class="lbl" font-size="12" text-anchor="middle">Actuators</text>
+<rect x="212" y="128" width="128" height="126" rx="12" class="nd perc"/><text x="276" y="182.1" class="lbl" font-size="12" text-anchor="middle">PX4</text><text x="276" y="197.8" class="sub" font-size="9" text-anchor="middle">control</text><text x="276" y="210.1" class="sub" font-size="9" text-anchor="middle">state estimation</text>
+<rect x="368" y="128" width="114" height="126" rx="12" class="nd cog"/><text x="425" y="182.1" class="lbl" font-size="12" text-anchor="middle">MAVROS</text><text x="425" y="197.8" class="sub" font-size="9" text-anchor="middle">setpoints</text><text x="425" y="210.1" class="sub" font-size="9" text-anchor="middle">feedback</text>
+<path d="M184,158 L212,158" class="flow"/>
+<path d="M212,228 L184,228" class="flow"/>
+<path d="M340,191 L368,191" class="flow"/>
+<rect x="552" y="128" width="170" height="126" rx="12" class="nd gold mine"/><circle cx="711" cy="139" r="3.5" class="dot"/><text x="637" y="176.0" class="lbl" font-size="12" text-anchor="middle">Trajectory manager</text><text x="637" y="191.7" class="sub" font-size="9" text-anchor="middle">generate random</text><text x="637" y="204.0" class="sub" font-size="9" text-anchor="middle">trajectories</text><text x="637" y="216.2" class="sub" font-size="9" text-anchor="middle">· send setpoints</text>
+<path d="M482,191 L552,191" class="flow"/>
+<rect x="790" y="150" width="120" height="84" rx="12" class="nd paper"/><text x="850" y="183.1" class="lbl" font-size="12" text-anchor="middle">CSV</text><text x="850" y="198.8" class="sub" font-size="9" text-anchor="middle">one file</text><text x="850" y="211.1" class="sub" font-size="9" text-anchor="middle">per flight</text>
+<path d="M722,191 L790,191" class="flow"/>
+<rect x="34" y="330" width="1090" height="180" rx="14" class="panel"/><rect x="50" y="321.36" width="98.24000000000001" height="17.4" fill="#fbfaf6"/><text x="57" y="334.32" class="col" font-size="12">Dataset build</text>
+<rect x="56" y="374" width="130" height="92" rx="12" class="nd nd mine"/><circle cx="175" cy="385" r="3.5" class="dot"/><text x="121" y="416.9" class="lbl" font-size="12" text-anchor="middle">Resample</text><text x="121" y="432.7" class="sub" font-size="9.5" text-anchor="middle">fixed Δt</text>
+<path d="M850,234 L850,300 L121,300 L121,374" class="react"/>
+<text x="470" y="292" class="edge" font-size="9" text-anchor="middle">raw flights</text>
+<rect x="226" y="374" width="190" height="92" rx="12" class="nd perc"/><text x="321" y="411.4" class="lbl" font-size="12" text-anchor="middle">Statistics</text><text x="321" y="427.1" class="sub" font-size="8.8" text-anchor="middle">mean · covariance · L-Cholesky</text><text x="321" y="439.0" class="sub" font-size="8.8" text-anchor="middle">max speed · max distance</text>
+<path d="M186,420 L226,420" class="flow"/>
+<rect x="456" y="374" width="210" height="92" rx="12" class="nd cog"/><text x="561" y="411.0" class="lbl" font-size="11.5" text-anchor="middle">Sequence &amp; feature-extract</text><text x="561" y="426.1" class="sub" font-size="9" text-anchor="middle">input/output segments</text><text x="561" y="438.4" class="sub" font-size="9" text-anchor="middle">spline features</text>
+<path d="M416,420 L456,420" class="flow"/>
+<rect x="706" y="356" width="128" height="58" rx="12" class="nd hw"/><text x="770" y="388.2" class="lbl" font-size="11.5" text-anchor="middle">Input length</text>
+<rect x="706" y="428" width="128" height="58" rx="12" class="nd hw"/><text x="770" y="460.2" class="lbl" font-size="11.5" text-anchor="middle">Output length</text>
+<path d="M706,385 L666,405" class="thin"/>
+<path d="M706,457 L666,437" class="thin"/>
+<rect x="894" y="356" width="210" height="58" rx="12" class="nd gold"/><text x="999" y="388.4" class="lbl" font-size="12" text-anchor="middle">Position dataset</text>
+<rect x="894" y="428" width="210" height="58" rx="12" class="nd gold"/><text x="999" y="460.4" class="lbl" font-size="12" text-anchor="middle">Velocity dataset</text>
+<path d="M834,385 L894,385" class="flow"/>
+<path d="M834,457 L894,457" class="flow"/>
+<text x="580" y="556" class="edge" font-size="11.5" text-anchor="middle">The statistics pass is not decoration: without the covariance and the speed ceiling you cannot tell a hard trajectory from a corrupt one.</text>
+<text x="580" y="578" class="edge" font-size="11.5" text-anchor="middle">Input and output length are inputs to the build, not constants — the same flights make different datasets.</text>
+</svg>

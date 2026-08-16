@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 700" preserveAspectRatio="xMidYMid meet"
+     role="img" aria-labelledby="t d">
+  <title id="t">Extended Kalman Filter</title>
+  <desc id="d">The Kalman loop with non-linear models. The state transition and measurement functions f and h replace the linear matrices, and two Jacobians, F and H, linearise them around the current estimate so the covariance can still be propagated.</desc>
+  <defs>
+  <marker id="m-flow"  markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#21503d"/></marker>
+  <marker id="m-share" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#4d8a6a"/></marker>
+  <marker id="m-react" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#8a978c"/></marker>
+  <marker id="m-emerg" markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#b6803a"/></marker>
+  <marker id="m-sup"   markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#2f6b4f"/></marker>
+</defs>
+  <style>
+  .bg   { fill: #fbfaf6 }
+  .nd   { fill: #ffffff; stroke: rgba(22,53,42,0.14); stroke-width: 1 }
+  .nd.perc   { fill: #eef4f0 }
+  .nd.cog    { fill: #f7f3ec }
+  .nd.hw     { fill: #eae2d4 }
+  .nd.paper  { fill: #f2ece1 }
+  .nd.dark   { fill: #16352a; stroke: #16352a }
+  .nd.sup    { fill: #f1ece2; stroke: #4d8a6a; stroke-dasharray: 5 4 }
+  .nd.mine   { stroke: #2f6b4f; stroke-width: 1.6 }
+  .nd.gold   { fill: #f7efe1; stroke: #b6803a }
+  .nd.slate  { fill: #eef2f4; stroke: #4a6b7c }
+  .panel     { fill: none; stroke: rgba(22,53,42,0.14); stroke-width: 1; stroke-dasharray: 6 5 }
+  .panel.solid { stroke-dasharray: none }
+  .band      { stroke: rgba(22,53,42,0.05); stroke-width: 1 }
+  .band.delib  { fill: rgba(77,138,106,0.05) }
+  .band.react  { fill: rgba(47,107,79,0.045) }
+  .band.reflex { fill: rgba(182,128,58,0.055) }
+  .ttl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl.on-dark { fill: #fbfaf6 }
+  .sub  { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #5c6f63 }
+  .sub.on-dark { fill: #b9d0c3 }
+  .col  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #2f6b4f }
+  .edge { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #8a978c }
+  .edge.gold  { fill: #b6803a; font-weight: 600 }
+  .edge.green { fill: #2f6b4f; font-weight: 600 }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; fill: #21503d }
+  .flow  { stroke: #21503d; stroke-width: 2.2; fill: none; marker-end: url(#m-flow) }
+  .share { stroke: #4d8a6a; stroke-width: 1.6; fill: none; marker-start: url(#m-share); marker-end: url(#m-share) }
+  .react { stroke: #8a978c; stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; marker-end: url(#m-react) }
+  .emerg { stroke: #b6803a; stroke-width: 2.6; fill: none; stroke-dasharray: 7 4; marker-end: url(#m-emerg) }
+  .super { stroke: #2f6b4f; stroke-width: 1.4; fill: none; stroke-dasharray: 3 4; opacity: .8; marker-start: url(#m-sup); marker-end: url(#m-sup) }
+  .thin  { stroke: #4d8a6a; stroke-width: 1.4; fill: none; marker-end: url(#m-share) }
+  .dot   { fill: #2f6b4f }
+</style>
+  <rect width="1040" height="700" class="bg"/>
+  <text x="520" y="34" class="ttl" font-size="22" text-anchor="middle">Extended Kalman Filter</text>
+<rect x="40" y="96" width="132" height="86" rx="12" class="nd paper"/><text x="106" y="132.8" class="lbl" font-size="12" text-anchor="middle">Initial state</text><text x="106" y="148.9" class="mono" font-size="12.2" text-anchor="middle" fill="#21503d">x̂<tspan font-size="8.1" baseline-shift="-22%">0</tspan> , P<tspan font-size="8.1" baseline-shift="-22%">0</tspan></text>
+<rect x="224" y="96" width="156" height="86" rx="12" class="nd paper"/><text x="302" y="132.8" class="lbl" font-size="12" text-anchor="middle">Previous state</text><text x="302" y="148.9" class="mono" font-size="12.2" text-anchor="middle" fill="#21503d">x̂<tspan font-size="8.1" baseline-shift="-22%">k−1</tspan> , P<tspan font-size="8.1" baseline-shift="-22%">k−1</tspan></text>
+<path d="M172,139 L224,139" class="flow"/>
+<text x="198" y="130" class="edge" font-size="8.5" text-anchor="middle">becomes</text>
+<rect x="432" y="84" width="300" height="110" rx="12" class="nd perc"/><text x="582" y="125.2" class="lbl" font-size="13" text-anchor="middle">Predict</text><text x="582" y="142.3" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">x̂′<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = f(x̂<tspan font-size="7.4" baseline-shift="-22%">k−1</tspan> , u<tspan font-size="7.4" baseline-shift="-22%">k</tspan>)</text><text x="582" y="159.7" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">P′<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = F<tspan font-size="7.4" baseline-shift="-22%">k</tspan> P<tspan font-size="7.4" baseline-shift="-22%">k−1</tspan> F<tspan font-size="7.4" baseline-shift="-22%">k</tspan><tspan font-size="7.4" baseline-shift="34%">T</tspan> + Q<tspan font-size="7.4" baseline-shift="-22%">k</tspan></text>
+<path d="M380,139 L432,139" class="flow"/>
+<text x="486" y="74" class="col" font-size="11" text-anchor="middle">State transition model</text>
+<rect x="800" y="84" width="200" height="110" rx="12" class="nd cog"/><text x="900" y="133.9" class="lbl" font-size="13" text-anchor="middle">Measurement</text><text x="900" y="151.0" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">z<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = h(x<tspan font-size="7.4" baseline-shift="-22%">k</tspan>) + v<tspan font-size="7.4" baseline-shift="-22%">k</tspan></text>
+<path d="M732,139 L800,139" class="flow"/>
+<text x="766" y="130" class="edge" font-size="8.5" text-anchor="middle">predicted</text>
+<rect x="760" y="258" width="240" height="104" rx="12" class="nd nd"/><text x="880" y="296.2" class="lbl" font-size="13" text-anchor="middle">Innovation</text><text x="880" y="313.3" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">y<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = z<tspan font-size="7.4" baseline-shift="-22%">k</tspan> − h(x̂′<tspan font-size="7.4" baseline-shift="-22%">k</tspan>)</text><text x="880" y="330.7" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">S<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = H<tspan font-size="7.4" baseline-shift="-22%">k</tspan> P′<tspan font-size="7.4" baseline-shift="-22%">k</tspan> H<tspan font-size="7.4" baseline-shift="-22%">k</tspan><tspan font-size="7.4" baseline-shift="34%">T</tspan> + R</text>
+<path d="M900,194 L900,258" class="flow"/>
+<rect x="432" y="268" width="260" height="84" rx="12" class="nd nd"/><text x="562" y="304.9" class="lbl" font-size="13" text-anchor="middle">Kalman gain</text><text x="562" y="322.0" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">K<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = P′<tspan font-size="7.4" baseline-shift="-22%">k</tspan> H<tspan font-size="7.4" baseline-shift="-22%">k</tspan><tspan font-size="7.4" baseline-shift="34%">T</tspan> S<tspan font-size="7.4" baseline-shift="-22%">k</tspan><tspan font-size="7.4" baseline-shift="34%">−1</tspan></text>
+<path d="M760,310 L692,310" class="flow"/>
+<path d="M582,194 L582,268" class="flow"/>
+<text x="632" y="240.0" class="mono" font-size="11" text-anchor="middle" fill="#21503d">P′<tspan font-size="7.3" baseline-shift="-22%">k</tspan></text>
+<rect x="224" y="424" width="380" height="96" rx="12" class="nd perc"/><text x="414" y="458.2" class="lbl" font-size="13" text-anchor="middle">Update</text><text x="414" y="475.3" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">x̂<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = x̂′<tspan font-size="7.4" baseline-shift="-22%">k</tspan> + K<tspan font-size="7.4" baseline-shift="-22%">k</tspan> y<tspan font-size="7.4" baseline-shift="-22%">k</tspan></text><text x="414" y="492.7" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">P<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = (I − K<tspan font-size="7.4" baseline-shift="-22%">k</tspan>H<tspan font-size="7.4" baseline-shift="-22%">k</tspan>) P′<tspan font-size="7.4" baseline-shift="-22%">k</tspan> (I − K<tspan font-size="7.4" baseline-shift="-22%">k</tspan>H<tspan font-size="7.4" baseline-shift="-22%">k</tspan>)<tspan font-size="7.4" baseline-shift="34%">T</tspan> + K<tspan font-size="7.4" baseline-shift="-22%">k</tspan>RK<tspan font-size="7.4" baseline-shift="-22%">k</tspan><tspan font-size="7.4" baseline-shift="34%">T</tspan></text>
+<path d="M562,352 L562,424" class="flow"/>
+<rect x="40" y="424" width="140" height="96" rx="12" class="nd paper"/><text x="110" y="465.8" class="lbl" font-size="12" text-anchor="middle">Updated state</text><text x="110" y="481.9" class="mono" font-size="12.2" text-anchor="middle" fill="#21503d">x̂<tspan font-size="8.1" baseline-shift="-22%">k</tspan> , P<tspan font-size="8.1" baseline-shift="-22%">k</tspan></text>
+<path d="M224,472 L180,472" class="flow"/>
+<path d="M110,424 L110,240 L302,240 L302,182" class="react"/>
+<text x="206" y="232" class="edge" font-size="9" text-anchor="middle">becomes the previous state</text>
+<rect x="760" y="396" width="240" height="92" rx="12" class="nd gold"/><text x="880" y="428.0" class="lbl" font-size="12" text-anchor="middle">The price: Jacobians</text><text x="880" y="443.9" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">F<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = ∂f/∂x  at x̂<tspan font-size="7.4" baseline-shift="-22%">k−1</tspan>, u<tspan font-size="7.4" baseline-shift="-22%">k</tspan></text><text x="880" y="461.3" class="mono" font-size="11.2" text-anchor="middle" fill="#21503d">H<tspan font-size="7.4" baseline-shift="-22%">k</tspan> = ∂h/∂x  at x̂′<tspan font-size="7.4" baseline-shift="-22%">k</tspan></text>
+<path d="M880,362 L880,396" class="share"/>
+<rect x="40" y="548" width="470" height="132" rx="12" class="nd paper"/><text x="52" y="570.8" class="lbl" font-size="12">The loop</text><text x="52" y="589.2" class="sub" font-size="9.6">Same five steps as the linear filter — predict, measure,</text><text x="52" y="602.8" class="sub" font-size="9.6">weigh, update, repeat.</text><text x="52" y="616.5" class="sub" font-size="9.6">What changes: f and h may be non-linear, so the covariance</text><text x="52" y="630.1" class="sub" font-size="9.6">is propagated through their Jacobians instead.</text><text x="52" y="643.7" class="sub" font-size="9.6">Cost: the linearisation is only valid near the estimate.</text>
+<rect x="540" y="548" width="460" height="132" rx="12" class="nd nd"/><text x="552" y="570.8" class="lbl" font-size="12">Symbols</text><text x="552" y="589.2" class="sub" font-size="9.6">f non-linear state transition    h non-linear measurement</text><text x="552" y="602.8" class="sub" font-size="9.6">F Jacobian of f — linearises the motion model</text><text x="552" y="616.5" class="sub" font-size="9.6">H Jacobian of h — linearises the sensor model</text><text x="552" y="630.1" class="sub" font-size="9.6">y innovation  ·  S innovation covariance  ·  K Kalman gain</text><text x="552" y="643.7" class="sub" font-size="9.6">Q, R process and measurement noise covariance</text>
+</svg>

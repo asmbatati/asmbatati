@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 470" preserveAspectRatio="xMidYMid meet"
+     role="img" aria-labelledby="t d">
+  <title id="t">Detect, track, predict</title>
+  <desc id="d">The interception pipeline. A depth camera feeds two drone detectors, a deep-learning one at 15 hertz on RGB and a depth-based one at 40 hertz. Their 3D positions go to a 100 hertz multi-target Kalman filter, whose buffered track feeds a bank of trajectory-prediction models. A best-model selector picks among them and the predicted trajectory drives trajectory generation and the trajectory tracker.</desc>
+  <defs>
+  <marker id="m-flow"  markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#21503d"/></marker>
+  <marker id="m-share" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#4d8a6a"/></marker>
+  <marker id="m-react" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#8a978c"/></marker>
+  <marker id="m-emerg" markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#b6803a"/></marker>
+  <marker id="m-sup"   markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#2f6b4f"/></marker>
+</defs>
+  <style>
+  .bg   { fill: #fbfaf6 }
+  .nd   { fill: #ffffff; stroke: rgba(22,53,42,0.14); stroke-width: 1 }
+  .nd.perc   { fill: #eef4f0 }
+  .nd.cog    { fill: #f7f3ec }
+  .nd.hw     { fill: #eae2d4 }
+  .nd.paper  { fill: #f2ece1 }
+  .nd.dark   { fill: #16352a; stroke: #16352a }
+  .nd.sup    { fill: #f1ece2; stroke: #4d8a6a; stroke-dasharray: 5 4 }
+  .nd.mine   { stroke: #2f6b4f; stroke-width: 1.6 }
+  .nd.gold   { fill: #f7efe1; stroke: #b6803a }
+  .nd.slate  { fill: #eef2f4; stroke: #4a6b7c }
+  .panel     { fill: none; stroke: rgba(22,53,42,0.14); stroke-width: 1; stroke-dasharray: 6 5 }
+  .panel.solid { stroke-dasharray: none }
+  .band      { stroke: rgba(22,53,42,0.05); stroke-width: 1 }
+  .band.delib  { fill: rgba(77,138,106,0.05) }
+  .band.react  { fill: rgba(47,107,79,0.045) }
+  .band.reflex { fill: rgba(182,128,58,0.055) }
+  .ttl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl.on-dark { fill: #fbfaf6 }
+  .sub  { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #5c6f63 }
+  .sub.on-dark { fill: #b9d0c3 }
+  .col  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #2f6b4f }
+  .edge { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #8a978c }
+  .edge.gold  { fill: #b6803a; font-weight: 600 }
+  .edge.green { fill: #2f6b4f; font-weight: 600 }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; fill: #21503d }
+  .flow  { stroke: #21503d; stroke-width: 2.2; fill: none; marker-end: url(#m-flow) }
+  .share { stroke: #4d8a6a; stroke-width: 1.6; fill: none; marker-start: url(#m-share); marker-end: url(#m-share) }
+  .react { stroke: #8a978c; stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; marker-end: url(#m-react) }
+  .emerg { stroke: #b6803a; stroke-width: 2.6; fill: none; stroke-dasharray: 7 4; marker-end: url(#m-emerg) }
+  .super { stroke: #2f6b4f; stroke-width: 1.4; fill: none; stroke-dasharray: 3 4; opacity: .8; marker-start: url(#m-sup); marker-end: url(#m-sup) }
+  .thin  { stroke: #4d8a6a; stroke-width: 1.4; fill: none; marker-end: url(#m-share) }
+  .dot   { fill: #2f6b4f }
+</style>
+  <rect width="1180" height="470" class="bg"/>
+  <text x="590" y="34" class="ttl" font-size="22" text-anchor="middle">Detect, track, predict</text>
+<rect x="34" y="92" width="330" height="250" rx="14" class="panel"/><rect x="50" y="83.36" width="78.80000000000001" height="17.4" fill="#fbfaf6"/><text x="57" y="96.32" class="col" font-size="12">Perception</text>
+<rect x="392" y="92" width="186" height="250" rx="14" class="panel"/><rect x="408" y="83.36" width="117.68" height="17.4" fill="#fbfaf6"/><text x="415" y="96.32" class="col" font-size="12">State estimation</text>
+<rect x="606" y="92" width="372" height="250" rx="14" class="panel"/><rect x="622" y="83.36" width="195.44" height="17.4" fill="#fbfaf6"/><text x="629" y="96.32" class="col" font-size="12">Target trajectory prediction</text>
+<rect x="56" y="190" width="96" height="74" rx="12" class="nd hw"/><text x="104" y="223.9" class="lbl" font-size="12" text-anchor="middle">Depth</text><text x="104" y="239.7" class="sub" font-size="9.5" text-anchor="middle">camera</text>
+<rect x="186" y="122" width="158" height="76" rx="12" class="nd cog mine"/><circle cx="333" cy="133" r="3.5" class="dot"/><text x="265" y="156.9" class="lbl" font-size="12" text-anchor="middle">Drone detection</text><text x="265" y="172.7" class="sub" font-size="9.5" text-anchor="middle">deep-learning · 15 Hz</text>
+<rect x="186" y="236" width="158" height="76" rx="12" class="nd cog mine"/><circle cx="333" cy="247" r="3.5" class="dot"/><text x="265" y="270.9" class="lbl" font-size="12" text-anchor="middle">Drone detection</text><text x="265" y="286.7" class="sub" font-size="9.5" text-anchor="middle">depth-based · 40 Hz</text>
+<path d="M152,212 L186,178" class="flow"/>
+<path d="M152,238 L186,268" class="flow"/>
+<path d="M265,198 L265,236" class="flow"/>
+<text x="300" y="116" class="edge" font-size="9" text-anchor="middle">RGB</text>
+<text x="300" y="330" class="edge" font-size="9" text-anchor="middle">depth</text>
+<rect x="414" y="178" width="142" height="96" rx="12" class="nd perc mine"/><circle cx="545" cy="189" r="3.5" class="dot"/><text x="485" y="216.4" class="lbl" font-size="12" text-anchor="middle">Multi-target</text><text x="485" y="232.3" class="sub" font-size="9.5" text-anchor="middle">tracking</text><text x="485" y="245.2" class="sub" font-size="9.5" text-anchor="middle">Kalman filter · 100 Hz</text>
+<path d="M344,274 L414,240" class="flow"/>
+<text x="384" y="168" class="edge" font-size="9" text-anchor="middle">3D position</text>
+<rect x="628" y="116" width="158" height="62" rx="12" class="nd nd"/><text x="707" y="144.1" class="lbl" font-size="11.5" text-anchor="middle">Model 1</text><text x="707" y="159.2" class="sub" font-size="9" text-anchor="middle">constant velocity</text>
+<rect x="628" y="196" width="158" height="62" rx="12" class="nd nd"/><text x="707" y="224.1" class="lbl" font-size="11.5" text-anchor="middle">Model 2</text><text x="707" y="239.2" class="sub" font-size="9" text-anchor="middle">constant acceleration</text>
+<rect x="628" y="276" width="158" height="62" rx="12" class="nd nd"/><text x="707" y="304.1" class="lbl" font-size="11.5" text-anchor="middle">Model N</text><text x="707" y="319.2" class="sub" font-size="9" text-anchor="middle">learned / manoeuvring</text>
+<path d="M556,214 L600,147 L628,147" class="thin"/><path d="M556,226 L600,227 L628,227" class="thin"/><path d="M556,240 L600,307 L628,307" class="thin"/>
+<text x="592" y="108" class="edge" font-size="9" text-anchor="middle">buffer</text>
+<rect x="828" y="178" width="128" height="84" rx="12" class="nd gold mine"/><circle cx="945" cy="189" r="3.5" class="dot"/><text x="892" y="216.9" class="lbl" font-size="12" text-anchor="middle">Best model</text><text x="892" y="232.7" class="sub" font-size="9.5" text-anchor="middle">selector</text>
+<path d="M786,147 L812,147 L812,206 L828,206" class="thin"/><path d="M786,227 L828,227" class="thin"/><path d="M786,307 L812,307 L812,248 L828,248" class="thin"/>
+<rect x="1008" y="130" width="140" height="76" rx="12" class="nd paper"/><text x="1078" y="164.9" class="lbl" font-size="12" text-anchor="middle">Trajectory</text><text x="1078" y="180.7" class="sub" font-size="9.5" text-anchor="middle">generation</text>
+<rect x="1008" y="234" width="140" height="76" rx="12" class="nd paper"/><text x="1078" y="268.9" class="lbl" font-size="12" text-anchor="middle">Trajectory</text><text x="1078" y="284.7" class="sub" font-size="9.5" text-anchor="middle">tracker</text>
+<path d="M956,206 L1078,206 L1078,206" class="flow"/>
+<path d="M1078,206 L1078,234" class="flow"/>
+<text x="1078" y="122" class="edge" font-size="9" text-anchor="middle">predicted target trajectory</text>
+<text x="590" y="392" class="edge" font-size="11.5" text-anchor="middle">Detection is the easy half. Everything after the buffer exists because a target that is only tracked is already too late.</text>
+<text x="590" y="414" class="edge" font-size="11.5" text-anchor="middle">The selector is what keeps a wrong motion model from confidently aiming at the wrong place.</text>
+</svg>

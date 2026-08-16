@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 700" preserveAspectRatio="xMidYMid meet"
+     role="img" aria-labelledby="t d">
+  <title id="t">SMART-TRACK</title>
+  <desc id="d">A LiDAR and detection fusion pipeline. Raw 3D LiDAR is filtered with a CropBox and PassThrough filter and projected into 2D pixels, forming a depth map split by signed Z and mapped to grayscale intensity. 2D bounding boxes restrict processing to the detected region, where positions are averaged into an object position estimate. A Kalman filter tracks the 3D pose and covariance and continues to predict when no measurement is present, re-anchoring on the point cloud when one arrives. Outputs are a fused image, an object pose array and a segmented object cloud.</desc>
+  <defs>
+  <marker id="m-flow"  markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#21503d"/></marker>
+  <marker id="m-share" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#4d8a6a"/></marker>
+  <marker id="m-react" markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#8a978c"/></marker>
+  <marker id="m-emerg" markerWidth="9" markerHeight="9" refX="6.5" refY="3"   orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#b6803a"/></marker>
+  <marker id="m-sup"   markerWidth="8" markerHeight="8" refX="5.5" refY="2.6" orient="auto"><path d="M0,0 L6,2.6 L0,5.2 Z" fill="#2f6b4f"/></marker>
+</defs>
+  <style>
+  .bg   { fill: #fbfaf6 }
+  .nd   { fill: #ffffff; stroke: rgba(22,53,42,0.14); stroke-width: 1 }
+  .nd.perc   { fill: #eef4f0 }
+  .nd.cog    { fill: #f7f3ec }
+  .nd.hw     { fill: #eae2d4 }
+  .nd.paper  { fill: #f2ece1 }
+  .nd.dark   { fill: #16352a; stroke: #16352a }
+  .nd.sup    { fill: #f1ece2; stroke: #4d8a6a; stroke-dasharray: 5 4 }
+  .nd.mine   { stroke: #2f6b4f; stroke-width: 1.6 }
+  .nd.gold   { fill: #f7efe1; stroke: #b6803a }
+  .nd.slate  { fill: #eef2f4; stroke: #4a6b7c }
+  .panel     { fill: none; stroke: rgba(22,53,42,0.14); stroke-width: 1; stroke-dasharray: 6 5 }
+  .panel.solid { stroke-dasharray: none }
+  .band      { stroke: rgba(22,53,42,0.05); stroke-width: 1 }
+  .band.delib  { fill: rgba(77,138,106,0.05) }
+  .band.react  { fill: rgba(47,107,79,0.045) }
+  .band.reflex { fill: rgba(182,128,58,0.055) }
+  .ttl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #16352a }
+  .lbl.on-dark { fill: #fbfaf6 }
+  .sub  { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #5c6f63 }
+  .sub.on-dark { fill: #b9d0c3 }
+  .col  { font-family: Fraunces, Georgia, 'Times New Roman', serif; font-weight: 600; fill: #2f6b4f }
+  .edge { font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; fill: #8a978c }
+  .edge.gold  { fill: #b6803a; font-weight: 600 }
+  .edge.green { fill: #2f6b4f; font-weight: 600 }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; fill: #21503d }
+  .flow  { stroke: #21503d; stroke-width: 2.2; fill: none; marker-end: url(#m-flow) }
+  .share { stroke: #4d8a6a; stroke-width: 1.6; fill: none; marker-start: url(#m-share); marker-end: url(#m-share) }
+  .react { stroke: #8a978c; stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; marker-end: url(#m-react) }
+  .emerg { stroke: #b6803a; stroke-width: 2.6; fill: none; stroke-dasharray: 7 4; marker-end: url(#m-emerg) }
+  .super { stroke: #2f6b4f; stroke-width: 1.4; fill: none; stroke-dasharray: 3 4; opacity: .8; marker-start: url(#m-sup); marker-end: url(#m-sup) }
+  .thin  { stroke: #4d8a6a; stroke-width: 1.4; fill: none; marker-end: url(#m-share) }
+  .dot   { fill: #2f6b4f }
+</style>
+  <rect width="1180" height="700" class="bg"/>
+  <text x="590" y="34" class="ttl" font-size="22" text-anchor="middle">SMART-TRACK</text>
+<rect x="34" y="92" width="250" height="200" rx="14" class="panel"/><rect x="50" y="83.36" width="46.400000000000006" height="17.4" fill="#fbfaf6"/><text x="57" y="96.32" class="col" font-size="12">Input</text>
+<rect x="56" y="130" width="206" height="64" rx="12" class="nd hw"/><text x="159" y="158.9" class="lbl" font-size="12" text-anchor="middle">3D LiDAR</text><text x="159" y="174.7" class="sub" font-size="9.5" text-anchor="middle">raw point cloud</text>
+<rect x="56" y="212" width="206" height="60" rx="12" class="nd cog"/><text x="159" y="238.9" class="lbl" font-size="12" text-anchor="middle">2D detections</text><text x="159" y="254.7" class="sub" font-size="9.5" text-anchor="middle">bounding boxes</text>
+<rect x="316" y="92" width="280" height="200" rx="14" class="panel"/><rect x="332" y="83.36" width="156.56" height="17.4" fill="#fbfaf6"/><text x="339" y="96.32" class="col" font-size="12">Point-cloud processing</text>
+<rect x="338" y="130" width="236" height="64" rx="12" class="nd perc"/><text x="456" y="158.9" class="lbl" font-size="12" text-anchor="middle">Filter</text><text x="456" y="174.7" class="sub" font-size="9.5" text-anchor="middle">CropBox · PassThrough</text>
+<rect x="338" y="212" width="236" height="60" rx="12" class="nd perc"/><text x="456" y="238.9" class="lbl" font-size="12" text-anchor="middle">Project</text><text x="456" y="254.7" class="sub" font-size="9.5" text-anchor="middle">point (x, y) → pixel</text>
+<path d="M262,162 L338,162" class="flow"/>
+<path d="M456,194 L456,212" class="flow"/>
+<rect x="628" y="92" width="250" height="200" rx="14" class="panel"/><rect x="644" y="83.36" width="72.32000000000001" height="17.4" fill="#fbfaf6"/><text x="651" y="96.32" class="col" font-size="12">Depth map</text>
+<rect x="650" y="130" width="206" height="58" rx="12" class="nd nd"/><text x="753" y="155.9" class="lbl" font-size="12" text-anchor="middle">Signed-Z split</text><text x="753" y="171.7" class="sub" font-size="9.5" text-anchor="middle">negative / positive</text>
+<rect x="650" y="208" width="206" height="64" rx="12" class="nd nd"/><text x="753" y="236.9" class="lbl" font-size="12" text-anchor="middle">Grayscale mapping</text><text x="753" y="252.7" class="sub" font-size="9.5" text-anchor="middle">depth → intensity</text>
+<path d="M574,192 L650,159" class="flow"/>
+<path d="M753,188 L753,208" class="flow"/>
+<rect x="910" y="92" width="234" height="200" rx="14" class="panel"/><rect x="926" y="83.36" width="117.68" height="17.4" fill="#fbfaf6"/><text x="933" y="96.32" class="col" font-size="12">Detection fusion</text>
+<rect x="932" y="130" width="190" height="62" rx="12" class="nd gold mine"/><circle cx="1111" cy="141" r="3.5" class="dot"/><text x="1027" y="157.8" class="lbl" font-size="11.5" text-anchor="middle">Selective processing</text><text x="1027" y="173.0" class="sub" font-size="9.5" text-anchor="middle">only inside the box</text>
+<rect x="932" y="210" width="190" height="62" rx="12" class="nd gold mine"/><circle cx="1111" cy="221" r="3.5" class="dot"/><text x="1027" y="238.1" class="lbl" font-size="11.5" text-anchor="middle">Position estimate</text><text x="1027" y="253.2" class="sub" font-size="9" text-anchor="middle">averaged over the patch</text>
+<path d="M856,192 L932,161" class="flow"/>
+<path d="M1027,192 L1027,210" class="flow"/>
+<rect x="28" y="356" width="506" height="250" rx="14" class="panel solid"/><rect x="44" y="347.36" width="312.08000000000004" height="17.4" fill="#fbfaf6"/><text x="51" y="360.32" class="col" font-size="12">SMART-TRACK — the part that survives a dropout</text>
+<rect x="66" y="396" width="200" height="88" rx="12" class="nd perc mine"/><circle cx="255" cy="407" r="3.5" class="dot"/><text x="166" y="431.5" class="lbl" font-size="12.5" text-anchor="middle">Kalman filter</text><text x="166" y="447.8" class="sub" font-size="8.8" text-anchor="middle">3D pose + covariance</text><text x="166" y="459.8" class="sub" font-size="8.8" text-anchor="middle">keeps predicting through dropouts</text>
+<rect x="66" y="508" width="200" height="72" rx="12" class="nd nd"/><text x="166" y="541.2" class="lbl" font-size="12" text-anchor="middle">Measurement?</text><text x="166" y="557.0" class="sub" font-size="9" text-anchor="middle">is a pose array present</text>
+<path d="M166,484 L166,508" class="flow"/>
+<path d="M266,544 L330,544" class="flow"/>
+<text x="298" y="536" class="edge green" font-size="9.5" text-anchor="middle">yes</text>
+<path d="M66,544 L44,544 L44,440 L66,440" class="react"/>
+<text x="52" y="502" class="edge" font-size="9.5" text-anchor="start">no</text>
+<rect x="330" y="508" width="184" height="72" rx="12" class="nd gold mine"/><circle cx="503" cy="519" r="3.5" class="dot"/><text x="422" y="541.2" class="lbl" font-size="11.5" text-anchor="middle">Sync KF with the cloud</text><text x="422" y="556.3" class="sub" font-size="8.8" text-anchor="middle">re-anchor on the measurement</text>
+<path d="M1027,272 L1027,330 L422,330 L422,508" class="share"/>
+<text x="700" y="322" class="edge" font-size="9.5" text-anchor="middle">object position</text>
+<rect x="596" y="400" width="240" height="80" rx="12" class="nd cog"/><text x="716" y="430.8" class="lbl" font-size="12" text-anchor="middle">Transform &amp; project</text><text x="716" y="446.6" class="sub" font-size="9.2" text-anchor="middle">world ↔ LiDAR frame</text><text x="716" y="459.1" class="sub" font-size="9.2" text-anchor="middle">3D box → centroid</text>
+<path d="M514,440 L596,440" class="flow"/>
+<rect x="884" y="380" width="250" height="60" rx="12" class="nd paper"/><text x="1009" y="413.4" class="lbl" font-size="12" text-anchor="middle">Fused image</text>
+<rect x="884" y="452" width="250" height="60" rx="12" class="nd paper"/><text x="1009" y="485.4" class="lbl" font-size="12" text-anchor="middle">Object pose array</text>
+<rect x="884" y="524" width="250" height="60" rx="12" class="nd paper"/><text x="1009" y="557.4" class="lbl" font-size="12" text-anchor="middle">Segmented object cloud</text>
+<path d="M836,432 L862,432 L862,410 L884,410" class="thin"/>
+<path d="M862,432 L862,482 L884,482" class="thin"/>
+<path d="M862,482 L862,554 L884,554" class="thin"/>
+<text x="590" y="640" class="edge" font-size="11.5" text-anchor="middle">The 2D detector says where to look; the LiDAR says how far. The filter is what keeps the track alive through the frames where the detector says nothing at all.</text>
+<text x="590" y="662" class="edge" font-size="11.5" text-anchor="middle">Processing only inside the bounding box is the difference between real-time and a slideshow.</text>
+</svg>
