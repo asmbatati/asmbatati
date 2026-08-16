@@ -1096,21 +1096,48 @@ export const MINDMAPS = [
    SIX ways (v10). Each cat.icon → img/gal/<icon>.webp (generated engraved icons). */
 export const GALLERY = {
   cats: [
-    { id: "design", icon: "cad", label: "Design", label_ar: "التصميم",
-      tease: "Sketch → CAD → drawing", tease_ar: "من الفكرة إلى CAD والرسم الهندسي" },
-    { id: "mathmodel", icon: "physics", label: "Mathematical Modeling", label_ar: "النمذجة الرياضية",
+    { id: "design", icon: "cad", label: "Design Gallery", label_ar: "معرض التصميم",
+      tease: "Sketch → CAD → printed part", tease_ar: "من الفكرة إلى CAD إلى قطعة مطبوعة" },
+    { id: "mathmodel", icon: "physics", label: "Essential Theories & Concepts Gallery", label_ar: "معرض النظريات والمفاهيم الأساسية",
       tease: "Newton → Lagrange → Kalman", tease_ar: "من نيوتن إلى لاغرانج وكالمان" },
-    { id: "physsim", icon: "sim", label: "Physics Simulation", label_ar: "المحاكاة الفيزيائية",
-      tease: "Gazebo · Isaac · Rviz 2", tease_ar: "Gazebo · Isaac · Rviz 2" },
-    { id: "fabrication", icon: "hardware", label: "Fabrication", label_ar: "التصنيع",
-      tease: "Print · machine · solder", tease_ar: "طباعة وتشغيل ولحام" },
-    { id: "software", icon: "software", label: "Software", label_ar: "البرمجيات",
+    { id: "physsim", icon: "sim", label: "Robotic Simulation Gallery", label_ar: "معرض المحاكاة الروبوتية",
+      tease: "Gazebo · PX4 SITL · Rviz 2", tease_ar: "Gazebo · PX4 SITL · Rviz 2" },
+    { id: "fabrication", icon: "hardware", label: "Manufacturing Gallery", label_ar: "معرض التصنيع",
+      tease: "Cut · grow · form · join", tease_ar: "قطعٌ ونموٌّ وتشكيلٌ ووصل" },
+    { id: "software", icon: "software", label: "Software Pkgs Gallery", label_ar: "معرض حزم البرمجيات",
       tease: "The repos behind the robots", tease_ar: "المستودعات خلف الروبوتات" },
-    { id: "integration", icon: "robotics", label: "Robotic Systems Integration", label_ar: "دمج الأنظمة الروبوتية",
+    { id: "integration", icon: "robotics", label: "Robotic Systems Gallery", label_ar: "معرض الأنظمة الروبوتية",
       tease: "Full systems — 3D + real", tease_ar: "أنظمة كاملة — مجسّمة وواقعية" },
   ],
   design: {
+    // The EDP framing is the one I teach in the ME 218 / design workshops, so the
+    // five steps here should stay in step with that material.
+    intro: "Design, taught properly, is a loop rather than a talent. The Engineering Design Process is how I run it: define the real problem before the solution, research what already exists, generate more concepts than feel comfortable, choose against stated criteria rather than taste, then build, test and go round again. Every machine below went through it — and the printed parts at the bottom are where the loop finally touches material.",
+    intro_ar: "التصميم، إذا عُلِّم كما ينبغي، حلقةٌ لا موهبة. ومنهجية التصميم الهندسي هي كيف أُديرها: عرِّف المشكلة الحقيقية قبل الحل، وابحث فيما هو قائم، وولّد من المفاهيم أكثر مما يريحك، ثم اختر وفق معايير معلنة لا وفق الذوق، ثم ابنِ واختبر وعُد من جديد. كل آلةٍ أدناه مرّت بهذه الحلقة — والقطع المطبوعة في الأسفل هي حيث تلامس الحلقةُ المادةَ أخيرًا.",
+    edp: [
+      { t: "Define", t_ar: "التعريف", d: "State the problem, the constraints and what “done” means — before any geometry exists.", d_ar: "صياغة المشكلة والقيود ومعنى «الاكتمال» — قبل وجود أي هندسة." },
+      { t: "Research", t_ar: "البحث", d: "What has been built already, what failed, and which standards apply.", d_ar: "ما الذي بُني سابقًا، وما الذي أخفق، وأي المعايير تنطبق." },
+      { t: "Ideate", t_ar: "توليد الأفكار", d: "Many concepts, cheaply — sketches and rough CAD, not one favourite defended too early.", d_ar: "مفاهيم كثيرة وبكلفة زهيدة — رسومٌ وCAD خشن، لا فكرة واحدة يُدافَع عنها مبكرًا." },
+      { t: "Select & detail", t_ar: "الاختيار والتفصيل", d: "Decide against written criteria, then take the winner to full CAD, drawings and GD&T.", d_ar: "قرارٌ وفق معايير مكتوبة، ثم أخذ الفائز إلى CAD كامل ورسومات وGD&T." },
+      { t: "Prototype & test", t_ar: "النمذجة والاختبار", d: "Print it, fly it, break it, and feed what broke back into the definition.", d_ar: "اطبعها، وطيّرها، واكسرها، ثم أعد ما انكسر إلى التعريف." },
+    ],
     skills: ["SolidWorks", "Siemens NX", "Technical drawings · GD&T", "STL / mesh prep (cad_2_mesh)", "Engineering Design Process", "Generative design"],
+    // Moved here from `fabrication` (16 Aug 2026): these are parts I *designed*, so
+    // they belong to the design story. The Manufacturing gallery keeps the processes.
+    trophy_intro: "Every part below is a real STL I designed and printed — mostly for the Tarot-960 drone build. Each spins under a spotlight; step through them.",
+    trophy_intro_ar: "كل قطعة أدناه مجسّم STL حقيقي صمّمته وطبعته — أغلبها لبناء درون Tarot-960. تدور كلٌّ منها تحت ضوء كاشف؛ تنقّل بينها.",
+    trophies: [
+      { file: "drone-mount.glb", name: "Motor-mount arm — textured", name_ar: "ذراع تثبيت المحرّك — مُكسّى", note: "A CAD-designed drone motor mount, rendered in full material", note_ar: "ذراع تثبيت محرّك مصمَّم على CAD، بخاماته الكاملة" },
+      { file: "tarot-cover.stl", name: "Tarot 960 top cover", name_ar: "غطاء Tarot 960 العلوي", note: "Electronics lid for the heavy-lift frame", note_ar: "غطاء إلكترونيات الهيكل ثقيل الحمولة" },
+      { file: "payload-box.stl", name: "Modular payload box", name_ar: "صندوق حمولة معياري", note: "Split-print carrier for sensors & battery", note_ar: "حاوية مطبوعة مجزّأة للحساسات والبطارية" },
+      { file: "xavier-holder.stl", name: "Jetson Xavier mount arm", name_ar: "ذراع تثبيت Jetson Xavier", note: "Onboard-compute holder for autonomy", note_ar: "حامل الحوسبة الطائرة للاستقلالية" },
+      { file: "pcb-mount.stl", name: "Flight-controller PCB mount", name_ar: "حامل لوحة متحكّم الطيران", note: "Vibration-isolating board tray", note_ar: "صينية لوحة عازلة للاهتزاز" },
+      { file: "holder-arm.stl", name: "Payload holder arm", name_ar: "ذراع حمل الحمولة", note: "Adjustable under-frame gimbal arm", note_ar: "ذراع جيمبال قابل للضبط أسفل الهيكل" },
+      { file: "latch.stl", name: "Payload quick-latch", name_ar: "مزلاج الحمولة السريع", note: "Tool-free box release", note_ar: "تحرير الصندوق دون أدوات" },
+      { file: "cover-bracket.stl", name: "Cover mounting bracket", name_ar: "كتيفة تثبيت الغطاء", note: "Snap bracket for the frame cover", note_ar: "كتيفة تعشيق لغطاء الهيكل" },
+      { file: "calibration-cube.stl", name: "Printer calibration cube", name_ar: "مكعّب معايرة الطابعة", note: "Dimensional-accuracy test print", note_ar: "طبعة اختبار دقّة الأبعاد" },
+    ],
+
     projects: [
       { id: "proj-vtol-build", name: "VTOL UAV Platform", name_ar: "منصة VTOL", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "A long-endurance mission needs both a helicopter's take-off and an airplane's cruise — so: a hybrid.", d_ar: "مهمة طويلة المدى تحتاج إقلاع المروحية وانسياب الطائرة — إذن: هجينة." },
@@ -1181,22 +1208,35 @@ export const GALLERY = {
         desc_ar: "روبوت حمّال: سطح أمتعة وشاشة نزلاء وهيكل بمستوى الضيافة.", tags: ["patent", "service"] },
     ],
   },
-  // Fabrication — real STLs rendered one-by-one as spotlit trophies + real print photos
+  // Manufacturing — the processes themselves, my skills, and the real prints.
+  // The spotlit STL trophies moved to `design` (16 Aug 2026): I designed those parts,
+  // and this gallery is about how things get made, not about one part in particular.
   fabrication: {
-    skills: ["FDM 3D printing — PLA · PETG", "CNC machining (KACST)", "Soldering & harness wiring", "Carbon-fiber builds", "Design for AM (MIT xPRO)", "Rapid prototyping"],
-    intro: "Every part below is a real STL I designed and printed — mostly for the Tarot-960 drone build. Each spins under a spotlight; step through them.",
-    intro_ar: "كل قطعة أدناه مجسّم STL حقيقي صمّمته وطبعته — أغلبها لبناء درون Tarot-960. تدور كلٌّ منها تحت ضوء كاشف؛ تنقّل بينها.",
-    trophies: [
-      { file: "drone-mount.glb", name: "Motor-mount arm — textured", name_ar: "ذراع تثبيت المحرّك — مُكسّى", note: "A CAD-designed drone motor mount, rendered in full material", note_ar: "ذراع تثبيت محرّك مصمَّم على CAD، بخاماته الكاملة" },
-      { file: "tarot-cover.stl", name: "Tarot 960 top cover", name_ar: "غطاء Tarot 960 العلوي", note: "Electronics lid for the heavy-lift frame", note_ar: "غطاء إلكترونيات الهيكل ثقيل الحمولة" },
-      { file: "payload-box.stl", name: "Modular payload box", name_ar: "صندوق حمولة معياري", note: "Split-print carrier for sensors & battery", note_ar: "حاوية مطبوعة مجزّأة للحساسات والبطارية" },
-      { file: "xavier-holder.stl", name: "Jetson Xavier mount arm", name_ar: "ذراع تثبيت Jetson Xavier", note: "Onboard-compute holder for autonomy", note_ar: "حامل الحوسبة الطائرة للاستقلالية" },
-      { file: "pcb-mount.stl", name: "Flight-controller PCB mount", name_ar: "حامل لوحة متحكّم الطيران", note: "Vibration-isolating board tray", note_ar: "صينية لوحة عازلة للاهتزاز" },
-      { file: "holder-arm.stl", name: "Payload holder arm", name_ar: "ذراع حمل الحمولة", note: "Adjustable under-frame gimbal arm", note_ar: "ذراع جيمبال قابل للضبط أسفل الهيكل" },
-      { file: "latch.stl", name: "Payload quick-latch", name_ar: "مزلاج الحمولة السريع", note: "Tool-free box release", note_ar: "تحرير الصندوق دون أدوات" },
-      { file: "cover-bracket.stl", name: "Cover mounting bracket", name_ar: "كتيفة تثبيت الغطاء", note: "Snap bracket for the frame cover", note_ar: "كتيفة تعشيق لغطاء الهيكل" },
-      { file: "calibration-cube.stl", name: "Printer calibration cube", name_ar: "مكعّب معايرة الطابعة", note: "Dimensional-accuracy test print", note_ar: "طبعة اختبار دقّة الأبعاد" },
+    intro: "Every design eventually has to become an object, and how you make it changes what you are allowed to draw. The four families below cover almost everything I have built — and the honest answer is that most real parts use more than one of them.",
+    intro_ar: "كل تصميمٍ لا بد أن يصير جسمًا في النهاية، وطريقة صنعه تُغيّر ما يُسمح لك برسمه. والعائلات الأربع أدناه تغطّي كل ما بنيته تقريبًا — والحقيقة أن معظم القطع الحقيقية تستعمل أكثر من واحدة منها.",
+    processes: [
+      { t: "Subtractive", t_ar: "التصنيع بالإزالة", how: "Start with a block, cut away what is not the part",
+        how_ar: "ابدأ من كتلة، وأزل ما ليس من القطعة",
+        note: "CNC milling and turning, drilling, laser cutting. Best tolerances and the best material properties, at the cost of waste and of geometry the tool cannot reach.",
+        note_ar: "تفريز وخراطة CNC وثقب وقطع بالليزر. أفضل تفاوتات وأفضل خواص للمادة، مقابل الهدر ومقابل هندسةٍ لا تصلها العُدّة.",
+        mine: "Machined at KACST during the Industry 4.0 training.", mine_ar: "شُغِّلت في كاكست خلال تدريب الصناعة ٤٫٠." },
+      { t: "Additive", t_ar: "التصنيع بالإضافة", how: "Build the part up, layer by layer",
+        how_ar: "ابنِ القطعة طبقةً فوق طبقة",
+        note: "FDM and resin printing. Geometry is nearly free — internal channels, lattices, one-piece assemblies — but layers are a weak axis and surface finish is a compromise.",
+        note_ar: "طباعة FDM وراتنجية. الهندسة شبه مجانية — قنوات داخلية وشبكيات وتجميعات من قطعة واحدة — لكن الطبقات محورُ ضعف والتشطيب تنازل.",
+        mine: "The whole Tarot-960 parts family, the RoboEye enclosure, every jig.", mine_ar: "عائلة قطع Tarot-960 كاملة، وحاوية RoboEye، وكل قوالب التثبيت." },
+      { t: "Formative", t_ar: "التصنيع بالتشكيل", how: "Force material into a shape and hold it there",
+        how_ar: "ادفع المادة إلى شكلٍ وثبّتها فيه",
+        note: "Injection moulding, casting, sheet bending, forging. Ruinous to set up and unbeatable per unit — which is exactly why prototypes are printed and products are moulded.",
+        note_ar: "حقن وسبك وثني صفائح وطَرق. تجهيزها مكلف والوحدة فيه لا تُبارى — ولهذا تُطبع النماذج وتُصبّ المنتجات.",
+        mine: "Composite lay-up for the carbon airframes.", mine_ar: "تشكيل مركّبات لهياكل الكربون." },
+      { t: "Joining & finishing", t_ar: "الوصل والتشطيب", how: "Turn several parts into one working assembly",
+        how_ar: "حوّل قطعًا عدّة إلى تجميعةٍ عاملة",
+        note: "Welding, fastening, adhesive bonding, soldering and harness work. The step that quietly decides whether a well-designed machine survives its first hard landing.",
+        note_ar: "لحامٌ وتثبيتٌ ولصقٌ وتلحيم وضفائر أسلاك. الخطوة التي تقرّر بهدوء إن كانت آلةٌ محكمة التصميم ستنجو من أول هبوطٍ عنيف.",
+        mine: "Frame welding, full power-harness and avionics wiring on every build.", mine_ar: "لحام الهياكل وضفائر القدرة وتوصيل الأفيونكس في كل بناء." },
     ],
+    skills: ["FDM 3D printing — PLA · PETG", "CNC machining (KACST)", "Soldering & harness wiring", "Carbon-fiber builds", "Design for AM (MIT xPRO)", "Rapid prototyping"],
     photos: [
       { id: "print-stereo", cap: "RoboEye stereo enclosure — PETG, 125 g", cap_ar: "حاوية عين الروبوت — PETG، ١٢٥ غ" },
       { id: "print-kacst-1", cap: "Impeller, housings, mechanisms — KACST Industry 4.0", cap_ar: "مروحة وحاويات وآليّات — كاكست للصناعة ٤٫٠" },
@@ -1207,8 +1247,22 @@ export const GALLERY = {
   // Mathematical Modeling — how a system becomes equations: Newton → Lagrange →
   // linearized 2nd-order → rotations → estimation → control. Live demo + theory.
   mathmodel: {
-    intro: "How a machine becomes mathematics: write the forces (Newton) or the energy (Lagrange), linearize, then estimate and control. One live demo, and the theories I actually use.",
-    intro_ar: "كيف تصير الآلة رياضيات: اكتب القوى (نيوتن) أو الطاقة (لاغرانج)، ثم خطِّط، ثم قدِّر وتحكَّم. عرضٌ حيّ واحد، والنظريات التي أستعملها فعلًا.",
+    intro: "A robot is not one discipline wearing a hat — it is six of them forced to agree. This gallery is the shortest honest tour of the ones I work in, and then the specific results I reach for often enough to have memorised.",
+    intro_ar: "الروبوت ليس تخصّصًا واحدًا بقبّعة، بل ستّة تخصّصات أُجبرت على الاتفاق. وهذا المعرض أقصر جولةٍ صادقة في التخصّصات التي أعمل فيها، ثم النتائج التي أستدعيها كثيرًا حتى حفظتها.",
+    fields: [
+      { t: "Physics", t_ar: "الفيزياء", note: "The floor everything else stands on. Conservation laws, energy, momentum — if a design violates these, no amount of control will save it.",
+        note_ar: "الأرضية التي يقف عليها كل ما سواها. قوانين الحفظ والطاقة وكمية الحركة — وإن خالفها التصميم فلن ينقذه أي تحكّم." },
+      { t: "Mechanical engineering", t_ar: "الهندسة الميكانيكية", note: "Statics, dynamics, materials and machine design. It decides what the structure can survive and how heavy the honest version of your idea is.",
+        note_ar: "السكون والديناميكا والمواد وتصميم الآلات. هي التي تقرّر ما يحتمله الهيكل، وكم تزن النسخة الصادقة من فكرتك." },
+      { t: "Mechatronics", t_ar: "الميكاترونكس", note: "Where mechanism, electronics, sensing and code stop being separate subjects. Most integration failures live exactly on these seams.",
+        note_ar: "حيث تكفّ الآليّة والإلكترونيات والاستشعار والشيفرة عن كونها مواد منفصلة. ومعظم إخفاقات التكامل تسكن هذه الدروز بالضبط." },
+      { t: "Robotics", t_ar: "الروبوتات", note: "Kinematics, state estimation, planning and control — the machinery of turning sensing into motion that is actually intended.",
+        note_ar: "الحركيّات وتقدير الحالة والتخطيط والتحكّم — آلة تحويل الاستشعار إلى حركةٍ مقصودةٍ فعلًا." },
+      { t: "Artificial intelligence", t_ar: "الذكاء الاصطناعي", note: "What earns its place where a model runs out: perception, learned policies, and decision-making under an uncertainty you cannot write down.",
+        note_ar: "ما يستحق مكانه حين ينفد النموذج: الإدراك والسياسات المتعلَّمة واتخاذ القرار تحت لا يقينٍ لا يمكن كتابته." },
+      { t: "Multiscale modelling", t_ar: "النمذجة متعدّدة المقاييس", note: "The discipline of choosing a scale on purpose — micro to macro, millisecond to mission — and knowing what each abstraction throws away.",
+        note_ar: "فنّ اختيار المقياس عن قصد — من المجهري إلى العياني، ومن الملّي ثانية إلى المهمّة — ومعرفة ما يُهمله كل تجريد." },
+    ],
     topics: [
       { t: "Newtonian mechanics", t_ar: "ميكانيكا نيوتن", eq: "ΣF = m a,   Στ = I α",
         note: "Where every model starts: free-body diagrams, forces and torques — the airframe, the rover, the arm.",
@@ -1238,14 +1292,32 @@ export const GALLERY = {
   },
   // Software — the repos + orgs behind the robots (rendered from REPOS + ORGS)
   software: {
-    intro: "Robots are half software. The open-source stacks, tools and research code I ship — under my handle and the labs I build with.",
-    intro_ar: "نصف الروبوت برمجيات. الحزم والأدوات والشيفرات البحثية التي أنشرها — باسمي وتحت المعامل التي أبني معها.",
+    // The organizations block moved out (16 Aug 2026) — Affiliations is its own page
+    // now, and listing them twice made the second copy the stale one.
+    intro: "Robots are half software, and the half that is easiest to get wrong quietly. These are the packages I actually ship — ROS 2 stacks, benchmarks and research code — kept open so the results in the papers can be run by someone other than me.",
+    intro_ar: "نصف الروبوت برمجيات، وهو النصف الأسهل أن يُخطئ بهدوء. وهذه الحزم التي أنشرها فعلًا — منظومات ROS 2 ومقاييس أداء وشيفرات بحثية — أُبقيها مفتوحة ليتمكّن غيري من تشغيل نتائج الأبحاث.",
     skills: ["Python", "C++", "ROS 2", "Docker", "Git · CI/CD", "Linux"],
   },
   // Physics Simulation — the ROS 2 sim + viz stack, plus a live GPS-denied estimate demo
   physsim: {
-    intro: "I close every loop in simulation first. The ROS 2 stack I reach for — and Rviz 2 to see what the robot believes.",
-    intro_ar: "أُغلق كل حلقة في المحاكاة أولًا. منظومة ROS 2 التي أعتمدها — وRviz 2 لأرى ما يعتقده الروبوت.",
+    intro: "Every loop gets closed in simulation before it touches a propeller. A simulator is a deliberate lie, though, and picking one is really picking which lie you can afford: Gazebo trades fidelity for a real ROS 2 graph, PX4 SITL runs the actual flight firmware, Isaac buys throughput for reinforcement learning with a GPU and a heavy setup, and Rviz 2 is not a simulator at all — it is the robot's own belief, drawn.",
+    intro_ar: "تُغلَق كل حلقة في المحاكاة قبل أن تلامس أي مروحة. لكن المحاكي كذبةٌ مقصودة، واختياره هو في الحقيقة اختيار الكذبة التي تحتملها: Gazebo يقايض الدقة برسم ROS 2 حقيقي، وPX4 SITL يشغّل برمجية الطيران ذاتها، وIsaac يشتري الإنتاجية للتعلّم المعزّز بمعالج رسومي وإعدادٍ ثقيل، وRviz 2 ليس محاكيًا أصلًا — بل هو اعتقاد الروبوت نفسه مرسومًا.",
+    // Clips/stills from the Gazebo + ROS 2 runs. `src` stays null until the media
+    // lands: a card then renders its caption tile instead of a broken frame.
+    runs: [
+      { id: "gz-flightgen", src: null, name: "FLIGHTGEN — automated dataset flights", name_ar: "FLIGHTGEN — طلعات توليد بيانات آلية",
+        note: "Randomised trajectories flown in Gazebo + PX4 SITL, logged straight to the training set.",
+        note_ar: "مسارات عشوائية تُطار في Gazebo وPX4 SITL وتُسجَّل مباشرةً إلى مجموعة التدريب." },
+      { id: "gz-rosnavbench", src: null, name: "ROSNavBench — planner benchmark", name_ar: "ROSNavBench — مقياس أداء المخطِّطات",
+        note: "The same Nav2 world run against every planner, scored automatically.",
+        note_ar: "عالم Nav2 نفسه يُشغَّل مع كل مخطِّط، ويُقيَّم آليًا." },
+      { id: "gz-interception", src: null, name: "Multi-UAV interception", name_ar: "اعتراض متعدّد الطائرات",
+        note: "Detection, tracking and pursuit closed in simulation before any real flight.",
+        note_ar: "كشفٌ وتتبّعٌ ومطاردة تُغلَق في المحاكاة قبل أي طيران حقيقي." },
+      { id: "gz-quadrorl", src: null, name: "QuadroRL — rough-terrain locomotion", name_ar: "QuadroRL — الحركة على التضاريس الوعرة",
+        note: "Go2 locomotion policies trained in a GPU-accelerated world.",
+        note_ar: "سياسات حركة Go2 مدرَّبة في عالمٍ مُسرَّع بالمعالج الرسومي." },
+    ],
     simulators: [
       { name: "Gazebo (Harmonic + Classic)", note: "Primary physics sim, bridged to ROS 2 via ros_gz", note_ar: "محاكي الفيزياء الأساسي، موصولٌ بـROS 2 عبر ros_gz", tag: "physics" },
       { name: "PX4 SITL", note: "Software-in-the-loop for the flight stack — every UAV mission dry-runs here", note_ar: "برمجيات في الحلقة لمنظومة الطيران — كل مهمة طائرة تُجرّب هنا", tag: "flight" },
@@ -1342,7 +1414,11 @@ export const I18N = {
     org_follow: "View organization ↗", org_site: "Site ↗",
     gp_photo: "Photo", gp_3d: "3D model",
     gp_trophy_hint: "Real STLs I designed and printed — use ‹ › to step through the collection.",
-    gp_theory: "The theory behind it", sim_stack: "My ROS 2 sim + viz stack", gp_prints_h: "And in the real world",
+    gp_theory: "The results I reach for", sim_stack: "The simulators, and what each one is for", gp_prints_h: "And in the real world",
+    gp_edp: "The Engineering Design Process", gp_showcase: "The machines, and how each was designed",
+    gp_stl_h: "The parts I designed and printed", gp_fields: "The six it draws on",
+    gp_processes: "Four ways to make a part", gp_runs: "From the simulator",
+    gp_runs_soon: "Capture coming", gp_proc_mine: "Mine",
     /* ── v10 ── */
     tab_quals: "Qualifications",
     quals_kicker: "Qualifications", quals_title: "My degrees, certifications & training.",
@@ -1350,7 +1426,7 @@ export const I18N = {
     q_cv: "Curriculum vitae", q_cv_get: "Download CV ↓",
     q_edu: "Education", q_certs: "Professional certifications", q_programs: "Specializations & programs",
     q_awards: "Awards & honors", q_courses: "courses",
-    gp_skills: "Skills", soft_orgs: "Organizations", soft_repos: "Selected repositories", soft_gh: "Everything on GitHub ↗",
+    gp_skills: "Skills", soft_repos: "Selected repositories", soft_gh: "Everything on GitHub ↗",
     eb_web: "Web & product", t_web: "Websites I've built.",
     lead_web: "Some of the sites that I worked on.",
     web_live: "Visit ↗", web_repo: "Code ↗", web_contact: "Ask me to build one ↗", web_more: "More",
@@ -1437,7 +1513,11 @@ export const I18N = {
     org_follow: "زيارة المنظّمة ↗", org_site: "الموقع ↗",
     gp_photo: "صورة", gp_3d: "مجسّم ثلاثي",
     gp_trophy_hint: "مجسّمات STL حقيقية صمّمتها وطبعتها — استخدم ‹ › للتنقّل في المجموعة.",
-    gp_theory: "النظرية خلفه", sim_stack: "منظومة المحاكاة والعرض بـROS 2", gp_prints_h: "وفي الواقع",
+    gp_theory: "النتائج التي أستدعيها", sim_stack: "المحاكيات، ولأي شيء يصلح كلٌّ منها", gp_prints_h: "وفي الواقع",
+    gp_edp: "منهجية التصميم الهندسي", gp_showcase: "الآلات، وكيف صُمّمت كلٌّ منها",
+    gp_stl_h: "قطعٌ صمّمتها وطبعتها", gp_fields: "التخصّصات الستّة التي يستند إليها",
+    gp_processes: "أربع طرقٍ لصنع قطعة", gp_runs: "من المحاكي",
+    gp_runs_soon: "التسجيل قادم", gp_proc_mine: "من عملي",
     /* ── v10 ── */
     tab_quals: "المؤهلات",
     quals_kicker: "المؤهلات", quals_title: "شهاداتي ودوراتي.",
@@ -1445,7 +1525,7 @@ export const I18N = {
     q_cv: "السيرة الذاتية", q_cv_get: "تحميل السيرة الذاتية ↓",
     q_edu: "التعليم", q_certs: "اعتمادات مهنية", q_programs: "تخصّصات وبرامج",
     q_awards: "جوائز وتكريم", q_courses: "مقرّرًا",
-    gp_skills: "مهارات", soft_orgs: "المنظّمات", soft_repos: "مستودعات مختارة", soft_gh: "كل شيء على GitHub ↗",
+    gp_skills: "مهارات", soft_repos: "مستودعات مختارة", soft_gh: "كل شيء على GitHub ↗",
     eb_web: "الويب والمنتجات", t_web: "مواقع بنيتُها.",
     lead_web: "بعض المواقع التي صممتها.",
     web_live: "زيارة ↗", web_repo: "الشيفرة ↗", web_contact: "اطلب واحدًا مثله ↗", web_more: "أخرى",

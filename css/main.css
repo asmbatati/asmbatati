@@ -460,7 +460,52 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .gp-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .gp-chip { border: 1.3px solid var(--line); background: var(--snow); color: var(--mid); border-radius: 99px; padding: 7px 15px; font-size: .85rem; transition: all .25s var(--ease); }
 .gp-chip.on { background: var(--green-2); color: #fff; border-color: var(--green-2); }
+/* The world header carries the category's icon, enlarged — it is the landing point
+   of the morph fired from the card (or chip) you clicked. */
+.gp-view-head { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+.gp-hero-icon { width: clamp(84px, 12vw, 132px); height: clamp(84px, 12vw, 132px); object-fit: contain; border-radius: 20px; background: var(--paper); border: 1px solid var(--line); flex: none; }
+.gp-head-text { min-width: min(100%, 16ch); }
 .gp-view-head h2 { font-family: var(--disp); font-size: clamp(1.6rem,4vw,2.4rem); color: var(--green-0); font-weight: 600; }
+.gp-head-text p { color: var(--dim); font-size: .9rem; margin-top: .3rem; }
+/* the in-flight clone: fixed to the viewport, above everything, never interactive */
+.gp-morph { position: fixed; z-index: 900; object-fit: contain; border-radius: 8px; background: var(--paper); pointer-events: none; box-shadow: 0 20px 50px rgba(22,53,42,.18); }
+
+/* ── Engineering Design Process strip (Design gallery) ── */
+.edp-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px,100%),1fr)); gap: 12px; }
+.edp-step { position: relative; border: 1px solid var(--line); border-top: 3px solid var(--green-3); border-radius: 14px; padding: 1.1rem 1rem 1rem; background: var(--card); }
+.edp-n { position: absolute; top: -13px; inset-inline-start: 14px; width: 24px; height: 24px; border-radius: 50%; background: var(--green-2); color: #fff; font-size: .74rem; font-weight: 700; display: grid; place-items: center; }
+.edp-step b { display: block; font-family: var(--disp); font-size: 1.02rem; color: var(--green-0); margin: .35rem 0 .4rem; }
+.edp-step p { font-size: .84rem; color: var(--mid); line-height: 1.5; }
+
+/* ── the six fields (Theories gallery) ── */
+.field-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(290px,100%),1fr)); gap: 1.1rem; }
+.field-card { border: 1px solid var(--line); border-inline-start: 3px solid var(--gold); border-radius: 14px; padding: 1.1rem 1.2rem; background: var(--card); }
+.fc-n { font-family: var(--disp); font-size: .8rem; color: var(--gold); letter-spacing: .08em; }
+.field-card b { display: block; font-family: var(--disp); font-size: 1.08rem; color: var(--green-0); margin: .2rem 0 .45rem; }
+.field-card p { font-size: .88rem; color: var(--mid); line-height: 1.55; }
+
+/* ── manufacturing processes ── */
+.proc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px,100%),1fr)); gap: 1.1rem; }
+.proc-card { border: 1px solid var(--line); border-radius: 14px; padding: 1.2rem 1.3rem; background: var(--card); display: flex; flex-direction: column; }
+.proc-card b { font-family: var(--disp); font-size: 1.1rem; color: var(--green-0); }
+.proc-how { display: block; font-size: .8rem; color: var(--green-2); margin: .25rem 0 .6rem; font-style: italic; }
+.proc-card > p { font-size: .88rem; color: var(--mid); line-height: 1.55; }
+.proc-mine { margin-top: auto; padding-top: .8rem; font-size: .82rem; color: var(--green-1); }
+.proc-mine span { display: inline-block; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); background: var(--paper); border-radius: 5px; padding: 2px 7px; margin-inline-end: 7px; }
+
+/* ── simulator run captures ── */
+.run-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px,100%),1fr)); gap: 1.1rem; }
+.run-card { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--card); transition: transform .35s var(--ease), box-shadow .35s; }
+.run-card:hover { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(22,53,42,.10); }
+.run-shot { position: relative; aspect-ratio: 16/9; background: var(--paper-2); }
+.run-shot img, .run-shot video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Shown only until the capture exists — an entry with no src must never ship as a
+   broken frame (same guard as the mind-map cards). */
+.run-tile { position: absolute; inset: 0; display: grid; place-items: center; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.run-body { padding: .9rem 1.1rem 1.1rem; }
+.run-body b { font-family: var(--disp); font-size: 1rem; color: var(--green-0); }
+.run-body p { font-size: .85rem; color: var(--mid); margin-top: .35rem; line-height: 1.5; }
+.run-pending { border-style: dashed; }
 .gp-hint { color: var(--mid); font-size: .95rem; margin: .5rem 0 1.4rem; max-width: 70ch; }
 .gp-hint.center { text-align: center; margin: .8rem auto 0; }
 .three-stage { position: relative; border-radius: 18px; background: linear-gradient(170deg, var(--paper), var(--snow) 70%); border: 1px solid var(--line); overflow: hidden; }

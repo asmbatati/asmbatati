@@ -1,16 +1,21 @@
-/* Interactive interests gallery (page #gallery) — v9, 5 ways.
-   Stage A: the generated emblem alone → click → five category cards burst out.
-   Stage B: each category is a small "world":
-     caddesign — rotating ring of my machines → click → 4-step design story
-     hardware  — my real STLs, each rendered as a spotlit trophy, stepped through
-     model     — a live damped 2nd-order system + the theory behind the machines
-     sim        — a live GPS-denied estimate + my ROS 2 sim & Rviz 2 stack
-     robotics   — a stylized 3D model per platform, with a 3D ⇄ real-photo toggle */
+/* Interactive interests gallery (page #gallery) — v11, six galleries.
+   Stage A: the generated emblem alone → click → six category cards burst out.
+   Stage B: clicking a card morphs its icon into the world view's hero image
+   (see morphInto) and paints one of six galleries:
+     design      — the Engineering Design Process, my CAD skills, a rotating ring of
+                   machines with a 4-step design story each, then the spotlit STLs
+     mathmodel   — the six disciplines a robot forces to agree, a live damped
+                   2nd-order system, then the results I reach for
+     physsim     — a live GPS-denied estimate, the simulators and what each is for,
+                   then captures from the Gazebo/ROS 2 runs
+     fabrication — four families of manufacturing process, my skills, real prints
+     software    — the packages, my toolchain and the repos (orgs live on Affiliations)
+     integration — a stylized 3D model per platform, with a 3D ⇄ real-photo toggle */
 
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, ORGS, IMG } from "./data.js?v=29";
+import { GALLERY, REPOS, IMG } from "./data.js?v=30";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -55,7 +60,17 @@ function paintHub() {
       card.style.setProperty("--tx", `${Math.cos(a) * R * 1.3}px`);
       card.style.setProperty("--ty", `${Math.sin(a) * R * 0.8}px`);
     }
-    card.addEventListener("click", () => { activeCat = c.id; stage = "world"; paint(); scrollTo({ top: 0, behavior: "instant" }); });
+    // Capture the icon's on-screen box BEFORE the hub is torn down — that rect is
+    // the "first" half of the morph into the world view's hero image. Scroll first
+    // so the destination is measured at its final position; the clone is fixed to
+    // the viewport, so it still starts exactly where the card was when clicked.
+    card.addEventListener("click", () => {
+      const icon = card.querySelector(".cc-icon");
+      morphFrom = { rect: icon.getBoundingClientRect(), src: icon.currentSrc || icon.src };
+      activeCat = c.id; stage = "world";
+      scrollTo({ top: 0, behavior: "instant" });
+      paint();
+    });
     wrap.append(card);
   });
 
@@ -94,7 +109,12 @@ function paintChips() {
   const bar = qs("#gpChips"); bar.innerHTML = "";
   GALLERY.cats.forEach(c => {
     const b = el("button", "gp-chip" + (c.id === activeCat ? " on" : ""), `<img class="gp-chip-i" src="${iconFor(c)}" alt="">${ctx.pick(c, "label")}`);
-    b.addEventListener("click", () => { activeCat = c.id; paint(); });
+    b.addEventListener("click", () => {
+      if (c.id === activeCat) return;
+      const i = b.querySelector(".gp-chip-i");
+      morphFrom = { rect: i.getBoundingClientRect(), src: i.currentSrc || i.src };
+      activeCat = c.id; paint();
+    });
     bar.append(b);
   });
   const back = qs("#gpBack");
@@ -102,11 +122,48 @@ function paintChips() {
   if (!back.__wired) { back.__wired = true; back.addEventListener("click", () => { stage = "burst"; paint(); }); }
 }
 
+/* The category icon flies from the card (or chip) you clicked into the world view's
+   hero image, growing on the way. A hand-rolled FLIP: the source rect is captured at
+   click time, the destination is measured after layout, and a fixed-position clone
+   animates between them. GSAP's Flip plugin would do this in one line — it is a paid
+   plugin, and this is the only place the site needs it. */
+let morphFrom = null;
+function morphInto(toEl) {
+  const from = morphFrom; morphFrom = null;
+  if (!from || !window.gsap || ctx.reduced) return;
+  const to = toEl.getBoundingClientRect();
+  if (!to.width || !from.rect.width) return;
+  const fly = el("img", "gp-morph");
+  fly.src = from.src; fly.alt = "";
+  Object.assign(fly.style, {
+    left: `${from.rect.left}px`, top: `${from.rect.top}px`,
+    width: `${from.rect.width}px`, height: `${from.rect.height}px`,
+  });
+  document.body.append(fly);
+  toEl.style.visibility = "hidden";
+  gsap.to(fly, {
+    left: to.left, top: to.top, width: to.width, height: to.height,
+    borderRadius: 20, duration: 0.7, ease: "expo.inOut",
+    onComplete: () => {
+      fly.remove();
+      toEl.style.visibility = "";
+      gsap.fromTo(toEl, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" });
+    },
+  });
+  // The clone is position:fixed and outlives a re-render, so it must be swept up if
+  // the view changes mid-flight.
+  live.push({ stop: () => { fly.remove(); toEl.style.visibility = ""; } });
+}
+
 function paintView(id) {
   const host = qs("#gpView"); host.innerHTML = "";
   const cat = GALLERY.cats.find(c => c.id === id);
-  host.append(el("div", "gp-view-head", `<h2>${ctx.pick(cat, "label")}</h2>`));
+  const head = el("div", "gp-view-head",
+    `<img class="gp-hero-icon" src="${iconFor(cat)}" alt="" fetchpriority="high">
+     <div class="gp-head-text"><h2>${ctx.pick(cat, "label")}</h2><p>${ctx.pick(cat, "tease")}</p></div>`);
+  host.append(head);
   ({ design: viewDesign, mathmodel: viewMath, physsim: viewSim, fabrication: viewFab, software: viewSoftware, integration: viewIntegration })[id](host);
+  morphInto(head.querySelector(".gp-hero-icon"));
   window.__cursorBind?.();
 }
 const skillChips = (host, skills, label) => {
@@ -155,9 +212,22 @@ function buildRing(host, items, makeFace, onPick) {
   live.push({ stop: () => { alive = false; cancelAnimationFrame(raf); } });
 }
 
-/* ── Design world: sketches → CAD → drawings, each machine's design story ── */
+/* ── Design gallery: the process, the skills, the machines, the printed parts ── */
 function viewDesign(host) {
-  host.append(el("p", "gp-hint", ctx.t().design_hint));
+  const T = ctx.t();
+  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.design, "intro")));
+
+  host.append(el("h3", "gp-subh", T.gp_edp));
+  const edp = el("div", "edp-row");
+  GALLERY.design.edp.forEach((s, i) => edp.append(el("article", "edp-step",
+    `<span class="edp-n">${i + 1}</span><b>${ctx.pick(s, "t")}</b><p>${ctx.pick(s, "d")}</p>`)));
+  host.append(edp);
+  if (window.gsap && !ctx.reduced) gsap.from(edp.children, { y: 16, opacity: 0, stagger: 0.06, duration: 0.5, ease: "expo.out" });
+
+  skillChips(host, GALLERY.design.skills, T.gp_skills);
+
+  host.append(el("h3", "gp-subh", T.gp_showcase));
+  host.append(el("p", "gp-hint center", T.design_hint));
   const items = GALLERY.design.projects;
   const brief = el("div", "design-brief");
   buildRing(host, items, it =>
@@ -170,22 +240,22 @@ function viewDesign(host) {
       if (window.gsap && !ctx.reduced) gsap.from(brief.querySelectorAll(".db-step"), { y: 18, opacity: 0, stagger: 0.07, duration: 0.5, ease: "expo.out" });
       brief.scrollIntoView({ behavior: ctx.reduced ? "instant" : "smooth", block: "nearest" });
     });
-  skillChips(host, GALLERY.design.skills, ctx.t().gp_skills);
   host.append(brief);
+
+  // Moved here from the Manufacturing gallery (16 Aug 2026) — these are parts I
+  // designed, so they close the design story rather than open the process one.
+  host.append(el("h3", "gp-subh", T.gp_stl_h));
+  trophyScene(host, GALLERY.design.trophies, ctx.pick(GALLERY.design, "trophy_intro"));
 }
 
-/* ── Software world: skills + orgs + the repos behind the robots ── */
+/* ── Software packages: the intro, my toolchain, and the repos themselves ──
+   The Organizations block used to sit between the skills and the repos. It moved out
+   on 16 Aug 2026 — Affiliations is a page of its own now, and keeping a second copy
+   here only guaranteed one of them would go stale. */
 function viewSoftware(host) {
   const T = ctx.t();
   host.append(el("p", "gp-hint center", ctx.pick(GALLERY.software, "intro")));
   skillChips(host, GALLERY.software.skills, T.gp_skills);
-  host.append(el("h3", "gp-subh", T.soft_orgs));
-  const og = el("div", "org-grid");
-  ORGS.forEach(o => og.append(el("article", "card org",
-    `<div class="org-top"><span class="org-name">${o.name}</span><span class="org-handle">@${o.handle}</span></div>
-     <p class="org-role">${ctx.pick(o, "role")}</p><p class="org-desc">${ctx.pick(o, "desc")}</p>
-     <div class="org-links"><a href="${o.url}" target="_blank" rel="noopener">${T.org_follow}</a>${o.site ? `<a href="${o.site}" target="_blank" rel="noopener">${T.org_site}</a>` : ""}</div>`)));
-  host.append(og);
   host.append(el("h3", "gp-subh", T.soft_repos));
   const rg = el("div", "repo-grid soft-repos");
   REPOS.forEach(r => {
@@ -437,10 +507,11 @@ function viewIntegration(host) {
   });
 }
 
-/* ── Fabrication & Integration: real STLs as spotlit trophies ── */
-function viewFab(host) {
+/* ── Spotlit STL trophies. Lives in the Design gallery now, but stays a standalone
+   function because it owns a Three.js scene that must be disposed on view change. ── */
+function trophyScene(host, trophies, intro) {
   const T = ctx.t();
-  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.fabrication, "intro")));
+  if (intro) host.append(el("p", "gp-hint center", intro));
   const sc = makeScene(host, Math.min(520, innerWidth * 0.92), { dark: true });
   const cap = el("div", "trophy-cap"); host.append(cap);
   const nav = el("div", "trophy-nav",
@@ -452,7 +523,6 @@ function viewFab(host) {
     sc.root.add(mesh(new THREE.CylinderGeometry(0.95, 1.12, 0.34, 56), new THREE.MeshStandardMaterial({ color: 0x161a1f, roughness: 0.85 }), 0, -1.05, 0));
     sc.root.add(mesh(new THREE.CylinderGeometry(0.97, 0.97, 0.02, 56), new THREE.MeshStandardMaterial({ color: 0xb6803a, roughness: 0.4, metalness: 0.5 }), 0, -0.87, 0));
     const stlLoader = new STLLoader(), gltfLoader = new GLTFLoader();
-    const trophies = GALLERY.fabrication.trophies;
     let current = null, idx = 0, rot = 0, vel = 0, dragging = false, px = 0, token = 0;
     const mat = new THREE.MeshStandardMaterial({ color: 0x4f9b74, roughness: 0.42, metalness: 0.12 });
     // scale + centre an object into the trophy pose, then swap it in
@@ -494,7 +564,25 @@ function viewFab(host) {
       if (current) { current.rotation.y = rot; current.position.y = 0.15 + (ctx.reduced ? 0 : Math.sin(t * 1.1) * 0.05); }
     });
   }
-  // the real prints, below
+}
+
+/* ── Manufacturing gallery: how a drawing becomes an object ──
+   The STL trophies moved to the Design gallery — those are parts I designed, and
+   this gallery is about the processes, not about one part. */
+function viewFab(host) {
+  const T = ctx.t();
+  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.fabrication, "intro")));
+
+  host.append(el("h3", "gp-subh", T.gp_processes));
+  const grid = el("div", "proc-grid");
+  GALLERY.fabrication.processes.forEach(p => grid.append(el("article", "proc-card",
+    `<b>${ctx.pick(p, "t")}</b><span class="proc-how">${ctx.pick(p, "how")}</span>
+     <p>${ctx.pick(p, "note")}</p>
+     <p class="proc-mine"><span>${T.gp_proc_mine}</span>${ctx.pick(p, "mine")}</p>`)));
+  host.append(grid);
+
+  skillChips(host, GALLERY.fabrication.skills, T.gp_skills);
+
   host.append(el("h3", "gp-subh", T.gp_prints_h));
   const strip = el("div", "print-strip");
   GALLERY.fabrication.photos.forEach((p, i) => {
@@ -505,9 +593,18 @@ function viewFab(host) {
   host.append(strip);
 }
 
-/* ── Physics & Math world: live 2nd-order system + theory cards ── */
+/* ── Essential theories & concepts: the six disciplines, a live system, the results ── */
 function viewMath(host) {
   const T = ctx.t();
+  host.append(el("p", "gp-hint center", ctx.pick(GALLERY.mathmodel, "intro")));
+
+  host.append(el("h3", "gp-subh", T.gp_fields));
+  const fg = el("div", "field-grid");
+  GALLERY.mathmodel.fields.forEach((f, i) => fg.append(el("article", "field-card",
+    `<span class="fc-n">${String(i + 1).padStart(2, "0")}</span><b>${ctx.pick(f, "t")}</b><p>${ctx.pick(f, "note")}</p>`)));
+  host.append(fg);
+  if (window.gsap && !ctx.reduced) gsap.from(fg.children, { y: 16, opacity: 0, stagger: 0.05, duration: 0.5, ease: "expo.out" });
+
   const wrap = el("div", "math-wrap",
     `<div class="math-eq">ẍ + 2ζω<sub>n</sub>ẋ + ω<sub>n</sub>²x = 0</div>
      <div class="math-grid"><canvas id="mSpring"></canvas><canvas id="mPlot"></canvas></div>
@@ -620,4 +717,28 @@ function viewSim(host) {
   GALLERY.physsim.simulators.forEach(s => grid.append(el("article", "sim-card" + (s.tag === "mine" ? " mine" : ""),
     `<div class="sim-card-top"><b>${s.name}</b><span class="sim-tag">${s.tag}</span></div><p>${ctx.pick(s, "note")}</p>`)));
   host.append(grid);
+
+  // Captures from the Gazebo + ROS 2 runs. An entry with no `src` renders its caption
+  // tile rather than a broken frame — the same guard the mind-map cards use.
+  host.append(el("h3", "gp-subh", T.gp_runs));
+  const runs = el("div", "run-grid");
+  const isVid = r => /\.(mp4|webm)$/i.test(r.src || "");
+  // stills only — the lightbox shows images, so a video card must not open it
+  const shots = (GALLERY.physsim.runs || []).filter(r => r.src && !isVid(r))
+    .map(r => ({ src: r.src, cap: r.name, cap_ar: r.name_ar }));
+  (GALLERY.physsim.runs || []).forEach(r => {
+    const card = el("article", "run-card" + (r.src ? "" : " run-pending"));
+    const media = isVid(r)
+      ? `<video src="${r.src}" muted loop playsinline autoplay preload="metadata" onerror="this.remove()"></video>`
+      : r.src ? `<img src="${r.src}" alt="${ctx.pick(r, "name")}" loading="lazy" onerror="this.remove()">` : "";
+    card.innerHTML = `<div class="run-shot"><span class="run-tile" aria-hidden="true">${r.src ? "" : T.gp_runs_soon}</span>${media}</div>
+      <div class="run-body"><b>${ctx.pick(r, "name")}</b><p>${ctx.pick(r, "note")}</p></div>`;
+    if (r.src && !isVid(r)) {
+      card.style.cursor = "pointer";
+      const at = shots.findIndex(s => s.src === r.src);
+      card.addEventListener("click", () => ctx.lightbox(shots, at < 0 ? 0 : at));
+    }
+    runs.append(card);
+  });
+  host.append(runs);
 }
