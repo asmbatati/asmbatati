@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=26";
-import { renderGallery } from "./gallery.js?v=26";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=27";
+import { renderGallery } from "./gallery.js?v=27";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -693,13 +693,35 @@ function galleryCtx() {
 let POSTS = null;
 async function loadPosts() {
   if (POSTS) return POSTS;
-  try { POSTS = await (await fetch("posts/posts.json")).json(); }
+  // no-cache (revalidate, don't skip the cache) — the index carries no ?v=, so a
+  // returning reader would otherwise keep an old copy and never see a new post.
+  try { POSTS = await (await fetch("posts/posts.json", { cache: "no-cache" })).json(); }
   catch { POSTS = []; }
   POSTS.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
   return POSTS;
 }
+/* Posts whose figure is live DOM (SVG diagram / plate grid) declare `embed: "<id>"`
+   in posts.json. The node is MOVED out of #postEmbeds into the article body — never
+   cloned, because renderAreas/renderArch look it up by id on every language toggle.
+   So it has to be put back before anything clears #articleRead, or it is destroyed. */
+function stashEmbeds() {
+  const holder = $("#postEmbeds"); if (!holder) return;
+  $$(".post-embed").forEach(n => { if (n.parentElement !== holder) { n.classList.remove("a-figure"); holder.append(n); } });
+}
+function mountEmbed(id) {
+  const node = document.getElementById(id), content = $("#articleRead .a-content");
+  if (!node || !content) return;
+  node.classList.add("a-figure");
+  // marked wraps the bare {{figure}} line in its own <p>; swap that for the figure so
+  // the post can place it mid-article. No marker → the figure lands at the end.
+  const slot = [...content.querySelectorAll("p")].find(p => p.textContent.trim() === "{{figure}}");
+  if (slot) slot.replaceWith(node); else content.append(node);
+}
+
 async function renderArticles() {
   const grid = $("#articlesGrid"), read = $("#articleRead");
+  stashEmbeds();
+  OPEN_POST = null;
   read.style.display = "none"; read.innerHTML = ""; grid.style.display = "";
   grid.innerHTML = "";
   const posts = await loadPosts();
@@ -717,20 +739,28 @@ async function renderArticles() {
   });
   window.__cursorBind?.();
 }
+let OPEN_POST = null;
 async function openArticle(a) {
   const grid = $("#articlesGrid"), read = $("#articleRead");
+  OPEN_POST = a; stashEmbeds();
   grid.style.display = "none"; read.style.display = "";
+  // A post can ship a translated body as `file_ar`; without one the original is served
+  // in both languages (the chrome around it still follows the UI language).
+  const file = (lang === "ar" && a.file_ar) || a.file;
+  const rtl = lang === "ar" ? a.file_ar : a.lang === "ar";
   let body = "";
   try {
-    const md = await (await fetch(`posts/${a.file}`)).text();
+    const md = await (await fetch(`posts/${file}`, { cache: "no-cache" })).text();
     body = DOMPurify.sanitize(marked.parse(md));
   } catch { body = `<p>${T().art_empty}</p>`; }
-  read.innerHTML = `<div class="article-full" ${a.lang === "ar" ? 'dir="rtl"' : ""}><span class="a-back">${T().art_back}</span>
+  read.innerHTML = `<div class="article-full" ${rtl ? 'dir="rtl"' : ""}><span class="a-back">${T().art_back}</span>
     <h1>${pick(a, "title")}</h1><div class="a-meta">${a.date} · ${a.read} ${T().art_min}</div>
     ${a.cover ? `<img class="article-cover" style="border-radius:14px;margin-bottom:2rem" src="${a.cover}" alt="">` : ""}
     <div class="a-content">${body}</div></div>`;
+  if (a.embed) mountEmbed(a.embed);
   read.querySelector(".a-back").addEventListener("click", () => { renderArticles(); lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0); });
   lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0);
+  requestAnimationFrame(() => ST.refresh());
 }
 
 /* ════════════ STATIC i18n + lang ════════════ */
@@ -745,7 +775,9 @@ function applyStatic() {
 function applyLang() {
   applyStatic(); renderDynamic();
   const active = $(".page.active")?.id.replace("page-", "");
-  if (active === "articles") renderArticles();
+  // Re-open the post being read instead of dumping the reader back to the grid —
+  // posts with a `file_ar` body swap language in place.
+  if (active === "articles") { const open = OPEN_POST; open ? openArticle(open) : renderArticles(); }
   if (active === "gallery") galleryCtx();
   if (active === "projects") wireFlow();
   if (active === "home") wireJourney();
@@ -762,7 +794,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=26").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=27").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {

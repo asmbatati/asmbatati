@@ -1,5 +1,35 @@
 [
 {
+  "slug": "robot-mental-model",
+  "file": "robot-mental-model.md",
+  "file_ar": "robot-mental-model.ar.md",
+  "embed": "embed-arch",
+  "title": "How I explain an autonomous robot in one diagram",
+  "title_ar": "كيف أشرح روبوتًا مستقلًا في مخطّطٍ واحد",
+  "date": "2026-08-16",
+  "read": 4,
+  "lang": "en",
+  "tags": ["robotics", "architecture", "ROS 2"],
+  "cover": "img/research/w960/ros2.webp",
+  "excerpt": "Two columns, one shared world model, three clocks — the drawing I keep coming back to, and the opinions baked into its shape.",
+  "excerpt_ar": "عمودان، ونموذج عالمٍ مشترك، وثلاث ساعات — الرسم الذي أعود إليه دائمًا، والمواقف الكامنة في هيئته."
+},
+{
+  "slug": "six-problems",
+  "file": "six-problems.md",
+  "file_ar": "six-problems.ar.md",
+  "embed": "embed-areas",
+  "title": "The six problems that keep showing up in my research",
+  "title_ar": "المسائل الستّ التي تتكرّر في أبحاثي",
+  "date": "2026-08-16",
+  "read": 3,
+  "lang": "en",
+  "tags": ["research", "autonomy", "UAV"],
+  "cover": "img/research/w960/gps-denied.webp",
+  "excerpt": "I did not choose six research areas — I noticed them. What laying out every paper and patent side by side actually revealed.",
+  "excerpt_ar": "لم أختر ستّة مجالاتٍ بحثية، بل لاحظتُها. ما كشفه صفُّ كل بحثٍ وبراءةٍ جنبًا إلى جنب."
+},
+{
   "slug": "ros2-survey-story",
   "file": "ros2-survey-story.md",
   "title": "What I learned distilling 8,500 papers into one ROS 2 survey",

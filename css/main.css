@@ -659,8 +659,17 @@ html[dir="rtl"] .sm-card:hover .sm-go { transform: scaleX(-1) translateX(0); }
 .rs-foot { margin-top: .9rem; font-size: .78rem; color: var(--dim); }
 .rs-foot a { color: var(--green-2); font-weight: 600; }
 
-/* ── A moved Research section presented as a long-form post on the Blog page ── */
-.post-feature { border-top: 1px solid var(--line); }
+/* ── Live figures mounted inside a blog post (see #postEmbeds in index.html) ──
+   The holder must stay display:none even though a bare div would otherwise win
+   over the [hidden] attribute's UA default. */
+#postEmbeds[hidden] { display: none; }
+.a-figure { margin: 2.4rem 0 2.6rem; }
+.a-figure .areas-grid, .a-figure .arch-figure { margin-top: 0; }
+/* The diagram and the plate grid both need more room than the 760px prose column,
+   so on wide screens they break out symmetrically around it (RTL-safe). */
+@media (min-width: 1180px) {
+  .a-figure { width: min(1060px, calc(100vw - 9rem)); margin-inline: calc((760px - min(1060px, calc(100vw - 9rem))) / 2); }
+}
 
 /* ── CV block (Qualifications) ── */
 .q-cv { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; flex-wrap: wrap; padding: 1.1rem 1.4rem; margin: 1.6rem 0 .4rem; border-inline-start: 3px solid var(--gold); }

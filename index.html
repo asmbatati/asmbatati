@@ -10,7 +10,7 @@
   <!-- ?v must be bumped with the JS modules: without it a returning visitor keeps a
        cached stylesheet while the new JS renders new markup, so fresh sections render
        completely unstyled. Missing until 12 Aug 2026. -->
-  <link rel="stylesheet" href="css/main.css?v=26">
+  <link rel="stylesheet" href="css/main.css?v=27">
   <link rel="icon" type="image/png" sizes="64x64" href="img/favicon.png">
   <link rel="icon" type="image/png" sizes="256x256" href="img/logo-mark.png">
   <link rel="apple-touch-icon" href="img/logo-mark.png">
@@ -58,7 +58,7 @@
         <li><a data-nav="teaching" data-i18n="tab_teaching">Teaching</a></li>
         <li><a data-nav="affil" data-i18n="tab_affil">Affiliations</a></li>
         <li><a data-nav="quals" data-i18n="tab_quals">Qualifications</a></li>
-        <li><a data-nav="articles" data-i18n="tab_articles">Writing</a></li>
+        <li><a data-nav="articles" data-i18n="tab_articles">Blog</a></li>
       </ul>
       <button id="langToggle" class="lang-toggle magnetic" aria-label="Switch language" title="العربية / English">
         <svg class="lang-globe" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.4 3.8 5.6 3.8 9S14.5 18.6 12 21c-2.5-2.4-3.8-5.6-3.8-9S9.5 5.4 12 3Z"/></svg>
@@ -113,7 +113,7 @@
 
     <!-- THE PATH SO FAR — education + career journey (glowing scroll path) -->
     <section class="section alt" id="journey-sec"><div class="section-inner">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_journey">The path so far</span><h2 class="section-title" data-i18n="t_journey">Education &amp; career, from 2018.</h2>
+      <div class="reveal"><span class="eyebrow" data-i18n="eb_journey">The path so far</span><h2 class="section-title" data-i18n="t_journey">Education &amp; career, from 2016.</h2>
         <p class="section-lead" data-i18n="lead_journey"></p></div>
       <div class="jrny" id="jrny">
         <span class="jrny-fill" id="jrnyFill"></span>
@@ -327,23 +327,22 @@
       <div class="article-read" id="articleRead" style="display:none"></div>
     </section>
 
-    <!-- Two long-form posts moved here from the Research page (12 Aug 2026). They stay
-         as live sections rather than markdown because both are interactive — a rendered
-         SVG diagram and the engraved plate grid — which a .md post could not carry. -->
-    <article class="section post-feature" id="areas-sec">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_areas">Research areas</span><h2 class="section-title" data-i18n="t_areas">Six problems I work on.</h2>
-        <p class="section-lead" data-i18n="lead_areas"></p></div>
-      <div class="areas-grid" id="areasGrid"></div>
-    </article>
-
-    <article class="section alt post-feature" id="stack-sec"><div class="section-inner">
-      <div class="reveal"><span class="eyebrow" data-i18n="eb_stack">How an autonomous robot thinks</span><h2 class="section-title" data-i18n="t_stack">My mental model of an autonomous robot.</h2>
-        <p class="section-lead" data-i18n="lead_stack"></p></div>
-      <div class="arch-figure" id="arch"></div>
-      <p class="arch-sim" id="archSim"></p>
-      <h3 class="arch-work-h" data-i18n="arch_work_title">Where my work lives</h3>
-      <div class="arch-cards" id="archCards"></div>
-    </div></article>
+    <!-- Live figures for two of the posts (moved off the Research page 12 Aug 2026, made
+         real posts 16 Aug 2026). Markdown can't carry a rendered SVG diagram or the
+         engraved plate grid, so they stay as DOM and openArticle() MOVES the matching
+         node into the article body at the {{figure}} marker. Kept here (not cloned)
+         because renderAreas/renderArch find them by id on every language toggle. -->
+    <div id="postEmbeds" hidden>
+      <div class="post-embed" id="embed-areas">
+        <div class="areas-grid" id="areasGrid"></div>
+      </div>
+      <div class="post-embed" id="embed-arch">
+        <div class="arch-figure" id="arch"></div>
+        <p class="arch-sim" id="archSim"></p>
+        <h3 class="arch-work-h" data-i18n="arch_work_title">Where my work lives</h3>
+        <div class="arch-cards" id="archCards"></div>
+      </div>
+    </div>
   </div>
 
   <footer class="footer">© <span id="year">2026</span> Abdulrahman S. Al-Batati · Robotics &amp; Autonomous Intelligent Systems<a class="admin-dot" href="#admin" aria-label="Admin sign-in"><span class="admin-dot-label" aria-hidden="true">Admin</span><i aria-hidden="true">◆</i></a></footer>
@@ -360,6 +359,6 @@
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
-  <script type="module" src="js/main.js?v=26"></script>
+  <script type="module" src="js/main.js?v=27"></script>
 </body>
 </html>

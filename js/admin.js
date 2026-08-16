@@ -14,7 +14,7 @@
    signed-in session whose email = OWNER can write (see admin-schema.sql).
    ═══════════════════════════════════════════════════════════════════ */
 
-import * as DATA from "./data.js?v=26";
+import * as DATA from "./data.js?v=27";
 
 const SB_URL = "https://pvconwkeshzoovchvzqm.supabase.co";
 const SB_KEY = "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ";
@@ -40,14 +40,15 @@ const TEXT_GROUPS = [
   ["About", [
     ["eb_about", "Eyebrow (small label)"], ["t_about", "Section title"],
     ["about_p1", "Paragraph"], ["about_origin", "Origin line"], ["about_meta", "Meta line"]]],
-  ["Home — journey & focus", [
+  ["Home — journey & site map", [
     ["eb_journey", "Journey eyebrow"], ["t_journey", "Journey title"], ["lead_journey", "Journey lead"],
-    ["eb_focus", "Focus eyebrow"], ["t_focus", "Focus title"], ["lead_focus", "Focus lead"], ["focus_cta", "Focus button"]]],
+    ["sm_eb", "Site-map eyebrow"], ["sm_title", "Site-map title"], ["sm_lead", "Site-map lead"]]],
   ["Contact", [["eb_contact", "Eyebrow"], ["t_contact", "Title"]]],
+  // The old "Areas" / "Model" sections are blog posts now — their copy lives in
+  // posts/*.md + posts.json, not in I18N, so there is nothing to edit here.
   ["Research page", [
+    ["rs_eb", "Highlights eyebrow"], ["rs_title", "Highlights title"],
     ["rm_kicker", "Map eyebrow"], ["rm_title", "Map title"], ["rm_lead", "Map lead"],
-    ["eb_areas", "Areas eyebrow"], ["t_areas", "Areas title"], ["lead_areas", "Areas lead"],
-    ["eb_stack", "Model eyebrow"], ["t_stack", "Model title"], ["lead_stack", "Model lead"],
     ["pubdb_title", "Publications eyebrow"], ["t_research", "Publications title"], ["pubdb_lead", "Publications lead"]]],
   ["Projects page", [
     ["projpg_kicker", "Eyebrow"], ["projpg_title", "Title"], ["proj_intro", "Intro"],
@@ -65,7 +66,7 @@ const TEXT_GROUPS = [
     ["quals_kicker", "Eyebrow"], ["quals_title", "Title"], ["quals_lead", "Lead"],
     ["q_edu", "Education heading"], ["q_certs", "Certifications heading"],
     ["q_programs", "Programs heading"], ["q_awards", "Awards heading"]]],
-  ["Writing page", [["art_eb", "Eyebrow"], ["art_title", "Title"], ["art_lead", "Lead"]]],
+  ["Blog page", [["art_eb", "Eyebrow"], ["art_title", "Title"], ["art_lead", "Lead"]]],
   ["Navigation & buttons", [
     ["nav_about", "Nav: About"], ["nav_research", "Nav: Research"], ["nav_projects", "Nav: Projects"],
     ["nav_gallery", "Nav: Gallery"], ["nav_cta", "Nav: contact button"], ["lang_btn", "Language toggle label"]]],
