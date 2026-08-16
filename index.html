@@ -10,7 +10,7 @@
   <!-- ?v must be bumped with the JS modules: without it a returning visitor keeps a
        cached stylesheet while the new JS renders new markup, so fresh sections render
        completely unstyled. Missing until 12 Aug 2026. -->
-  <link rel="stylesheet" href="css/main.css?v=27">
+  <link rel="stylesheet" href="css/main.css?v=28">
   <link rel="icon" type="image/png" sizes="64x64" href="img/favicon.png">
   <link rel="icon" type="image/png" sizes="256x256" href="img/logo-mark.png">
   <link rel="apple-touch-icon" href="img/logo-mark.png">
@@ -327,6 +327,15 @@
       <div class="article-read" id="articleRead" style="display:none"></div>
     </section>
 
+    <!-- MIND MAPS — the diagrams, as their own band under the posts. Hidden while an
+         article is open (renderArticles/openArticle toggle it), so the reading view
+         stays a reading view. -->
+    <section class="section alt" id="mindmaps-sec"><div class="section-inner">
+      <div class="reveal"><span class="eyebrow" data-i18n="mm_eb">Mind maps</span><h2 class="section-title" data-i18n="mm_title">Diagrams I draw to think.</h2>
+        <p class="section-lead" data-i18n="mm_lead"></p></div>
+      <div class="mm-grid" id="mindMaps"></div>
+    </div></section>
+
     <!-- Live figures for two of the posts (moved off the Research page 12 Aug 2026, made
          real posts 16 Aug 2026). Markdown can't carry a rendered SVG diagram or the
          engraved plate grid, so they stay as DOM and openArticle() MOVES the matching
@@ -359,6 +368,6 @@
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
-  <script type="module" src="js/main.js?v=27"></script>
+  <script type="module" src="js/main.js?v=28"></script>
 </body>
 </html>

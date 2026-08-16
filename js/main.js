@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=27";
-import { renderGallery } from "./gallery.js?v=27";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=28";
+import { renderGallery } from "./gallery.js?v=28";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -140,6 +140,7 @@ function renderDynamic() {
   renderResearchMap();
   renderAreas();
   renderArch();
+  renderMindmaps();
   renderProjects();
   renderActiveProjects();
   renderWebwork();
@@ -303,6 +304,48 @@ function renderResearchStats() {
   host.after(foot);
   // avoid stacking a new footnote on every re-render (language toggle re-runs this)
   [...host.parentElement.querySelectorAll(".rs-foot")].slice(0, -1).forEach(n => n.remove());
+}
+
+/* ── Mind maps (Blog page) ──
+   A card is openable only when the entry carries a `file`; the rest render the
+   typographic tile and say so, because an entry whose artwork is still a .drawio
+   in the vault must not ship as a broken image (the showcase learned this once
+   already — see webCard). Published ones open in the shared lightbox, which is
+   why they are collected into their own array: ←/→ steps between diagrams. */
+function renderMindmaps() {
+  const host = $("#mindMaps"); if (!host) return; host.innerHTML = "";
+  const openable = MINDMAPS.filter(m => m.file).map(m => ({ src: m.file, cap: m.title, cap_ar: m.title_ar }));
+  MINDMAPS.forEach(m => {
+    const card = el("article", "mm-card" + (m.file ? "" : " mm-pending"));
+    const tags = (lang === "ar" ? m.tags_ar : m.tags) || [];
+    // padding-top reserves the diagram's own aspect ratio so the grid doesn't
+    // reflow as the SVGs stream in.
+    card.innerHTML = `
+      <div class="mm-shot" style="padding-top:${(m.h / m.w * 100).toFixed(2)}%">
+        <span class="mm-tile" aria-hidden="true"><b>${pick(m, "title")}</b><i>${m.file ? "SVG" : T().mm_soon}</i></span>
+        ${m.file ? `<img src="${m.file}" alt="${pick(m, "title")}" loading="lazy" onerror="this.remove()">` : ""}
+      </div>
+      <div class="mm-body">
+        <h3>${pick(m, "title")}</h3>
+        <p>${pick(m, "note")}</p>
+        <div class="mm-foot">
+          <div class="mm-tags">${tags.map(t => `<span>${t}</span>`).join("")}</div>
+          ${m.file ? `<a class="mm-full" href="${m.file}" target="_blank" rel="noopener">${T().mm_full}</a>` : ""}
+        </div>
+      </div>`;
+    if (m.file) {
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      const open = e => {
+        if (e.target.closest(".mm-full")) return;   // the link opens the raw file instead
+        openLightbox(openable, openable.findIndex(o => o.src === m.file));
+      };
+      card.addEventListener("click", open);
+      card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(e); } });
+    }
+    host.append(card);
+  });
+  window.__cursorBind?.();
 }
 
 /* ── Research areas, illustrated (engraved plates) ── */
@@ -723,6 +766,7 @@ async function renderArticles() {
   stashEmbeds();
   OPEN_POST = null;
   read.style.display = "none"; read.innerHTML = ""; grid.style.display = "";
+  const mm = $("#mindmaps-sec"); if (mm) mm.style.display = "";
   grid.innerHTML = "";
   const posts = await loadPosts();
   if (!posts.length) { grid.innerHTML = `<div class="articles-empty">${T().art_empty}</div>`; return; }
@@ -744,6 +788,8 @@ async function openArticle(a) {
   const grid = $("#articlesGrid"), read = $("#articleRead");
   OPEN_POST = a; stashEmbeds();
   grid.style.display = "none"; read.style.display = "";
+  // a reading view should be a reading view — the mind-map band comes back on exit
+  const mm = $("#mindmaps-sec"); if (mm) mm.style.display = "none";
   // A post can ship a translated body as `file_ar`; without one the original is served
   // in both languages (the chrome around it still follows the UI language).
   const file = (lang === "ar" && a.file_ar) || a.file;
@@ -794,7 +840,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=27").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=28").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
@@ -859,7 +905,9 @@ $("#ppClose").addEventListener("click", closePanel); panel.addEventListener("cli
 
 let lbItems = [], lbIdx = 0; const lb = $("#lightbox");
 function openLightbox(items, idx) { lbItems = items; lbIdx = idx; renderLb(); lb.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop(); }
-function renderLb() { const it = lbItems[lbIdx]; $("#lbImg").src = IMG(it.id, "w1600"); $("#lbImg").alt = pick(it, "cap") || pick(it, "name") || ""; $("#lbCap").textContent = pick(it, "cap") || pick(it, "name") || ""; $("#lbCount").textContent = `${lbIdx + 1} / ${lbItems.length}`; }
+// `src` lets a caller put an exact file in the lightbox (the mind-map SVGs);
+// everything else still resolves a responsive webp tier from the item id.
+function renderLb() { const it = lbItems[lbIdx]; $("#lbImg").src = it.src || IMG(it.id, "w1600"); $("#lbImg").alt = pick(it, "cap") || pick(it, "name") || ""; $("#lbCap").textContent = pick(it, "cap") || pick(it, "name") || ""; $("#lbCount").textContent = `${lbIdx + 1} / ${lbItems.length}`; }
 function closeLb() { lb.classList.remove("active"); document.body.style.overflow = ""; lenis?.start(); }
 const step = d => { lbIdx = (lbIdx + d + lbItems.length) % lbItems.length; renderLb(); };
 $(".lb-close").addEventListener("click", closeLb); lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });

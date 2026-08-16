@@ -1026,6 +1026,72 @@ export const CALISTHENICS = {
 /* ── Blog: posts live in posts/*.md, indexed by posts/posts.json.
    Publish a vault note with:  python tools/publish_post.py "<path-to-note.md>"  ── */
 
+/* ── Mind maps — the diagrams I draw to think (Blog page) ──
+   `file` is a path under site/ and is what makes a card openable. Leave it null
+   while the artwork is still a .drawio in the vault: the card then renders a
+   typographic tile and says the diagram is not published yet, rather than
+   shipping a broken image. `src` is the vault original, kept as provenance —
+   those files are NOT in this repo (they live in
+   G:\My Drive\03 Resources\Personal & Important\Portfolio\).
+   `w`/`h` are the intrinsic aspect ratio, so a card reserves the right space
+   before the SVG loads and the grid does not jump. */
+export const MINDMAPS = [
+  { id: "robotic-cognitive-stack", file: "img/mindmaps/robotic-cognitive-stack.svg", w: 1740, h: 960,
+    title: "The Robotic Cognitive Stack", title_ar: "المنظومة الإدراكية للروبوت",
+    note: "Perception ascending on the left, decision and control descending on the right, meeting at a shared world model — with a supervisor across the top and three timing bands from 0.1 Hz deliberation down to 1 kHz reflexes.",
+    note_ar: "إدراكٌ يصعد على اليسار، وقرارٌ وتحكّمٌ ينزلان على اليمين، يلتقيان عند نموذج عالمٍ مشترك — ومشرفٌ يعلوهما، وثلاثة نطاقات زمنية من 0.1 هرتز للتداول إلى 1 كيلوهرتز للانعكاسات.",
+    tags: ["architecture", "autonomy"], tags_ar: ["معمارية", "استقلالية"],
+    src: "robotics_architecture_enhanced.drawio" },
+  { id: "kalman-filter", file: null, w: 1600, h: 900,
+    title: "Kalman Filter, end to end", title_ar: "مرشّح كالمان من طرفٍ إلى طرف",
+    note: "The whole loop on one page — predict, measure, compute the gain, update, repeat — with every symbol defined underneath. The diagram I wish I had been handed the first time.",
+    note_ar: "الحلقة كاملةً في صفحة — تنبّأ، قِس، احسب الكسب، حدّث، وأعِد — مع تعريف كل رمز أسفلها. المخطّط الذي تمنّيت لو أُعطيته أول مرة.",
+    tags: ["estimation", "math"], tags_ar: ["تقدير", "رياضيات"],
+    src: "kalman_filter_diagram_updated.drawio" },
+  { id: "extended-kalman-filter", file: null, w: 1600, h: 900,
+    title: "Extended Kalman Filter", title_ar: "مرشّح كالمان الممتد",
+    note: "The same skeleton with the non-linear models dropped in, and the two Jacobians that pay for them made explicit.",
+    note_ar: "الهيكل ذاته بنماذج غير خطية، مع إظهار المصفوفتين اليعقوبيتين اللتين هما ثمن ذلك.",
+    tags: ["estimation", "math"], tags_ar: ["تقدير", "رياضيات"],
+    src: "extended_kalman_filter_diagram.drawio" },
+  { id: "unscented-kalman-filter", file: null, w: 1600, h: 1140,
+    title: "Unscented Kalman Filter", title_ar: "مرشّح كالمان عديم الرائحة",
+    note: "Sigma points instead of Jacobians — the sampling scheme, the weights, and where the cross-covariance comes from.",
+    note_ar: "نقاط سيغما بدل اليعاقيب — مخطّط الاعتيان والأوزان ومن أين يأتي التغاير المتقاطع.",
+    tags: ["estimation", "math"], tags_ar: ["تقدير", "رياضيات"],
+    src: "unscented_kalman_filter_diagram.drawio" },
+  { id: "gps-denied-taxonomy", file: null, w: 2000, h: 1125,
+    title: "Outdoor GPS-denied localization, mapped", title_ar: "خريطة التموضع خارجيًا دون GPS",
+    note: "The field split into absolute and relative localization, then into what each family actually does. The frame behind the survey work.",
+    note_ar: "تقسيم المجال إلى تموضعٍ مطلق ونسبي، ثم إلى ما تفعله كل عائلة فعلًا. الإطار الذي يقف خلف المسح.",
+    tags: ["survey", "GPS-denied"], tags_ar: ["مسح", "دون GPS"] },
+  { id: "detect-track-predict", file: null, w: 1280, h: 400,
+    title: "Detect, track, predict", title_ar: "اكشف، تتبّع، تنبّأ",
+    note: "The interception pipeline: drone detection at 15 and 40 Hz, a 100 Hz multi-target Kalman filter, then a bank of trajectory models with a selector picking the best one.",
+    note_ar: "مسار الاعتراض: كشف الطائرات عند 15 و40 هرتز، ومرشّح كالمان متعدد الأهداف عند 100 هرتز، ثم مجموعة نماذج مسار يختار بينها مُنتقٍ.",
+    tags: ["pipeline", "UAV"], tags_ar: ["مسار عمل", "طائرات"] },
+  { id: "trajectory-dataset", file: null, w: 1280, h: 726,
+    title: "How the trajectory dataset is made", title_ar: "كيف يُصنع مجموعة بيانات المسارات",
+    note: "Gazebo and PX4 flying randomised trajectories into CSV, then resampling, statistics, and the sequencing that turns them into input/output training pairs.",
+    note_ar: "Gazebo وPX4 يطيران مساراتٍ عشوائية إلى CSV، ثم إعادة اعتيان وإحصاءات وتسلسلٌ يحوّلها إلى أزواج تدريب.",
+    tags: ["dataset", "simulation"], tags_ar: ["بيانات", "محاكاة"] },
+  { id: "smart-track", file: null, w: 2000, h: 1900,
+    title: "SMART-TRACK", title_ar: "SMART-TRACK",
+    note: "Fusing a 3D LiDAR point cloud with 2D detections — filtering, projection to a depth map, selective processing inside the bounding box, and a Kalman filter that keeps going when the measurement drops out.",
+    note_ar: "دمج سحابة نقاط ليدار ثلاثية الأبعاد مع كشوفات ثنائية — ترشيح وإسقاط إلى خريطة عمق ومعالجة انتقائية داخل الصندوق، ومرشّح كالمان يواصل حين ينقطع القياس.",
+    tags: ["fusion", "LiDAR"], tags_ar: ["دمج", "ليدار"] },
+  { id: "interception-fsm", file: null, w: 1690, h: 700,
+    title: "The interception mission, as a state machine", title_ar: "مهمّة الاعتراض كآلة حالات",
+    note: "Idle, surveillance, pursuit, attack — and, more importantly, every transition back out of them.",
+    note_ar: "سكون، ومراقبة، ومطاردة، وهجوم — والأهم: كل انتقالٍ يعود منها.",
+    tags: ["autonomy", "mission"], tags_ar: ["استقلالية", "مهمّة"] },
+  { id: "rl-architecture", file: null, w: 1540, h: 830,
+    title: "An RL training stack that stays reproducible", title_ar: "منظومة تدريب معزّز قابلة لإعادة الإنتاج",
+    note: "Where the config ends and the environment begins — agent, algorithm, training loop, checkpointing, evaluation, and the arrows that say which artefact crosses which boundary.",
+    note_ar: "أين تنتهي الإعدادات وتبدأ البيئة — الوكيل والخوارزمية وحلقة التدريب والحفظ والتقييم، والأسهم التي تبيّن أي ناتجٍ يعبر أي حد.",
+    tags: ["RL", "tooling"], tags_ar: ["تعلّم معزّز", "أدوات"] },
+];
+
 /* ── Interactive interests gallery (page #gallery) ──
    SIX ways (v10). Each cat.icon → img/gal/<icon>.webp (generated engraved icons). */
 export const GALLERY = {
@@ -1230,6 +1296,9 @@ export const I18N = {
     col_type: "Type", col_rank: "Rank", col_links: "Links", col_contrib: "Contribution", col_project: "Project page", pubdb_alltype: "All types", pub_copy: "Copy BibTeX", pub_copied: "Copied ✓", pub_project: "Project ↗", pub_page: "Visit ↗",
     role_first: "1st author", role_equal: "Equal contributor", role_co: "Co-author",
     tab_articles: "Blog", art_eb: "Blog", art_title: "Notes & blog posts.", art_lead: "A personal blog.",
+    mm_eb: "Mind maps", mm_title: "Diagrams I draw to think.",
+    mm_lead: "Before a system exists it is a drawing. These are the ones I keep going back to — redrawn until the picture stopped arguing with me.",
+    mm_open: "Open diagram", mm_full: "Full size ↗", mm_soon: "Not published yet", mm_from: "from",
     art_empty: "No articles yet — coming soon.", art_min: "min read", art_back: "← All articles",
     st_published: "Published", st_accepted: "Accepted", st_review: "Under review", st_progress: "In progress",
     beyond_kicker: "Off the clock", beyond_title: "Beyond the lab.", beyond_lead: "The same discipline that builds robots — pointed at a mountain and a pull-up bar.",
@@ -1322,6 +1391,9 @@ export const I18N = {
     col_type: "النوع", col_rank: "التصنيف", col_links: "روابط", col_contrib: "المساهمة", col_project: "صفحة المشروع", pubdb_alltype: "كل الأنواع", pub_copy: "انسخ BibTeX", pub_copied: "تم النسخ ✓", pub_project: "المشروع ↗", pub_page: "زيارة ↗",
     role_first: "مؤلف أول", role_equal: "مساهم مكافئ", role_co: "مؤلف مشارك",
     tab_articles: "المدوّنة", art_eb: "المدوّنة", art_title: "ملاحظات ومنشورات.", art_lead: "مدونة شخصية.",
+    mm_eb: "خرائط ذهنية", mm_title: "مخطّطاتٌ أرسمها لأفكّر.",
+    mm_lead: "قبل أن يوجد أي نظام يكون رسمًا. هذه ما أعود إليه دائمًا — أعدتُ رسمها حتى كفّت الصورة عن مجادلتي.",
+    mm_open: "افتح المخطّط", mm_full: "بالحجم الكامل ↗", mm_soon: "لم يُنشر بعد", mm_from: "من",
     art_empty: "لا مقالات بعد — قريبًا.", art_min: "دقيقة قراءة", art_back: "← كل المقالات",
     st_published: "منشور", st_accepted: "مقبول", st_review: "قيد المراجعة", st_progress: "قيد العمل",
     beyond_kicker: "خارج الدوام", beyond_title: "خارج المختبر.", beyond_lead: "الانضباط نفسه الذي يبني الروبوتات — موجّهًا نحو جبلٍ وعقلة.",

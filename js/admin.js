@@ -14,7 +14,7 @@
    signed-in session whose email = OWNER can write (see admin-schema.sql).
    ═══════════════════════════════════════════════════════════════════ */
 
-import * as DATA from "./data.js?v=27";
+import * as DATA from "./data.js?v=28";
 
 const SB_URL = "https://pvconwkeshzoovchvzqm.supabase.co";
 const SB_KEY = "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ";
@@ -26,7 +26,7 @@ const TABLE = "portfolio_content";
 const KEYS = ["PROFILE", "STATS", "JOURNEY", "RESEARCH_MAP", "RESEARCH_PLATES",
   "PROJECTS", "PAPERS", "PUBS", "TAXONOMY", "ROBOTS", "PRINTS", "PATENTS",
   "SKILLS", "REPOS", "ORGS", "TEACHING", "QUALS", "WEBWORK", "GALLERY",
-  "ARCH", "CALISTHENICS", "I18N"];
+  "ARCH", "MINDMAPS", "CALISTHENICS", "I18N"];
 
 // The visible site copy — hero, section titles, about, leads — all lives as
 // I18N keys (rendered via [data-i18n]). Editing raw JSON to find `hero_l1` is
@@ -66,7 +66,9 @@ const TEXT_GROUPS = [
     ["quals_kicker", "Eyebrow"], ["quals_title", "Title"], ["quals_lead", "Lead"],
     ["q_edu", "Education heading"], ["q_certs", "Certifications heading"],
     ["q_programs", "Programs heading"], ["q_awards", "Awards heading"]]],
-  ["Blog page", [["art_eb", "Eyebrow"], ["art_title", "Title"], ["art_lead", "Lead"]]],
+  ["Blog page", [
+    ["art_eb", "Eyebrow"], ["art_title", "Title"], ["art_lead", "Lead"],
+    ["mm_eb", "Mind-maps eyebrow"], ["mm_title", "Mind-maps title"], ["mm_lead", "Mind-maps lead"]]],
   ["Navigation & buttons", [
     ["nav_about", "Nav: About"], ["nav_research", "Nav: Research"], ["nav_projects", "Nav: Projects"],
     ["nav_gallery", "Nav: Gallery"], ["nav_cta", "Nav: contact button"], ["lang_btn", "Language toggle label"]]],

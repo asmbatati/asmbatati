@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 10 1740 960" preserveAspectRatio="xMidYMid meet" role="img"
+     aria-labelledby="rcs-title rcs-desc" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <title id="rcs-title">The Robotic Cognitive Stack</title>
+  <desc id="rcs-desc">A closed-loop autonomous-robot architecture. A perception pipeline ascends on the left from sensors through state estimation, spatial perception and semantic perception. A decision-and-control column descends on the right from task planning through motion planning to real-time control and the actuators. Both columns exchange data with a shared world model at the centre. A supervisory and monitoring system on the right oversees the three decision layers. Everything is grouped into three timing bands: 0.1 to 10 hertz deliberative, 10 to 50 hertz reactive, and 100 hertz to 1 kilohertz reflex.</desc>
+
+  <defs>
+    <marker id="a-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#F5A623"/></marker>
+    <marker id="a-amber"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#E65100"/></marker>
+    <marker id="a-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6A1B9A"/></marker>
+    <marker id="a-red"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C62828"/></marker>
+    <marker id="a-emerg"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#D32F2F"/></marker>
+    <marker id="a-prop"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9C27B0"/></marker>
+    <marker id="a-prior"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#7B1FA2"/></marker>
+    <marker id="a-wm"     viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#F57F17"/></marker>
+    <marker id="a-sup"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3F51B5"/></marker>
+    <filter id="sh" x="-8%" y="-8%" width="120%" height="125%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1a3d3d" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+
+  <rect x="10" y="10" width="1740" height="960" fill="#FCFBF7"/>
+
+  <!-- ══ title ══ -->
+  <text x="880" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#16352A"
+        font-family="Fraunces, Georgia, serif">The Robotic Cognitive Stack</text>
+
+  <!-- ══ legend ══ -->
+  <rect x="150" y="30" width="400" height="30" rx="8" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="2"/>
+  <line x1="160" y1="45" x2="188" y2="45" stroke="#424242" stroke-width="2.5"/>
+  <text x="194" y="49" font-size="11" fill="#424242">Standard flow</text>
+  <line x1="290" y1="45" x2="318" y2="45" stroke="#424242" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <text x="324" y="49" font-size="11" fill="#424242">Feedback / reactive</text>
+  <line x1="438" y1="45" x2="462" y2="45" stroke="#F57F17" stroke-width="2.5" marker-start="url(#a-wm)" marker-end="url(#a-wm)"/>
+  <text x="470" y="49" font-size="11" fill="#424242">Shared data</text>
+
+  <!-- ══ column headings ══ -->
+  <text x="330"  y="108" text-anchor="middle" font-size="20" font-weight="700" fill="#1976D2">Perception Pipeline</text>
+  <text x="1070" y="108" text-anchor="middle" font-size="20" font-weight="700" fill="#2E7D32">Decision &amp; Control</text>
+
+  <!-- ══ timing bands (right rail) ══ -->
+  <rect x="1280" y="190" width="100" height="50" rx="8" fill="#F3E5F5"/>
+  <text x="1330" y="209" text-anchor="middle" font-size="12" font-weight="700" fill="#6A1B9A">0.1–10 Hz</text>
+  <text x="1330" y="226" text-anchor="middle" font-size="12" font-weight="700" fill="#6A1B9A">(~100 ms–10 s)</text>
+  <rect x="1280" y="370" width="100" height="50" rx="8" fill="#FFF3E0"/>
+  <text x="1330" y="389" text-anchor="middle" font-size="12" font-weight="700" fill="#E65100">10–50 Hz</text>
+  <text x="1330" y="406" text-anchor="middle" font-size="12" font-weight="700" fill="#E65100">(~20–100 ms)</text>
+  <rect x="1280" y="550" width="100" height="50" rx="8" fill="#FFEBEE"/>
+  <text x="1330" y="569" text-anchor="middle" font-size="12" font-weight="700" fill="#C62828">100 Hz–1 kHz</text>
+  <text x="1330" y="586" text-anchor="middle" font-size="12" font-weight="700" fill="#C62828">(~1–10 ms)</text>
+
+  <!-- ══ layer labels (left rail) ══ -->
+  <text x="80" y="742" text-anchor="middle" font-size="20" font-weight="700" fill="#5A5A5A">Hardware</text>
+  <text x="80" y="766" text-anchor="middle" font-size="20" font-weight="700" fill="#5A5A5A">Layer</text>
+
+  <!-- ══════ EDGES (drawn under the boxes) ══════ -->
+
+  <!-- shared world-model exchange -->
+  <g stroke="#F57F17" stroke-width="2.5" fill="none" marker-start="url(#a-wm)" marker-end="url(#a-wm)">
+    <path d="M460 245 H500 V355 H520"/>
+    <path d="M460 425 H520"/>
+    <path d="M940 245 H900 V355 H860"/>
+    <path d="M940 425 H860"/>
+  </g>
+
+  <!-- supervisory links -->
+  <g stroke="#3F51B5" stroke-width="2" fill="none" stroke-dasharray="7 6" marker-start="url(#a-sup)" marker-end="url(#a-sup)">
+    <path d="M1490 425 H1440 V270 H1200"/>
+    <path d="M1490 445 H1200"/>
+    <path d="M1490 465 H1440 V630 H1200"/>
+  </g>
+
+  <!-- perception, ascending -->
+  <path d="M330 720 V650" stroke="#F5A623" stroke-width="3" fill="none" marker-end="url(#a-orange)"/>
+  <path d="M330 560 V470" stroke="#E65100" stroke-width="3" fill="none" marker-end="url(#a-amber)"/>
+  <path d="M330 380 V290" stroke="#6A1B9A" stroke-width="3" fill="none" marker-end="url(#a-purple)"/>
+
+  <!-- decision, descending -->
+  <path d="M1070 290 V380" stroke="#6A1B9A" stroke-width="3" fill="none" marker-end="url(#a-purple)"/>
+  <path d="M1070 470 V560" stroke="#E65100" stroke-width="3" fill="none" marker-end="url(#a-amber)"/>
+  <path d="M1070 650 V720" stroke="#C62828" stroke-width="3" fill="none" marker-end="url(#a-red)"/>
+
+  <!-- the world loop -->
+  <path d="M1070 800 V870" stroke="#F5A623" stroke-width="3" fill="none" marker-end="url(#a-orange)"/>
+  <path d="M330 870 V800" stroke="#F5A623" stroke-width="3" fill="none" marker-end="url(#a-orange)"/>
+
+  <!-- proprioceptive feedback -->
+  <path d="M1005 720 V680 H700 V605 H460" stroke="#9C27B0" stroke-width="3" fill="none"
+        stroke-dasharray="8 8" marker-end="url(#a-prop)"/>
+
+  <!-- emergency reflex path: spatial perception straight to control -->
+  <path d="M460 448 H485 V590 H940" stroke="#D32F2F" stroke-width="4" fill="none"
+        stroke-dasharray="9 7" marker-end="url(#a-emerg)"/>
+
+  <!-- top-down priors -->
+  <path d="M200 245 H170 V425 H200" stroke="#7B1FA2" stroke-width="2.5" fill="none"
+        stroke-dasharray="4 4" marker-end="url(#a-prior)"/>
+  <path d="M200 605 H145 V425 H200" stroke="#7B1FA2" stroke-width="2.5" fill="none"
+        stroke-dasharray="4 4" marker-end="url(#a-prior)"/>
+
+  <!-- ══════ NODES ══════ -->
+
+  <!-- deliberative band -->
+  <g filter="url(#sh)">
+    <rect x="200" y="200" width="260" height="90" rx="8" fill="#E1BEE7" stroke="#6A1B9A" stroke-width="2"/>
+    <rect x="940" y="200" width="260" height="90" rx="8" fill="#E1BEE7" stroke="#6A1B9A" stroke-width="2"/>
+  </g>
+  <text x="330" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="#3A2540">Semantic Perception</text>
+  <text x="330" y="249" text-anchor="middle" font-size="14" font-weight="700" fill="#3A2540">&amp; Scene Understanding</text>
+  <text x="330" y="270" text-anchor="middle" font-size="12" fill="#5B3F6B">(Object Detection, Segmentation)</text>
+  <text x="1070" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="#3A2540">Task Planning</text>
+  <text x="1070" y="249" text-anchor="middle" font-size="14" font-weight="700" fill="#3A2540">&amp; Mission Control</text>
+  <text x="1070" y="270" text-anchor="middle" font-size="12" fill="#5B3F6B">(Behavior Trees, FSM)</text>
+
+  <!-- reactive band -->
+  <g filter="url(#sh)">
+    <rect x="200" y="380" width="260" height="90" rx="8" fill="#FFE0B2" stroke="#E65100" stroke-width="2"/>
+    <rect x="940" y="380" width="260" height="90" rx="8" fill="#FFE0B2" stroke="#E65100" stroke-width="2"/>
+  </g>
+  <text x="330" y="410" text-anchor="middle" font-size="14" font-weight="700" fill="#4A2800">Spatial Perception</text>
+  <text x="330" y="429" text-anchor="middle" font-size="14" font-weight="700" fill="#4A2800">&amp; Mapping</text>
+  <text x="330" y="450" text-anchor="middle" font-size="12" fill="#7A4A12">(SLAM, Point Clouds)</text>
+  <text x="1070" y="410" text-anchor="middle" font-size="14" font-weight="700" fill="#4A2800">Motion Planning</text>
+  <text x="1070" y="429" text-anchor="middle" font-size="14" font-weight="700" fill="#4A2800">&amp; Local Navigation</text>
+  <text x="1070" y="450" text-anchor="middle" font-size="12" fill="#7A4A12">(RRT, DWA, Trajectory Gen)</text>
+
+  <!-- reflex band -->
+  <g filter="url(#sh)">
+    <rect x="200" y="560" width="260" height="90" rx="8" fill="#FFCDD2" stroke="#C62828" stroke-width="2"/>
+    <rect x="940" y="560" width="260" height="90" rx="8" fill="#FFCDD2" stroke="#C62828" stroke-width="2"/>
+  </g>
+  <text x="330" y="590" text-anchor="middle" font-size="14" font-weight="700" fill="#4A1414">State Estimation</text>
+  <text x="330" y="609" text-anchor="middle" font-size="14" font-weight="700" fill="#4A1414">&amp; Sensor Fusion</text>
+  <text x="330" y="630" text-anchor="middle" font-size="12" fill="#7A2A2A">(Kalman Filter, EKF)</text>
+  <text x="1070" y="598" text-anchor="middle" font-size="14" font-weight="700" fill="#4A1414">Real-time Control</text>
+  <text x="1070" y="622" text-anchor="middle" font-size="12" fill="#7A2A2A">(PID, MPC, Torque Control)</text>
+
+  <!-- shared world model -->
+  <g filter="url(#sh)">
+    <rect x="520" y="315" width="340" height="220" rx="8" fill="#FFFDE7" stroke="#F57F17" stroke-width="3"/>
+  </g>
+  <text x="530" y="342" font-size="15" font-weight="700" fill="#5A3E00">Shared World Model</text>
+  <text x="530" y="362" font-size="13" fill="#7A5A18">(Semantic + Geometric Map)</text>
+  <text x="530" y="399" font-size="13" fill="#4A3A10">• Object poses &amp; states</text>
+  <text x="530" y="423" font-size="13" fill="#4A3A10">• Occupancy grid</text>
+  <text x="530" y="447" font-size="13" fill="#4A3A10">• Robot state</text>
+  <text x="530" y="471" font-size="13" fill="#4A3A10">• Dynamic obstacles</text>
+  <text x="530" y="495" font-size="13" fill="#4A3A10">• Goal locations</text>
+
+  <!-- supervisor -->
+  <g filter="url(#sh)">
+    <rect x="1490" y="315" width="240" height="220" rx="8" fill="#E8EAF6" stroke="#3F51B5" stroke-width="3" stroke-dasharray="8 8"/>
+  </g>
+  <text x="1500" y="342" font-size="15" font-weight="700" fill="#232E63">Supervisory &amp;</text>
+  <text x="1500" y="362" font-size="15" font-weight="700" fill="#232E63">Monitoring System</text>
+  <text x="1500" y="399" font-size="13" fill="#33406E">• Fault detection</text>
+  <text x="1500" y="423" font-size="13" fill="#33406E">• Plan validation</text>
+  <text x="1500" y="447" font-size="13" fill="#33406E">• Recovery behaviors</text>
+  <text x="1500" y="471" font-size="13" fill="#33406E">• Safety constraints</text>
+  <text x="1500" y="495" font-size="13" fill="#33406E">• Performance metrics</text>
+
+  <!-- hardware -->
+  <g filter="url(#sh)">
+    <rect x="200" y="720" width="260" height="80" rx="8" fill="#FFF4E6" stroke="#F5A623" stroke-width="3"/>
+    <rect x="940" y="720" width="260" height="80" rx="8" fill="#FFF4E6" stroke="#F5A623" stroke-width="3"/>
+  </g>
+  <text x="330" y="754" text-anchor="middle" font-size="16" font-weight="700" fill="#4A3510">Sensors</text>
+  <text x="330" y="776" text-anchor="middle" font-size="12" fill="#7A5A20">(Cameras, LiDAR, IMU, Encoders)</text>
+  <text x="1070" y="754" text-anchor="middle" font-size="16" font-weight="700" fill="#4A3510">Actuators</text>
+  <text x="1070" y="776" text-anchor="middle" font-size="12" fill="#7A5A20">(Motors, Grippers)</text>
+
+  <!-- environment -->
+  <g filter="url(#sh)">
+    <rect x="150" y="870" width="1100" height="80" rx="8" fill="#2C5F5F" stroke="#1a3d3d" stroke-width="2"/>
+  </g>
+  <text x="700" y="903" text-anchor="middle" font-size="18" font-weight="700" fill="#FFFFFF">Dynamic Environment</text>
+  <text x="700" y="927" text-anchor="middle" font-size="14" fill="#CFE3E0">(Moving obstacles, humans, changing conditions)</text>
+
+  <!-- ══ edge callouts (drawn last, above everything) ══ -->
+  <rect x="720" y="665" width="100" height="50" rx="8" fill="#F3E5F5"/>
+  <text x="770" y="681" text-anchor="middle" font-size="11" font-weight="700" fill="#6A1B9A">Proprioceptive</text>
+  <text x="770" y="695" text-anchor="middle" font-size="11" font-weight="700" fill="#6A1B9A">Feedback</text>
+  <text x="770" y="709" text-anchor="middle" font-size="11" font-weight="700" fill="#6A1B9A">(Encoders, IMU)</text>
+
+  <rect x="495" y="560" width="150" height="60" rx="8" fill="#FFEBEE" stroke="#D32F2F" stroke-width="2"/>
+  <text x="570" y="578" text-anchor="middle" font-size="11" font-weight="700" fill="#D32F2F">EMERGENCY PATH</text>
+  <text x="570" y="594" text-anchor="middle" font-size="11" fill="#D32F2F">Obstacle avoidance</text>
+  <text x="570" y="609" text-anchor="middle" font-size="11" fill="#D32F2F">Collision prevention</text>
+
+  <rect x="102" y="310" width="76" height="40" rx="8" fill="#F3E5F5"/>
+  <text x="140" y="327" text-anchor="middle" font-size="10" font-weight="700" fill="#6A1B9A">Semantic</text>
+  <text x="140" y="341" text-anchor="middle" font-size="10" font-weight="700" fill="#6A1B9A">Priors</text>
+</svg>
