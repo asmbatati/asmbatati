@@ -6,6 +6,15 @@ export const IMG = (slug, w = "w960") => `img/${w}/${slug}.webp`;
 export const PROFILE = {
   name: "Abdulrahman S. Al-Batati",
   name_ar: "عبدالرحمن صالح البطاطي",
+  /* Path to a downloadable CV, relative to site/ (e.g. "cv/Abdulrahman-AlBatati-CV.pdf").
+     The Qualifications page renders its CV block only when this is set, so a missing
+     file can never ship as a dead download link.
+     Still null on 12 Aug 2026: the source PDF at
+     G:\My Drive\03 Resources\Personal & Important\CV\Abdulrahman_AlBatati_CV_2026.pdf
+     is password-protected, so it could not be opened, reviewed for personal data, or
+     copied here. A public CV needs an unprotected copy that has been checked for
+     phone/address/PII first. */
+  cv: null,
   role: "Robotics & Autonomous Intelligent Systems",
   role_ar: "الروبوتات والأنظمة الذكية المستقلة",
   blurb:
@@ -308,17 +317,53 @@ export const REPOS = [
 ];
 
 /* ── GitHub organizations I build under ── */
+/* ── Affiliations ──
+   `tie` is my actual relationship, stated plainly — employment, study, membership or
+   interest — because "affiliation" flattens very different things. `handle`/`url` are
+   for GitHub organizations only; the last two are not on GitHub and have neither. */
 export const ORGS = [
   { name: "RIOTU-Lab", handle: "riotu-lab", role: "Robotics & IoT Lab · Prince Sultan University",
     role_ar: "معمل الروبوتات وإنترنت الأشياء · جامعة الأمير سلطان",
+    tie: "Full-time researcher", tie_ar: "باحث بدوام كامل",
     desc: "Where my UAV autonomy, GPS-denied localization and multi-robot research ships.",
     desc_ar: "حيث تُنشر أبحاثي في استقلالية الطائرات والتموضع دون GPS والروبوتات المتعددة.",
-    url: "https://github.com/riotu-lab", site: "https://riotu-lab.github.io" },
+    url: "https://github.com/riotu-lab", site: "https://ric.psu.edu.sa/riotu/" },
+  { name: "KFUPM", handle: null, role: "King Fahd University of Petroleum & Minerals",
+    role_ar: "جامعة الملك فهد للبترول والمعادن",
+    tie: "Ph.D. student", tie_ar: "طالب دكتوراه",
+    desc: "Mechanical Engineering (Robotics) — robotic systems modeling, under Dr. Ammar A. Alzaydi.",
+    desc_ar: "الهندسة الميكانيكية (الروبوتات) — نمذجة الأنظمة الروبوتية، بإشراف د. عمّار الزيدي.",
+    url: null, site: "https://www.kfupm.edu.sa" },
   { name: "NEUROS-X", handle: "neuros-x", role: "Agentic & safety-verified multi-robot systems",
     role_ar: "أنظمة روبوتات متعددة وكيلة ومُتحقَّقة السلامة",
+    tie: "GitHub organization", tie_ar: "منظمة على GitHub",
     desc: "The program behind SAFEMRS — pre-execution safety for LLM-based robot task planning.",
     desc_ar: "البرنامج خلف SAFEMRS — سلامة ما قبل التنفيذ لتخطيط مهام الروبوتات بالنماذج اللغوية.",
-    url: "https://github.com/neuros-x", site: "https://neuros-x.github.io/safemrs/" },
+    url: "https://github.com/neuros-x", site: "https://neuros-x.github.io/" },
+  { name: "Arab-Meet", handle: "arab-meet", role: "Arabic robotics & AI community",
+    role_ar: "مجتمع عربي للروبوتات والذكاء الاصطناعي",
+    tie: "GitHub organization", tie_ar: "منظمة على GitHub",
+    desc: "Where DelibFlow and other community robotics work lives.",
+    desc_ar: "حيث يعيش DelibFlow وغيره من أعمال الروبوتات المجتمعية.",
+    url: "https://github.com/arab-meet", site: null },
+  { name: "gen3d-research", handle: "gen3d-research", role: "Generative 3D for robot manipulation",
+    role_ar: "التوليد ثلاثي الأبعاد للمناولة الروبوتية",
+    tie: "GitHub organization", tie_ar: "منظمة على GitHub",
+    desc: "The dataset-free 3D object generation work behind the ICARM 2026 submission.",
+    desc_ar: "عمل توليد الأجسام ثلاثية الأبعاد دون مجموعات بيانات، خلف الورقة المقدَّمة إلى ICARM 2026.",
+    url: "https://github.com/gen3d-research", site: "https://gen3d-research.github.io/3d_generator/" },
+  { name: "Al-Khwarizmi Fellowship", handle: null, role: "Fellowship for Saudi researchers & builders",
+    role_ar: "زمالة للباحثين والصنّاع السعوديين",
+    tie: "Committee member", tie_ar: "عضو لجنة",
+    desc: "On the committee — selecting and supporting the next cohort.",
+    desc_ar: "ضمن اللجنة — اختيار الدفعة القادمة ودعمها.",
+    url: null, site: "https://kwfellow.com/" },
+  { name: "Saudi Calisthenics Group", handle: null, role: "Bodyweight training community",
+    role_ar: "مجتمع تدريب بوزن الجسم",
+    tie: "Hobby & life interest", tie_ar: "هواية واهتمام شخصي",
+    desc: "Outside the lab — discipline that carries back into the work.",
+    desc_ar: "خارج المعمل — انضباط ينعكس على العمل.",
+    url: null, site: null },
 ];
 
 /* ── Teaching: courses + workshops I've taught (Teaching page) ── */
@@ -1066,7 +1111,7 @@ export const I18N = {
     teach_lead: "What I taught.",
     teach_courses: "University courses", teach_workshops: "Workshops & bootcamps",
     eb_orgs: "Organizations", t_orgs: "Where I build.", orgs_lead: "The labs and programs my research ships under.",
-    org_follow: "View organization ↗", org_site: "Project site ↗",
+    org_follow: "View organization ↗", org_site: "Site ↗",
     gp_photo: "Photo", gp_3d: "3D model",
     gp_trophy_hint: "Real STLs I designed and printed — use ‹ › to step through the collection.",
     gp_theory: "The theory behind it", sim_stack: "My ROS 2 sim + viz stack", gp_prints_h: "And in the real world",
@@ -1074,6 +1119,7 @@ export const I18N = {
     tab_quals: "Qualifications",
     quals_kicker: "Qualifications", quals_title: "My degrees, certifications & training.",
     quals_lead: "Two academic degrees with honors, engineering professional accreditation, and personal education.",
+    q_cv: "Curriculum vitae", q_cv_get: "Download CV ↓",
     q_edu: "Education", q_certs: "Professional certifications", q_programs: "Specializations & programs",
     q_awards: "Awards & honors", q_courses: "courses",
     gp_skills: "Skills", soft_orgs: "Organizations", soft_repos: "Selected repositories", soft_gh: "Everything on GitHub ↗",
@@ -1162,7 +1208,7 @@ export const I18N = {
     teach_lead: "ما قد درّسته.",
     teach_courses: "مقرّرات جامعية", teach_workshops: "ورش عمل",
     eb_orgs: "المنظّمات", t_orgs: "أين أبني.", orgs_lead: "المعامل والبرامج التي تُنشر تحتها أبحاثي.",
-    org_follow: "زيارة المنظّمة ↗", org_site: "موقع المشروع ↗",
+    org_follow: "زيارة المنظّمة ↗", org_site: "الموقع ↗",
     gp_photo: "صورة", gp_3d: "مجسّم ثلاثي",
     gp_trophy_hint: "مجسّمات STL حقيقية صمّمتها وطبعتها — استخدم ‹ › للتنقّل في المجموعة.",
     gp_theory: "النظرية خلفه", sim_stack: "منظومة المحاكاة والعرض بـROS 2", gp_prints_h: "وفي الواقع",
@@ -1170,6 +1216,7 @@ export const I18N = {
     tab_quals: "المؤهلات",
     quals_kicker: "المؤهلات", quals_title: "شهاداتي ودوراتي.",
     quals_lead: "درجتان جامعية بمرتبة الشرف، واعتماد مهني للهندسة، وبرامج للتعلم الذاتي.",
+    q_cv: "السيرة الذاتية", q_cv_get: "تحميل السيرة الذاتية ↓",
     q_edu: "التعليم", q_certs: "اعتمادات مهنية", q_programs: "تخصّصات وبرامج",
     q_awards: "جوائز وتكريم", q_courses: "مقرّرًا",
     gp_skills: "مهارات", soft_orgs: "المنظّمات", soft_repos: "مستودعات مختارة", soft_gh: "كل شيء على GitHub ↗",

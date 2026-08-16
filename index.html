@@ -10,7 +10,7 @@
   <!-- ?v must be bumped with the JS modules: without it a returning visitor keeps a
        cached stylesheet while the new JS renders new markup, so fresh sections render
        completely unstyled. Missing until 12 Aug 2026. -->
-  <link rel="stylesheet" href="css/main.css?v=22">
+  <link rel="stylesheet" href="css/main.css?v=23">
   <link rel="icon" type="image/png" sizes="64x64" href="img/favicon.png">
   <link rel="icon" type="image/png" sizes="256x256" href="img/logo-mark.png">
   <link rel="apple-touch-icon" href="img/logo-mark.png">
@@ -245,9 +245,10 @@
   <!-- ════════ PAGE: GALLERY (interactive interests) ════════ -->
   <div class="page" id="page-gallery">
     <section class="section gp-section">
+      <!-- The "Six ways I build." heading was removed 12 Aug 2026: the exploded
+           emblem cards land on top of it. The eyebrow stays as the page label. -->
       <div class="gp-head">
         <span class="eyebrow" data-i18n="hub_kicker">Interests &amp; craft</span>
-        <h1 class="section-title" data-i18n="hub_title">Six ways I build.</h1>
       </div>
       <div class="hub-stage" id="hubStage">
         <button class="hub-emblem" id="hubEmblem" aria-label="Open the interests">
@@ -308,6 +309,9 @@
       <div class="reveal"><span class="eyebrow" data-i18n="quals_kicker">Qualifications</span><h1 class="section-title" data-i18n="quals_title">Degrees, certifications &amp; training.</h1>
         <p class="section-lead" data-i18n="quals_lead"></p></div>
       <div class="teach-stats" id="qStats"></div>
+      <!-- CV block — rendered by renderQuals only when PROFILE.cv is set, so a missing
+           file can never ship as a dead download link. -->
+      <div id="qCv"></div>
       <h3 class="teach-h reveal" data-i18n="q_edu">Education</h3>
       <div class="teach-list" id="qEdu"></div>
       <h3 class="teach-h reveal" data-i18n="q_certs">Professional certifications</h3>
@@ -348,6 +352,6 @@
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
-  <script type="module" src="js/main.js?v=22"></script>
+  <script type="module" src="js/main.js?v=23"></script>
 </body>
 </html>

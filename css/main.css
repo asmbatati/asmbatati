@@ -638,7 +638,29 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .org:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(22,53,42,0.1); }
 .org-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .org-name { font-family: var(--disp); font-weight: 700; font-size: 1.25rem; color: var(--green-0); }
+/* ── CV block (Qualifications) ── */
+.q-cv { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; flex-wrap: wrap; padding: 1.1rem 1.4rem; margin: 1.6rem 0 .4rem; border-inline-start: 3px solid var(--gold); }
+.q-cv h3 { font-family: var(--disp); font-size: 1.15rem; color: var(--green-0); font-weight: 600; }
+.q-cv-btn { display: inline-block; padding: .62rem 1.35rem; border-radius: 99px; background: var(--green-1); color: var(--snow); font-weight: 700; font-size: .88rem; transition: background .3s var(--ease), transform .3s var(--ease); }
+.q-cv-btn:hover, .q-cv-btn:focus-visible { background: var(--gold); transform: translateY(-2px); }
+
+/* ── Expandable course lists (Qualifications) ──
+   Native <details>, so keyboard + AT behaviour is free and nothing holds open state. */
+.q-more { margin-top: .7rem; border-top: 1px dashed var(--line); padding-top: .55rem; }
+.q-more > summary { cursor: pointer; list-style: none; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; color: var(--green-2); display: inline-flex; align-items: center; gap: .4rem; }
+.q-more > summary::-webkit-details-marker { display: none; }
+.q-more > summary::before { content: "▸"; font-size: .8em; transition: transform .25s var(--ease); }
+.q-more[open] > summary::before { transform: rotate(90deg); }
+.q-more > summary:hover { color: var(--gold); }
+.q-courses { list-style: none; margin: .6rem 0 .2rem; display: grid; gap: .3rem; }
+.q-courses li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: .86rem; color: var(--mid); padding: .22rem 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
+.q-courses li b { color: var(--green-1); font-weight: 700; font-size: .82rem; flex: none; }
+
 .org-handle { color: var(--gold); font-size: .85rem; }
+/* Non-GitHub affiliations show the relationship where the handle would sit; the ones
+   that DO have a handle show it as a line underneath instead. */
+.org-tie { font-size: .68rem; letter-spacing: .05em; text-transform: uppercase; color: var(--green-2); background: color-mix(in srgb, var(--green-3) 16%, transparent); border: 1px solid color-mix(in srgb, var(--green-3) 38%, transparent); border-radius: 99px; padding: 2px 9px; }
+.org-tie-line { font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; color: var(--dim); margin-top: .15rem; }
 .org-role { color: var(--green-2); font-weight: 600; font-size: .92rem; margin: .3rem 0 .6rem; }
 .org-desc { color: var(--mid); font-size: .92rem; }
 .org-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
@@ -822,7 +844,10 @@ html[dir="rtl"] .ap-card:hover { border-right-color: var(--gold); }
    is the point of the block — it gets a real button instead of a text link. */
 .web-standalone { border: 1px solid var(--line); border-radius: 18px; padding: clamp(1.4rem, 3vw, 2.4rem); background: linear-gradient(135deg, var(--paper) 0%, var(--paper-2) 55%, color-mix(in srgb, var(--green-3) 22%, var(--paper-2)) 100%); }
 .ws-inner { max-width: 68ch; display: grid; gap: .75rem; justify-items: start; }
-.ws-tag { position: static; background: var(--green-0); }
+/* Must out-specify `.web-tag` (declared later in this file, position:absolute). A bare
+   `.ws-tag` loses that tie, and since .web-standalone isn't positioned the label escapes
+   the card and hangs loose on the page. */
+.web-standalone .ws-tag { position: static; background: var(--green-0); }
 .web-standalone h3 { font-family: var(--disp); font-size: clamp(1.4rem, 2.4vw, 1.9rem); color: var(--green-0); font-weight: 600; }
 .web-standalone p { color: var(--mid); font-size: .96rem; line-height: 1.6; }
 .ws-cta { display: inline-block; margin-top: .5rem; padding: .7rem 1.5rem; border-radius: 99px; background: var(--green-1); color: var(--snow); font-weight: 700; font-size: .92rem; transition: background .3s var(--ease), transform .3s var(--ease); }

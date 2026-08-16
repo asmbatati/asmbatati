@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=22";
-import { renderGallery } from "./gallery.js?v=22";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, I18N, IMG } from "./data.js?v=23";
+import { renderGallery } from "./gallery.js?v=23";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -206,19 +206,38 @@ function renderTeaching() {
 function renderQuals() {
   const stats = $("#qStats");
   if (stats) { stats.innerHTML = ""; QUALS.stats.forEach(s => stats.append(el("div", "tstat", `<span class="tstat-n">${s.n}</span><span class="tstat-l">${pick(s, "label")}</span>`))); }
+  // Course lists expand on click via native <details> — keyboard and screen-reader
+  // behaviour comes free, and there is no open/closed state to keep in sync on re-render.
+  // A course is either a plain string or { name, grade }.
+  const courseList = list => `<ul class="q-courses">${list.map(c => {
+    const name = typeof c === "string" ? c : pick(c, "name");
+    const grade = typeof c === "string" ? "" : (c.grade || "");
+    return `<li><span>${name}</span>${grade ? `<b>${grade}</b>` : ""}</li>`;
+  }).join("")}</ul>`;
+  const expander = (list, count) => list && list.length
+    ? `<details class="q-more"><summary>${count ?? list.length} ${T().q_courses}</summary>${courseList(list)}</details>` : "";
+
+  // Only render the CV block when a file is actually configured — never a dead link.
+  const cvHost = $("#qCv");
+  if (cvHost) cvHost.innerHTML = PROFILE.cv
+    ? `<div class="q-cv card"><div><h3>${T().q_cv}</h3><p class="teach-org">${PROFILE.name}</p></div>
+         <a class="q-cv-btn magnetic" href="${PROFILE.cv}" download>${T().q_cv_get}</a></div>` : "";
+
   const edu = $("#qEdu");
   if (edu) edu.innerHTML = EDUCATION.map(e => `<article class="teach-card card"><div class="teach-when">${pick(e, "when")}</div>
     <div class="teach-body"><div class="teach-head"><h4>${pick(e, "deg")}</h4></div>
-    <p class="teach-org">${pick(e, "org")}</p>${pick(e, "extra") ? `<p class="teach-note">${pick(e, "extra")}</p>` : ""}</div></article>`).join("");
+    <p class="teach-org">${pick(e, "org")}</p>${pick(e, "extra") ? `<p class="teach-note">${pick(e, "extra")}</p>` : ""}
+    ${expander(e.courses)}</div></article>`).join("");
   const certs = $("#qCerts");
   if (certs) certs.innerHTML = QUALS.certs.map(c => `<article class="card cert">
     <span class="cert-year">${c.year}</span><h4>${c.title}</h4><p class="teach-org">${pick(c, "org")}</p>
-    <div class="teach-tags">${c.skills.map(s => `<span>${s}</span>`).join("")}</div></article>`).join("");
+    <div class="teach-tags">${c.skills.map(s => `<span>${s}</span>`).join("")}</div>
+    ${expander(c.courses)}</article>`).join("");
   const progs = $("#qPrograms");
   if (progs) progs.innerHTML = QUALS.programs.map(p => `<article class="card prog">
     <div class="prog-top"><h4>${p.title}</h4><span class="prog-n">${p.n} ${T().q_courses}</span></div>
     <p class="teach-org">${p.org}</p>
-    <div class="teach-tags">${p.items.map(i => `<span>${i}</span>`).join("")}</div></article>`).join("");
+    ${expander(p.items, p.n)}</article>`).join("");
   const aw = $("#qAwards");
   if (aw) aw.innerHTML = QUALS.awards.map(a => `<div class="award-row card">
     <span class="teach-when">${a.year}</span><div><h4>${pick(a, "title")}</h4><p class="teach-org">${pick(a, "org")}</p></div></div>`).join("");
@@ -229,9 +248,20 @@ function renderOrgs() {
   const og = $("#orgs"); if (!og) return; og.innerHTML = "";
   ORGS.forEach(o => {
     const c = el("article", "card org");
-    c.innerHTML = `<div class="org-top"><span class="org-name">${o.name}</span><span class="org-handle">@${o.handle}</span></div>
+    // Not every affiliation is a GitHub org — the fellowship, KFUPM and the
+    // calisthenics group have no handle and no repo URL. Rendering "@null" and a
+    // dead link is worse than showing nothing, so both are conditional and the
+    // relationship (`tie`) takes the handle's place.
+    const badge = o.handle ? `<span class="org-handle">@${o.handle}</span>`
+                           : `<span class="org-tie">${pick(o, "tie")}</span>`;
+    const links = [
+      o.url ? `<a href="${o.url}" target="_blank" rel="noopener">${T().org_follow}</a>` : "",
+      o.site ? `<a href="${o.site}" target="_blank" rel="noopener">${T().org_site}</a>` : "",
+    ].filter(Boolean).join("");
+    c.innerHTML = `<div class="org-top"><span class="org-name">${o.name}</span>${badge}</div>
+      ${o.handle ? `<p class="org-tie-line">${pick(o, "tie")}</p>` : ""}
       <p class="org-role">${pick(o, "role")}</p><p class="org-desc">${pick(o, "desc")}</p>
-      <div class="org-links"><a href="${o.url}" target="_blank" rel="noopener">${T().org_follow}</a>${o.site ? `<a href="${o.site}" target="_blank" rel="noopener">${T().org_site}</a>` : ""}</div>`;
+      ${links ? `<div class="org-links">${links}</div>` : ""}`;
     og.append(c);
   });
 }
@@ -706,7 +736,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=22").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=23").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
