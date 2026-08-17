@@ -4,10 +4,10 @@
    Projects (filterable showcase + patents + hardware + skills + repos) ·
    interactive interests Gallery · markdown blog · i18n. */
 
-import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
+import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, EVENTS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=32";
-import { renderGallery } from "./gallery.js?v=32";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=33";
+import { renderGallery } from "./gallery.js?v=33";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -332,7 +332,44 @@ function renderShowcase() {
   if (aw) aw.innerHTML = QUALS.awards.map(a =>
     `<article class="gaw-card"><span class="gaw-year">${a.year}</span>
      <b>${pick(a, "title")}</b><p>${pick(a, "org")}</p></article>`).join("");
+  renderEvents();
   syncShowcase();
+}
+
+/* Events, expos and press. Grouped, and inside a group sorted newest first with the
+   entries whose year was never recorded last — those show "year to confirm" rather
+   than a guess, because an invented date on a CV-grade list is worse than a gap. */
+function renderEvents() {
+  const host = $("#galEvents"); if (!host) return;
+  const t = T();
+  const rows = g => EVENTS.items.filter(i => i.g === g)
+    .sort((a, b) => (b.year || 0) - (a.year || 0));
+  host.innerHTML = EVENTS.groups.map(g => {
+    const items = rows(g.id);
+    if (!items.length) return "";
+    return `<section class="ev-group">
+      <header class="ev-head"><h3>${pick(g, "label")}</h3>
+        <span class="ev-n">${items.length} ${t.ev_count}</span>
+        <p>${pick(g, "note")}</p></header>
+      <ol class="ev-list">` + items.map(i => `
+        <li class="ev-item${i.year ? "" : " ev-nodate"}">
+          <span class="ev-year">${i.year || "—"}</span>
+          <div class="ev-body">
+            <b>${pick(i, "title")}</b>
+            <p>${pick(i, "what")}${i.place ? ` · <span class="ev-place">${pick(i, "place")}</span>` : ""}${i.org ? ` · ${pick(i, "org")}` : ""}</p>
+            ${i.year ? "" : `<span class="ev-flag">${t.ev_undated}</span>`}
+          </div>
+        </li>`).join("") + `</ol></section>`;
+  }).join("") + `
+    <section class="ev-group">
+      <header class="ev-head"><h3>${t.ev_press}</h3></header>
+      ${EVENTS.coverage.length
+        ? `<ol class="ev-list">` + EVENTS.coverage.map(c => `
+            <li class="ev-item"><span class="ev-year">${c.year || "—"}</span>
+              <div class="ev-body"><b>${c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${pick(c, "title")}</a>` : pick(c, "title")}</b>
+                <p>${pick(c, "outlet") || ""}</p></div></li>`).join("") + `</ol>`
+        : `<p class="ev-empty">${t.ev_press_soon}</p>`}
+    </section>`;
 }
 
 let openEmblem = null;
@@ -896,7 +933,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=32").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=33").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {

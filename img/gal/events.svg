@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="An engraved emblem of a conference stage: a presentation screen, a lectern and a microphone">
+  <defs>
+    <radialGradient id="eg" cx="50%" cy="40%" r="64%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef4f0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="120" cy="120" r="118" fill="url(#eg)"/>
+  <circle cx="120" cy="120" r="113" fill="none" stroke="#16352a" stroke-opacity=".16" stroke-width="1.2"/>
+  <circle cx="120" cy="120" r="106" fill="none" stroke="#b6803a" stroke-opacity=".55" stroke-width="1.6" stroke-dasharray="2 6" stroke-linecap="round"/>
+
+  <!-- the screen -->
+  <rect x="56" y="52" width="128" height="80" rx="7" fill="#16352a" stroke="#21503d" stroke-width="2"/>
+  <!-- a slide: rising bars + a trend line -->
+  <g fill="#4d8a6a">
+    <rect x="70" y="104" width="13" height="16" rx="2"/>
+    <rect x="89" y="93"  width="13" height="27" rx="2"/>
+    <rect x="108" y="82" width="13" height="38" rx="2"/>
+  </g>
+  <path d="M70 96 L96 84 L118 70 L166 64" fill="none" stroke="#b6803a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="166" cy="64" r="3.6" fill="#b6803a"/>
+  <!-- screen stand -->
+  <path d="M120 132 v10" stroke="#21503d" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- lectern -->
+  <path d="M92 152 h56 l-7 12 h-42 Z" fill="#f2ece1" stroke="#21503d" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M114 164 v22" stroke="#21503d" stroke-width="3" stroke-linecap="round"/>
+  <path d="M126 164 v22" stroke="#21503d" stroke-width="3" stroke-linecap="round"/>
+  <path d="M104 188 h32" stroke="#21503d" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- microphone on a gooseneck -->
+  <path d="M138 152 C150 146 152 138 150 132" fill="none" stroke="#2f6b4f" stroke-width="2.4" stroke-linecap="round"/>
+  <ellipse cx="150" cy="127" rx="5.6" ry="7" fill="#b6803a"/>
+
+  <!-- audience -->
+  <g fill="#4d8a6a" fill-opacity=".55">
+    <circle cx="62" cy="182" r="7"/><circle cx="80" cy="192" r="6"/>
+    <circle cx="178" cy="182" r="7"/><circle cx="160" cy="192" r="6"/>
+  </g>
+</svg>

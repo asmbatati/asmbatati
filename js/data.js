@@ -1107,9 +1107,76 @@ export const MINDMAPS = [
 export const SHOWCASE = [
   { id: "photos", img: "img/gal/photos.svg", label: "Selected photos", label_ar: "صور مختارة",
     tease: "The machines and the printed parts, in the metal", tease_ar: "الآلات والقطع المطبوعة في الواقع" },
+  { id: "events", img: "img/gal/events.svg", label: "Events & coverage", label_ar: "الفعاليات والتغطية",
+    tease: "Conferences presented at, expos represented, and press", tease_ar: "مؤتمراتٌ قدّمت فيها ومعارض مثّلت فيها وتغطية إعلامية" },
   { id: "awards", img: "img/gal/awards.svg", label: "Awards", label_ar: "الجوائز",
     tease: "Competitions won, and the teams I coached", tease_ar: "مسابقاتٌ فُزت بها وفرقٌ دربتها" },
 ];
+
+/* ── Events, expos and press (Gallery page → Events emblem) ──
+   `year: null` means the date was never recorded, NOT that it is undated — those
+   render a neutral dash and are listed at the end of their group. Six entries are
+   waiting on a year; fill them in rather than guessing.
+   `coverage` is press/media mentions — links or clippings, added through the admin
+   panel's media mode or straight into this array. */
+export const EVENTS = {
+  groups: [
+    { id: "presented", label: "Presented", label_ar: "قدّمتُ فيها",
+      note: "Accepted papers, presented in person.", note_ar: "أوراقٌ مقبولة قدّمتها حضوريًا." },
+    { id: "expos", label: "Expos & exhibitions", label_ar: "معارض ومنصّات",
+      note: "Representing the RIOTU lab and Prince Sultan University on the floor.", note_ar: "تمثيلًا لمختبر RIOTU وجامعة الأمير سلطان في أرض المعرض." },
+    { id: "industry", label: "Industry & developer events", label_ar: "فعاليات تقنية وصناعية",
+      note: "Where the tooling gets demonstrated before it reaches a paper.", note_ar: "حيث تُستعرض الأدوات قبل أن تصل إلى بحث." },
+    { id: "service", label: "Recognition & service", label_ar: "تكريم وخدمة",
+      note: "Committees, and the rankings the lab's work landed in.", note_ar: "لجانٌ وتصنيفاتٌ حلّ فيها عمل المختبر." },
+  ],
+  items: [
+    // ── presented ──
+    { g: "presented", year: 2026, title: "ICARM 2026", title_ar: "ICARM 2026",
+      what: "Presented an accepted paper", what_ar: "تقديم ورقة مقبولة", place: "Paris, France", place_ar: "باريس، فرنسا" },
+    { g: "presented", year: 2024, title: "SmartTech 2024", title_ar: "SmartTech 2024",
+      what: "Presented an accepted paper", what_ar: "تقديم ورقة مقبولة", place: "Morocco", place_ar: "المغرب" },
+    { g: "presented", year: null, title: "UVS Conference", title_ar: "مؤتمر UVS",
+      what: "Presented an accepted paper", what_ar: "تقديم ورقة مقبولة", place: "Oman", place_ar: "عُمان" },
+    // ── expos ──
+    { g: "expos", year: 2025, title: "Research Labs Expo", title_ar: "معرض مختبرات البحث",
+      what: "Exhibited the RIOTU lab's work", what_ar: "عرض أعمال مختبر RIOTU" },
+    { g: "expos", year: 2024, title: "Saudi Arabia AI & Drone Exhibition — first edition", title_ar: "المعرض السعودي للذكاء الاصطناعي والطائرات المسيّرة — النسخة الأولى",
+      what: "Exhibited for RIOTU", what_ar: "عرضٌ باسم RIOTU", place: "Saudi Arabia", place_ar: "السعودية" },
+    { g: "expos", year: 2024, title: "LEAP 24", title_ar: "LEAP 24",
+      what: "Represented Prince Sultan University", what_ar: "تمثيل جامعة الأمير سلطان" },
+    { g: "expos", year: 2023, title: "LEAP 23", title_ar: "LEAP 23",
+      what: "Represented Prince Sultan University", what_ar: "تمثيل جامعة الأمير سلطان" },
+    { g: "expos", year: 2023, title: "SmartTech 2023 Conference", title_ar: "مؤتمر SmartTech 2023",
+      what: "Represented Prince Sultan University", what_ar: "تمثيل جامعة الأمير سلطان" },
+    { g: "expos", year: 2022, title: "Saudi International AI & Cloud Tech Expo", title_ar: "المعرض السعودي الدولي للذكاء الاصطناعي وتقنيات الحوسبة السحابية",
+      what: "Exhibited the RIOTU lab's work", what_ar: "عرض أعمال مختبر RIOTU" },
+    { g: "expos", year: null, title: "AI Exhibition", title_ar: "معرض الذكاء الاصطناعي",
+      what: "Represented Prince Sultan University", what_ar: "تمثيل جامعة الأمير سلطان" },
+    { g: "expos", year: null, title: "Education Expo", title_ar: "معرض التعليم",
+      what: "Represented Prince Sultan University", what_ar: "تمثيل جامعة الأمير سلطان" },
+    { g: "expos", year: null, title: "CDMA Conference", title_ar: "مؤتمر CDMA",
+      what: "Represented Prince Sultan University", what_ar: "تمثيل جامعة الأمير سلطان" },
+    // ── industry & developer ──
+    { g: "industry", year: 2024, title: "7th ROS Developers Day", title_ar: "يوم مطوّري ROS السابع",
+      what: "Attended", what_ar: "حضور" },
+    { g: "industry", year: null, title: "6th ROS Developers Day", title_ar: "يوم مطوّري ROS السادس",
+      what: "Attended", what_ar: "حضور" },
+    { g: "industry", year: null, title: "Dassault Systèmes simulation seminar", title_ar: "ندوة المحاكاة من Dassault Systèmes",
+      what: "Attended — the Dassault platform for CAD, CAM and CAE across electromagnetism, thermo-fluids and structural simulation",
+      what_ar: "حضور — منصّة Dassault للتصميم والتصنيع والتحليل، شاملةً الكهرومغناطيسية والموائع الحرارية والتحليل الإنشائي",
+      org: "organized by ATMATA", org_ar: "بتنظيم ATMATA" },
+    // ── recognition & service ──
+    { g: "service", year: 2025, title: "PSU's robotics ranking in EduRank", title_ar: "تصنيف الروبوتات لجامعة الأمير سلطان في EduRank",
+      what: "Research recognition", what_ar: "تقدير بحثي" },
+    { g: "service", year: null, title: "Space Department formation, PSU", title_ar: "تأسيس قسم الفضاء بجامعة الأمير سلطان",
+      what: "Consulting committee member", what_ar: "عضو اللجنة الاستشارية" },
+  ],
+  /* Press and media mentions. Each: { year, outlet, outlet_ar, title, title_ar, url, img }
+     — `url` links out, `img` is an optional clipping. Empty until the coverage is
+     collected; the panel says so rather than pretending the section is missing. */
+  coverage: [],
+};
 
 export const GALLERY = {
   cats: [
@@ -1399,6 +1466,9 @@ export const I18N = {
     sh_eb: "More to see", sh_title: "Two more doors.",
     sh_lead: "One opens on the machines and the printed parts as they actually came out. The other on the competitions.",
     sh_open: "Open", sh_close: "Close",
+    ev_lead: "Conferences I presented accepted papers at, expos where I stood on the floor for the lab, and the press that followed.",
+    ev_press: "Media coverage", ev_press_soon: "Coverage is still being collected — links and clippings land here.",
+    ev_undated: "year to confirm", ev_count: "entries",
     sh_swipe: "Drag the rows, scroll them sideways, or use the arrows. Click any frame to open it full size.",
     gp_drag: "drag ⟲ to spin · it also turns on its own", gp_pick: "Platforms",
     math_zeta: "damping ζ", math_wn: "frequency ωₙ",
@@ -1502,6 +1572,9 @@ export const I18N = {
     sh_eb: "المزيد", sh_title: "بابان آخران.",
     sh_lead: "أحدهما يفتح على الآلات والقطع المطبوعة كما خرجت فعلًا، والآخر على المسابقات.",
     sh_open: "افتح", sh_close: "إغلاق",
+    ev_lead: "مؤتمراتٌ قدّمتُ فيها أوراقًا مقبولة، ومعارضُ وقفتُ فيها ممثّلًا للمختبر، والتغطية التي تبعتها.",
+    ev_press: "التغطية الإعلامية", ev_press_soon: "التغطية قيد الجمع — ستظهر الروابط والمقتطفات هنا.",
+    ev_undated: "السنة قيد التأكيد", ev_count: "مدخلًا",
     sh_swipe: "اسحب الصفوف أو مرّرها جانبيًا أو استخدم الأسهم. اضغط أي إطار لعرضه بالحجم الكامل.",
     gp_drag: "اسحب ⟲ للتدوير · وهو يدور من تلقاء نفسه", gp_pick: "المنصّات",
     math_zeta: "التخميد ζ", math_wn: "التردد الطبيعي ωₙ",

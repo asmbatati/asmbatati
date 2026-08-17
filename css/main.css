@@ -507,6 +507,28 @@ h1,h2,h3,h4 { font-family: var(--disp); font-weight: 600; line-height: 1.08; let
 .em-panel { margin-top: 2.6rem; }
 .em-panel[hidden] { display: none; }
 
+/* ── events, expos & press ── */
+.ev-group { margin-top: 2.4rem; }
+.ev-group:first-child { margin-top: 1.4rem; }
+.ev-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .7rem; border-bottom: 1px solid var(--line); padding-bottom: .6rem; }
+.ev-head h3 { font-family: var(--disp); font-size: 1.25rem; color: var(--green-0); font-weight: 600; }
+.ev-n { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); background: var(--paper); border-radius: 5px; padding: 2px 8px; }
+.ev-head p { flex: 1 1 100%; font-size: .86rem; color: var(--mid); }
+.ev-list { list-style: none; margin: 0; padding: 0; }
+.ev-item { display: flex; gap: 1.1rem; align-items: baseline; padding: .85rem 0; border-bottom: 1px solid var(--line); }
+.ev-item:last-child { border-bottom: 0; }
+.ev-year { flex: none; width: 4.2ch; font-family: var(--disp); font-size: 1.05rem; font-weight: 600; color: var(--green-2); font-variant-numeric: tabular-nums; }
+.ev-nodate .ev-year { color: var(--dim); }
+.ev-body { min-width: 0; }
+.ev-body b { font-family: var(--disp); font-size: 1.02rem; color: var(--green-0); font-weight: 600; }
+.ev-body b a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.ev-body b a:hover { color: var(--green-2); }
+.ev-body p { font-size: .87rem; color: var(--mid); margin-top: .18rem; line-height: 1.5; }
+.ev-place { color: var(--green-2); }
+/* A missing year is marked, never invented — see the note above EVENTS in data.js. */
+.ev-flag { display: inline-block; margin-top: .3rem; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); border: 1px dashed var(--line); border-radius: 5px; padding: 1px 7px; }
+.ev-empty { margin-top: .9rem; padding: 1.1rem 1.2rem; border: 1px dashed var(--line); border-radius: 12px; font-size: .88rem; color: var(--mid); }
+
 /* awards, as plates rather than the Qualifications page's rows */
 .gaw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px,100%),1fr)); gap: 1.1rem; }
 .gaw-card { position: relative; border: 1px solid var(--line); border-top: 3px solid var(--gold); border-radius: 14px; padding: 1.3rem 1.3rem 1.2rem; background: var(--card); }

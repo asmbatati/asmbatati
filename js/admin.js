@@ -31,7 +31,7 @@
    shared by four sites and `photos` already belongs to Maha Lens.
    ═══════════════════════════════════════════════════════════════════ */
 
-import * as DATA from "./data.js?v=32";
+import * as DATA from "./data.js?v=33";
 
 const SB_URL = "https://pvconwkeshzoovchvzqm.supabase.co";
 const SB_KEY = "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ";
@@ -43,7 +43,7 @@ const TABLE = "portfolio_content";
 const KEYS = ["PROFILE", "STATS", "JOURNEY", "RESEARCH_MAP", "RESEARCH_PLATES",
   "PROJECTS", "PAPERS", "PUBS", "TAXONOMY", "ROBOTS", "PRINTS", "PATENTS",
   "SKILLS", "REPOS", "ORGS", "TEACHING", "QUALS", "WEBWORK", "GALLERY",
-  "ARCH", "MINDMAPS", "CALISTHENICS", "I18N"];
+  "ARCH", "MINDMAPS", "SHOWCASE", "EVENTS", "CALISTHENICS", "I18N"];
 
 // The visible site copy — hero, section titles, about, leads — all lives as
 // I18N keys (rendered via [data-i18n]). Editing raw JSON to find `hero_l1` is
@@ -132,6 +132,11 @@ const MEDIA_SLOTS = [
     hint: "Video autoplays muted and looped; a still opens in the lightbox instead.",
     get: d => d.GALLERY?.physsim?.runs, ref: "src", cap: ["name", "name_ar"], cap2: ["note", "note_ar"],
     make: (u, en, ar, n, nAr) => ({ id: "run-" + Date.now().toString(36), src: u, name: en, name_ar: ar, note: n, note_ar: nAr }) },
+  { id: "coverage", key: "EVENTS", kind: "image", accept: ".webp,.png,.jpg,.jpeg,.pdf",
+    label: "Events emblem — press coverage",
+    hint: "A clipping or screenshot of the coverage. Put the outlet in the Arabic/second field and paste the article link into the note.",
+    get: d => d.EVENTS?.coverage, ref: "img", cap: ["title", "title_ar"], cap2: ["outlet", "url"],
+    make: (u, en, ar, outlet, link) => ({ year: new Date().getFullYear(), img: u, title: en, title_ar: ar, outlet, url: link }) },
   { id: "mindmaps", key: "MINDMAPS", kind: "image", accept: ".svg,.webp,.png,.jpg,.jpeg",
     label: "Blog — mind-map artwork",
     hint: "Pick the existing row to fill rather than adding one, so the title and blurb are kept.",
