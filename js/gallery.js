@@ -15,7 +15,7 @@
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, IMG } from "./data.js?v=31";
+import { GALLERY, REPOS, IMG } from "./data.js?v=32";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -27,6 +27,9 @@ let live = [];                  // running scenes/loops to dispose on view chang
 const kill = () => { live.forEach(l => { try { l.stop(); } catch {} }); live = []; };
 const onWin = (ev, fn) => { addEventListener(ev, fn); live.push({ stop: () => removeEventListener(ev, fn) }); };
 const iconFor = c => `img/gal/${c.icon}.webp`;
+// A trophy file is normally a bare filename under assets/; an admin upload arrives as
+// a full Supabase URL, so only prefix the ones that need it.
+const url = (f, base) => (/^(https?:)?\/\//.test(f) || f.startsWith("/")) ? f : base + f;
 
 export function renderGallery(context) { ctx = context; paint(); }
 
@@ -553,9 +556,9 @@ function trophyScene(host, trophies, intro) {
       cap.innerHTML = `<h3>${ctx.pick(tr, "name")}</h3><p>${ctx.pick(tr, "note")}</p><span class="trophy-count">${idx + 1} / ${trophies.length}</span>`;
       const fail = () => { if (my === token) cap.innerHTML += `<p class="gp-hint">(mesh failed to load)</p>`; };
       if (/\.glb$/i.test(tr.file)) {                 // textured GLB — keep its own materials, Y-up
-        gltfLoader.load(`assets/models/${tr.file}`, gltf => { if (my !== token) return; place(gltf.scene); }, undefined, fail);
+        gltfLoader.load(url(tr.file, "assets/models/"), gltf => { if (my !== token) return; place(gltf.scene); }, undefined, fail);
       } else {                                       // STL — solid material, Z-up → upright
-        stlLoader.load(`assets/stl/${tr.file}`, geo => {
+        stlLoader.load(url(tr.file, "assets/stl/"), geo => {
           if (my !== token) return;
           const m = new THREE.Mesh(geo, mat); m.rotation.x = -Math.PI / 2;
           place(m);

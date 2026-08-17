@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=31";
-import { renderGallery } from "./gallery.js?v=31";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=32";
+import { renderGallery } from "./gallery.js?v=32";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -25,7 +25,7 @@ const pick = (o, k) => (lang === "ar" ? (o[k + "_ar"] ?? o[k]) : o[k]);
 const txEn = id => (TAXONOMY.find(t => t.id === id) || {})[lang] || id;
 // scroll-trigger handles wired lazily per page — declared up here so the
 // first applyLang() (which calls wireJourneyPath) never hits their TDZ.
-let journeyST = null, flowSTs = [];
+let journeyST = null;
 
 /* ── Lenis ── */
 let lenis = null;
@@ -881,7 +881,7 @@ function applyLang() {
   // posts with a `file_ar` body swap language in place.
   if (active === "articles") { const open = OPEN_POST; open ? openArticle(open) : renderArticles(); }
   if (active === "gallery") galleryCtx();
-  if (active === "projects") wireFlow();
+  if (active === "gallery") wireFlow();
   if (active === "home") wireJourney();
   requestAnimationFrame(() => ST.refresh());
 }
@@ -896,7 +896,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=31").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=32").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
@@ -938,20 +938,59 @@ function wireJourney() {
 }
 wireJourney();
 
-/* ── hardware flow gallery: rows drift as the Photos panel scrolls by ── */
+/* ── photo rows: real horizontal scrolling ──
+   These used to be transform-driven: a scrub-linked GSAP tween slid `x` as the
+   section passed the viewport. Three things were wrong with that. The travel was
+   computed from the row's overflow but capped by however much page scroll the
+   section happened to occupy, so the last cards were simply unreachable; a
+   transform is not scroll, so there was nothing to swipe; and once the rows moved
+   into a collapsed panel the measurement ran against zero height.
+   Now each row is its own scroll container — native wheel, trackpad, touch and
+   keyboard all work — with drag-to-pan and arrow buttons on top. */
 function wireFlow() {
-  flowSTs.forEach(s => s.kill()); flowSTs = [];
-  // The panel starts closed and has no height; measuring then would pin the drift
-  // at 0 for the rest of the session. toggleShowcase re-runs this on open.
-  if (reduced || $("#emPhotos")?.hidden) return;
-  const dir = document.documentElement.dir === "rtl" ? -1 : 1;
-  [["#flowRobots", -1], ["#flowPrints", 1]].forEach(([sel, sign]) => {
-    const row = $(sel); if (!row) return;
-    const drift = () => Math.max(0, row.scrollWidth - row.parentElement.clientWidth + 80);
-    flowSTs.push(gsap.fromTo(row, { x: sign * dir < 0 ? 0 : -drift() }, {
-      x: sign * dir < 0 ? -drift() : 0, ease: "none",
-      scrollTrigger: { trigger: "#emPhotos", start: "top 85%", end: "bottom 15%", scrub: 0.6, invalidateOnRefresh: true },
-    }).scrollTrigger);
+  $$(".flow-row").forEach(row => {
+    // `rev` starts at the far end so the two rows sit visually offset, the way the
+    // opposing drift used to look.
+    if (row.classList.contains("rev") && !row.__seeded && row.scrollWidth > row.clientWidth) {
+      row.__seeded = true;
+      row.scrollLeft = document.documentElement.dir === "rtl" ? -row.scrollWidth : row.scrollWidth;
+    }
+    const lane = row.closest(".flow-lane");
+    const sync = () => {
+      if (!lane) return;
+      // RTL scrollLeft runs negative in Chrome, so compare against the extremes
+      const max = row.scrollWidth - row.clientWidth;
+      const at = Math.abs(row.scrollLeft);
+      lane.classList.toggle("at-start", at < 4);
+      lane.classList.toggle("at-end", at > max - 4);
+      lane.classList.toggle("no-scroll", max < 4);
+    };
+    if (!row.__wired) {
+      row.__wired = true;
+      let down = false, sx = 0, sl = 0, moved = 0;
+      row.addEventListener("pointerdown", e => {
+        if (e.button) return;
+        down = true; sx = e.clientX; sl = row.scrollLeft; moved = 0;
+      });
+      row.addEventListener("pointermove", e => {
+        if (!down) return;
+        const dx = e.clientX - sx;
+        if (Math.abs(dx) > 4) { moved = Math.abs(dx); row.scrollLeft = sl - dx; row.classList.add("dragging"); }
+      });
+      const up = () => { down = false; row.classList.remove("dragging"); };
+      row.addEventListener("pointerup", up);
+      row.addEventListener("pointercancel", up);
+      row.addEventListener("pointerleave", up);
+      // A drag that ends over a card must not also open the lightbox.
+      row.addEventListener("click", e => { if (moved > 6) { e.stopPropagation(); e.preventDefault(); moved = 0; } }, true);
+      row.addEventListener("scroll", sync, { passive: true });
+      lane?.querySelectorAll(".flow-arrow").forEach(btn =>
+        btn.addEventListener("click", () => {
+          const step = (row.querySelector(".flow-card")?.getBoundingClientRect().width || 300) + 16;
+          row.scrollBy({ left: btn.classList.contains("prev") ? -step * 2 : step * 2, behavior: reduced ? "instant" : "smooth" });
+        }));
+    }
+    sync();
   });
 }
 

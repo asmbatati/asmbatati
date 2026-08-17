@@ -1,7 +1,13 @@
 /* Abdulrahman S. Al-Batati — portfolio content manifest (bilingual EN/AR).
    Images resolve to img/{w480|w960|w1600}/<slug>.webp (tools/build_images.py). */
 
-export const IMG = (slug, w = "w960") => `img/${w}/${slug}.webp`;
+/* Most galleries address images by slug and IMG() builds the responsive-tier path.
+   Media uploaded through the admin panel lives at a full Supabase Storage URL, which
+   has no tiers — so anything that already looks like a URL or a path is passed
+   through untouched. Without this, an uploaded photo would resolve to the nonsense
+   `img/w480/https://…webp`. */
+export const isMediaRef = s => typeof s === "string" && (/^(https?:)?\/\//.test(s) || s.startsWith("/") || s.includes("/") || /\.(webp|png|jpe?g|gif|svg|mp4|webm)$/i.test(s));
+export const IMG = (slug, w = "w960") => isMediaRef(slug) ? slug : `img/${w}/${slug}.webp`;
 
 export const PROFILE = {
   name: "Abdulrahman S. Al-Batati",
@@ -1393,6 +1399,7 @@ export const I18N = {
     sh_eb: "More to see", sh_title: "Two more doors.",
     sh_lead: "One opens on the machines and the printed parts as they actually came out. The other on the competitions.",
     sh_open: "Open", sh_close: "Close",
+    sh_swipe: "Drag the rows, scroll them sideways, or use the arrows. Click any frame to open it full size.",
     gp_drag: "drag ⟲ to spin · it also turns on its own", gp_pick: "Platforms",
     math_zeta: "damping ζ", math_wn: "frequency ωₙ",
     math_note: "A live second-order system — the mathematics under every mount, arm and airframe I tune.",
@@ -1495,6 +1502,7 @@ export const I18N = {
     sh_eb: "المزيد", sh_title: "بابان آخران.",
     sh_lead: "أحدهما يفتح على الآلات والقطع المطبوعة كما خرجت فعلًا، والآخر على المسابقات.",
     sh_open: "افتح", sh_close: "إغلاق",
+    sh_swipe: "اسحب الصفوف أو مرّرها جانبيًا أو استخدم الأسهم. اضغط أي إطار لعرضه بالحجم الكامل.",
     gp_drag: "اسحب ⟲ للتدوير · وهو يدور من تلقاء نفسه", gp_pick: "المنصّات",
     math_zeta: "التخميد ζ", math_wn: "التردد الطبيعي ωₙ",
     math_note: "نظام حيّ من الدرجة الثانية — الرياضيات الكامنة خلف كل حاملٍ وذراعٍ وهيكلٍ أضبطه.",

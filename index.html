@@ -10,7 +10,7 @@
   <!-- ?v must be bumped with the JS modules: without it a returning visitor keeps a
        cached stylesheet while the new JS renders new markup, so fresh sections render
        completely unstyled. Missing until 12 Aug 2026. -->
-  <link rel="stylesheet" href="css/main.css?v=31">
+  <link rel="stylesheet" href="css/main.css?v=32">
   <link rel="icon" type="image/png" sizes="64x64" href="img/favicon.png">
   <link rel="icon" type="image/png" sizes="256x256" href="img/logo-mark.png">
   <link rel="apple-touch-icon" href="img/logo-mark.png">
@@ -267,9 +267,18 @@
         <p class="section-lead" data-i18n="sh_lead"></p></div>
       <div class="em-row" id="emblemRow"></div>
       <div class="em-panel" id="emPhotos" hidden>
+        <p class="gp-hint center" data-i18n="sh_swipe"></p>
         <div class="flow-wrap">
-          <div class="flow-row" id="flowRobots"></div>
-          <div class="flow-row rev" id="flowPrints"></div>
+          <div class="flow-lane">
+            <button class="flow-arrow prev" aria-label="Scroll left" type="button">‹</button>
+            <div class="flow-row" id="flowRobots"></div>
+            <button class="flow-arrow next" aria-label="Scroll right" type="button">›</button>
+          </div>
+          <div class="flow-lane">
+            <button class="flow-arrow prev" aria-label="Scroll left" type="button">‹</button>
+            <div class="flow-row rev" id="flowPrints"></div>
+            <button class="flow-arrow next" aria-label="Scroll right" type="button">›</button>
+          </div>
         </div>
       </div>
       <div class="em-panel" id="emAwards" hidden>
@@ -366,6 +375,6 @@
     <div class="lb-meta"><span id="lbCap"></span><span id="lbCount"></span></div>
   </div>
 
-  <script type="module" src="js/main.js?v=31"></script>
+  <script type="module" src="js/main.js?v=32"></script>
 </body>
 </html>
