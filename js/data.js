@@ -58,7 +58,7 @@ export const RESEARCH_STATS = {
     { n: "268", label: "citations", label_ar: "استشهادًا" },
     { n: "6", label: "h-index", label_ar: "معامل h" },
     { n: "6", label: "i10-index", label_ar: "معامل i10" },
-    { n: "2", label: "patents granted", label_ar: "براءتا تصميم" },
+    { n: "2", label: "industrial designs granted", label_ar: "تصميمان صناعيّان" },
   ],
 };
 
@@ -69,7 +69,7 @@ export const SITEMAP = [
   { nav: "research", title: "Research", title_ar: "الأبحاث",
     desc: "Publications, the research map, and what I'm asking.", desc_ar: "المنشورات وخريطة الأبحاث والأسئلة التي أطرحها." },
   { nav: "projects", title: "Projects", title_ar: "المشاريع",
-    desc: "Active funded research, finished builds, and patents.", desc_ar: "أبحاث جارية ممولة، وأعمال مكتملة، وبراءات." },
+    desc: "Active funded research, finished builds, and granted industrial designs.", desc_ar: "أبحاث جارية ممولة، وأعمال مكتملة، وتصاميم صناعية ممنوحة." },
   { nav: "gallery", title: "Gallery", title_ar: "المعرض",
     desc: "Six ways I build — plus hardware, open source and websites.", desc_ar: "ستّ طرق أبني بها — والعتاد ومفتوح المصدر والمواقع." },
   { nav: "teaching", title: "Teaching", title_ar: "التدريس",
@@ -84,7 +84,7 @@ export const SITEMAP = [
 
 export const STATS = [
   { n: "10", label: "papers published", label_ar: "بحثًا منشورًا" },
-  { n: "2", label: "patents granted", label_ar: "براءتا تصميم" },
+  { n: "2", label: "industrial designs granted", label_ar: "تصميمان صناعيّان" },
   { n: "6+", label: "years in robotics", label_ar: "سنوات في الروبوتات" },
   { n: "8", label: "robots designed & built", label_ar: "روبوتات صُمّمت وبُنيت" },
 ];
@@ -96,13 +96,13 @@ export const PROJECTS = [
   { id: "proj-taer", cat: "aerial", title: "TAER", title_ar: "طائر", kind: "VTOL · CAD", kind_ar: "تصميم VTOL", year: "2023",
     blurb: "Long-endurance tilt-tail VTOL concept: folding quad-lift arms over an efficient fixed-wing cruise body. Full SolidWorks design.",
     blurb_ar: "تصميم VTOL طويل المدى بأذرع رفع قابلة للطي فوق جسم ثابت الجناح عالي الكفاءة. تصميم كامل على SolidWorks." },
-  { id: "proj-roboeye", cat: "sensor", title: "RoboEye", title_ar: "عين الروبوت", kind: "VIO sensor kit · patent", kind_ar: "حساس تموضع · براءة", year: "2024",
-    blurb: "A compact visual-inertial localization kit (stereo + IMU on Raspberry Pi / Jetson) that keeps robots located in GPS-denied spaces. Patented industrial design.",
+  { id: "proj-roboeye", cat: "sensor", title: "RoboEye", title_ar: "عين الروبوت", kind: "VIO sensor kit · industrial design", kind_ar: "حساس تموضع · تصميم صناعي", year: "2024",
+    blurb: "A compact visual-inertial localization kit (stereo + IMU on Raspberry Pi / Jetson) that keeps robots located in GPS-denied spaces. Granted industrial design (SAIP).",
     blurb_ar: "حساس تموضع بصري-قصوري مُدمج (كاميرتان + وحدة قياس قصوري على Raspberry Pi / Jetson) يُبقي الروبوت متموضِعًا في الأماكن المحرومة من GPS. تصميم صناعي مُسجّل." },
-  { id: "proj-amir", cat: "ground", title: "AMIR", title_ar: "عامر", kind: "Warehouse AGV · patent", kind_ar: "روبوت مستودعات · براءة", year: "2022",
-    blurb: "Autonomous mobile robot for warehouse logistics — low-profile tote-carrier with onboard navigation. Granted industrial-design patent.",
-    blurb_ar: "روبوت متحرّك مستقل لخدمات المستودعات — حامل صناديق منخفض مع ملاحة ذاتية. حاصل على براءة تصميم صناعي." },
-  { id: "proj-robohotel", cat: "ground", title: "RoboHotel", title_ar: "روبو-هوتيل", kind: "Service robot · patent", kind_ar: "روبوت خدمة · براءة", year: "2022",
+  { id: "proj-amir", cat: "ground", title: "AMIR", title_ar: "عامر", kind: "Warehouse AGV · industrial design", kind_ar: "روبوت مستودعات · تصميم صناعي", year: "2022",
+    blurb: "Autonomous mobile robot for warehouse logistics — low-profile tote-carrier with onboard navigation. Granted industrial design (SAIP).",
+    blurb_ar: "روبوت متحرّك مستقل لخدمات المستودعات — حامل صناديق منخفض مع ملاحة ذاتية. حاصل على شهادة تصميم صناعي." },
+  { id: "proj-robohotel", cat: "ground", title: "RoboHotel", title_ar: "روبو-هوتيل", kind: "Service robot", kind_ar: "روبوت خدمة", year: "2022",
     blurb: "A bellhop service robot for hotels: luggage-carrying AMR with a guest touchscreen and a hospitality-grade shell.",
     blurb_ar: "روبوت خدمة للفنادق بدور الحمّال: روبوت متحرّك يحمل الأمتعة بشاشة لمس للنزلاء وهيكلٍ بمستوى الضيافة." },
   { id: "proj-faseeh", cat: "ground", title: "FASEEH", title_ar: "فصيح", kind: "Outdoor UGV", kind_ar: "روبوت أرضي خارجي", year: "2023",
@@ -192,14 +192,14 @@ export const PAPERS = [
     doi: "https://doi.org/10.18653/v1/2025.acl-long.1579", tag: "Arabic NLP" },
   { year: "2025", title: "VECTOR: Velocity-Enhanced GRU for Real-Time 3D UAV Trajectory Prediction", venue: "Drones (MDPI)", role: "Co-author", role_ar: "مؤلف مشارك",
     doi: "https://doi.org/10.3390/drones9010008", tag: "Prediction" },
-  { year: "2025", title: "FLIGHTGEN: ROS 2-Powered Automated UAV Dataset Generator", venue: "SmartSE (Springer)", role: "Co-author", role_ar: "مؤلف مشارك",
+  { year: "2025", title: "FLIGHTGEN: ROS 2-Powered Automated UAV Dataset Generator", venue: "SMARTTECH 2024 (Springer LNNS)", role: "Co-author", role_ar: "مؤلف مشارك",
     doi: "https://doi.org/10.1007/978-3-031-91235-1_28", tag: "Simulation" },
   { year: "2024", title: "D2DTracker: Real-Time Trajectory Prediction for Drone-to-Drone Tracking", venue: "UVS 2024 (IEEE)", role: "Co-author", role_ar: "مؤلف مشارك",
     doi: "https://doi.org/10.1109/UVS59630.2024.10467173", tag: "Tracking" },
 ];
 
-export const RESEARCH_NOTE = "11 published (9 peer-reviewed + 2 preprints) · 4 accepted (incl. 3 Springer chapters) · 2 under review · 5 uncredited framework contributions.";
-export const RESEARCH_NOTE_AR = "١١ منشورة (٩ محكّمة + نسختان أوّليتان) · ٤ مقبولة (منها ٣ فصول كتب من Springer) · ٢ قيد المراجعة · ٥ مساهمات إطارية غير منسوبة.";
+export const RESEARCH_NOTE = "11 published (9 peer-reviewed + 2 preprints) · 4 accepted (incl. 3 Springer chapters) · 3 under review · 5 uncredited framework contributions.";
+export const RESEARCH_NOTE_AR = "١١ منشورة (٩ محكّمة + نسختان أوّليتان) · ٤ مقبولة (منها ٣ فصول كتب من Springer) · ٣ قيد المراجعة · ٥ مساهمات إطارية غير منسوبة.";
 
 /* ── The path so far: education + career milestones (2018 → now) ──
    Drives the glowing scroll-path on Home. kind: edu | work | milestone | next. */
@@ -236,7 +236,7 @@ export const JOURNEY = [
     note_ar: "البحث والتطوير في الروبوتات — طائرات وروبوتات أرضية، تموضع دون GPS، منظومات وكيلة متعددة الروبوتات. تدريس CS460 وورش الدرون وROS 2." },
   // kind "edu" so the chip reads "Education" (the card shows the kind label, not `tag`).
   { year: "2027", kind: "edu", tag: "Education", tag_ar: "تعليم",
-    title: "Ph.D. candidate in Mechanical Engineering (Robotics)", title_ar: "مرشّح دكتوراه في الهندسة الميكانيكية (الروبوتات)",
+    title: "Ph.D. in Mechanical Engineering (Robotics) — admitted, starting January 2027", title_ar: "الدكتوراه في الهندسة الميكانيكية (الروبوتات) — مقبول، وتبدأ في يناير ٢٠٢٧",
     org: "KFUPM · Dr. Ammar A. Alzaydi", org_ar: "جامعة الملك فهد · د. عمّار الزيدي",
     note: "Robotic systems modeling", note_ar: "نمذجة الأنظمة الروبوتية" },
 ];
@@ -252,8 +252,8 @@ export const RESEARCH_MAP = {
       label: "Perception & Estimation", label_ar: "الإدراك وتقدير الحالة",
       topics: ["GNSS-denied localization", "VIO · SLAM", "EKF / sensor fusion", "learned estimators"],
       topics_ar: ["التموضع دون GNSS", "VIO · SLAM", "EKF ودمج الحساسات", "مُقدِّرات متعلَّمة"],
-      work: "GNSS-denied UAV navigation survey · Two-Stage Residual EKF (XGBoost·KAN) · RoboEye VIO kit (patented).",
-      work_ar: "مسح الملاحة دون GNSS · مرشّح كالمان ببقايا على مرحلتين (XGBoost·KAN) · عُدّة RoboEye المُبرّأة." },
+      work: "GNSS-denied UAV navigation survey · Two-Stage Residual EKF (XGBoost·KAN) · RoboEye VIO kit (granted industrial design).",
+      work_ar: "مسح الملاحة دون GNSS · مرشّح كالمان ببقايا على مرحلتين (XGBoost·KAN) · عُدّة RoboEye (تصميم صناعي ممنوح)." },
     { id: "learn", pos: "tr", color: "#b6803a",
       label: "Learning & AI", label_ar: "التعلّم والذكاء الاصطناعي",
       topics: ["reinforcement learning", "trajectory prediction (GRU)", "agentic AI · LLM planning", "Arabic NLP · generative 3D"],
@@ -300,8 +300,8 @@ export const PRINTS = [
 
 export const PATENTS = [
   { id: "patent-transfer", title: "Transfer Robots (AMIR)", title_ar: "روبوتات النقل (عامر)",
-    body: "Granted industrial-design certificate — Saudi Authority for Intellectual Property. Autonomous transfer robots for warehouses & hotels.",
-    body_ar: "شهادة تصميم صناعي ممنوحة — الهيئة السعودية للملكية الفكرية. روبوتات نقل ذاتية للمستودعات والفنادق.", year: "2023" },
+    body: "Granted industrial-design certificate — Saudi Authority for Intellectual Property. An autonomous logistic mobile robot for warehouses.",
+    body_ar: "شهادة تصميم صناعي ممنوحة — الهيئة السعودية للملكية الفكرية. روبوت لوجستي متحرّك ذاتي للمستودعات.", year: "2023" },
   { id: "print-stereo", title: "RoboEye — VIO Localization Kit", title_ar: "عين الروبوت — حساس التموضع البصري-القصوري",
     body: "Granted industrial-design certificate — Saudi Authority for Intellectual Property. A visual-inertial odometry kit for GPS-denied robot localization.",
     body_ar: "شهادة تصميم صناعي ممنوحة — الهيئة السعودية للملكية الفكرية. حساس قياس بصري-قصوري لتموضع الروبوت في الأماكن المحرومة من GPS.", year: "2024" },
@@ -980,7 +980,7 @@ export const PUBS = [
 /* ── Robotics architecture — his real mental model (from his drawio) ──
    A closed perception↔decision loop around a shared world model, with a
    supervisory layer and three timing bands. Each node carries where his
-   published / patented work lives. Rendered as an SVG schematic + cards. */
+   published work and granted industrial designs live. Rendered as an SVG schematic + cards. */
 export const ARCH = {
   bands: [
     { id: "delib",  rate: "0.1–10 Hz",     ms: "100 ms – 10 s", label: "Deliberative", label_ar: "تداولي" },
@@ -994,7 +994,7 @@ export const ARCH = {
       work: "Drone & object detection and tracking", work_ar: "كشف وتتبّع الطائرات والأجسام", papers: ["D2DTracker"] },
     spatial: { col: "perc", band: "react", label: "Spatial Perception & Mapping", label_ar: "الإدراك المكاني ورسم الخرائط",
       sub: "SLAM · point clouds · local maps", sub_ar: "SLAM · سُحُب النقاط · خرائط محلية", mine: true,
-      work: "Visual-inertial odometry & local mapping (RoboEye, patented kit)", work_ar: "قياس بصري-قصوري ورسم خرائط محلي (RoboEye، عُدّة مُبرَّأة)", papers: ["RoboEye"] },
+      work: "Visual-inertial odometry & local mapping (RoboEye kit, granted industrial design)", work_ar: "قياس بصري-قصوري ورسم خرائط محلي (عُدّة RoboEye، تصميم صناعي ممنوح)", papers: ["RoboEye"] },
     stateest: { col: "perc", band: "reflex", label: "State Estimation & Sensor Fusion", label_ar: "تقدير الحالة ودمج الحساسات",
       sub: "Kalman filter · EKF · VIO", sub_ar: "مرشّح كالمان · EKF · VIO", mine: true,
       work: "GPS-denied localization · residual EKF · sensor fusion", work_ar: "تموضع دون GPS · مرشّح كالمان البقايا · دمج الحساسات", papers: ["TSR-EKF", "GNSS-Denied Nav"] },
@@ -1018,7 +1018,7 @@ export const ARCH = {
       work: "Runtime safety & benchmarking for multi-robot systems", work_ar: "سلامة زمن التشغيل وقياس الأداء لأنظمة متعددة الروبوتات", papers: ["SAFEMRS", "ROSNavBench"] },
     // ── Hardware layer ──
     sensors: { col: "hw", label: "Sensors", label_ar: "الحساسات", sub: "Cameras · LiDAR · IMU · encoders", sub_ar: "كاميرات · ليدار · IMU · مُرمِّزات", mine: true,
-      work: "RoboEye sensor kit (patented)", work_ar: "عُدّة حساسات RoboEye (مُبرَّأة)", papers: ["RoboEye kit"] },
+      work: "RoboEye sensor kit (granted industrial design)", work_ar: "عُدّة حساسات RoboEye (تصميم صناعي ممنوح)", papers: ["RoboEye kit"] },
     actuators: { col: "hw", label: "Actuators", label_ar: "المُشغِّلات", sub: "Motors · ESCs · grippers", sub_ar: "محرّكات · مسرّعات · قابضات", mine: false },
     env: { col: "hw", label: "Dynamic Environment", label_ar: "البيئة الديناميكية", sub: "Moving obstacles · humans · changing conditions", sub_ar: "عوائق متحركة · بشر · ظروف متغيّرة", mine: false },
   },
@@ -1247,17 +1247,17 @@ export const GALLERY = {
         { t: "Concept", t_ar: "الفكرة", d: "When GPS goes dark, robots go blind — package visual-inertial localization into one kit.", d_ar: "حين ينقطع GPS يعمى الروبوت — فلنحزم التموضع البصري-القصوري في عُدّة واحدة." },
         { t: "CAD", t_ar: "التصميم", d: "Stereo baseline, IMU seat and compute bay in a 125 g printable enclosure.", d_ar: "قاعدة كاميرتين ومقعد IMU وحجيرة معالجة في حاوية ١٢٥ غرامًا قابلة للطباعة." },
         { t: "Prototype", t_ar: "النموذج", d: "PETG prints on Raspberry Pi and Jetson — tested on UGVs and UAVs in GPS-denied rooms.", d_ar: "طباعة PETG على Raspberry Pi وJetson — اختُبرت داخليًا دون GPS." },
-        { t: "Patent", t_ar: "البراءة", d: "Granted industrial-design certificate, Saudi Authority for Intellectual Property, 2024.", d_ar: "شهادة تصميم صناعي من الهيئة السعودية للملكية الفكرية، ٢٠٢٤." } ] },
+        { t: "Industrial design", t_ar: "التصميم الصناعي", d: "Granted industrial-design certificate, Saudi Authority for Intellectual Property, 2024.", d_ar: "شهادة تصميم صناعي من الهيئة السعودية للملكية الفكرية، ٢٠٢٤." } ] },
       { id: "proj-amir", name: "AMIR", name_ar: "عامر", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "Warehouse totes move all day — a low robot that slides under, lifts and delivers.", d_ar: "صناديق المستودعات تتحرك طوال اليوم — روبوت منخفض ينزلق تحتها ويرفعها." },
         { t: "CAD", t_ar: "التصميم", d: "Low-profile chassis, lift plate, sensor belt — designed for manufacture from day one.", d_ar: "هيكل منخفض وصفيحة رفع وحزام حساسات — مُصمَّم للتصنيع منذ اليوم الأول." },
         { t: "Prototype", t_ar: "النموذج", d: "Drive base with onboard navigation, tested on warehouse-style routes.", d_ar: "قاعدة دفع بملاحة ذاتية جُرّبت على مسارات مستودعية." },
-        { t: "Patent", t_ar: "البراءة", d: "Granted industrial-design certificate (transfer robots), 2023.", d_ar: "شهادة تصميم صناعي (روبوتات النقل)، ٢٠٢٣." } ] },
+        { t: "Industrial design", t_ar: "التصميم الصناعي", d: "Granted industrial-design certificate (transfer robots), 2023.", d_ar: "شهادة تصميم صناعي (روبوتات النقل)، ٢٠٢٣." } ] },
       { id: "proj-robohotel", name: "RoboHotel", name_ar: "روبو-هوتيل", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "A bellhop that never sleeps — luggage AMR with a guest-facing touchscreen.", d_ar: "حمّالٌ لا ينام — روبوت أمتعة بشاشة لمس للنزلاء." },
         { t: "CAD", t_ar: "التصميم", d: "Hospitality-grade shell over the AMIR drive experience — soft surfaces, service tray, screen mast.", d_ar: "هيكل بمستوى الضيافة فوق خبرة عامر — أسطح ناعمة وصينية خدمة وسارية شاشة." },
         { t: "Prototype", t_ar: "النموذج", d: "Guest-interaction flow mocked on the drive base with the real shell.", d_ar: "تدفّق تفاعل النزيل على القاعدة الحقيقية بالهيكل الفعلي." },
-        { t: "Patent", t_ar: "البراءة", d: "Part of the granted transfer-robots industrial design family.", d_ar: "ضمن عائلة براءة روبوتات النقل الممنوحة." } ] },
+        { t: "Status", t_ar: "الحالة", d: "Built on AMIR's base. AMIR's industrial design is granted; the hotel variant has no grant of its own.", d_ar: "مبنيّ على قاعدة عامر. لعامر تصميم صناعي ممنوح، ولا تصميم ممنوحًا لنسخة الفنادق وحدها." } ] },
       { id: "proj-faseeh", name: "FASEEH", name_ar: "فصيح", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "Outdoor autonomy dies on curbs and rocks — build the suspension first.", d_ar: "الاستقلالية الخارجية تموت عند الأرصفة والصخور — فلنبدأ من التعليق." },
         { t: "CAD", t_ar: "التصميم", d: "Ackermann steering, long-travel arms, sealed electronics bay.", d_ar: "توجيه أكرمان وأذرع طويلة المدى وحجيرة إلكترونيات معزولة." },
@@ -1295,11 +1295,11 @@ export const GALLERY = {
         desc: "Ackermann-steered rover with long-travel suspension for autonomy on uneven terrain.",
         desc_ar: "مركبة بتوجيه أكرمان وتعليق طويل المدى للاستقلالية على التضاريس الوعرة.", tags: ["Ackermann", "outdoor"] },
       { id: "agv", photo: "proj-amir", name: "AMIR — warehouse AGV", name_ar: "عامر — روبوت مستودعات",
-        desc: "Low-profile tote-carrier with onboard navigation. Granted industrial-design patent.",
-        desc_ar: "حامل صناديق منخفض بملاحة ذاتية. حاصل على براءة تصميم صناعي.", tags: ["patent", "logistics"] },
+        desc: "Low-profile tote-carrier with onboard navigation. Granted industrial design (SAIP).",
+        desc_ar: "حامل صناديق منخفض بملاحة ذاتية. حاصل على شهادة تصميم صناعي.", tags: ["industrial design", "logistics"] },
       { id: "bot", photo: "proj-robohotel", name: "RoboHotel — service robot", name_ar: "روبو-هوتيل — روبوت خدمة",
         desc: "A bellhop AMR: luggage deck, guest touchscreen, hospitality-grade shell.",
-        desc_ar: "روبوت حمّال: سطح أمتعة وشاشة نزلاء وهيكل بمستوى الضيافة.", tags: ["patent", "service"] },
+        desc_ar: "روبوت حمّال: سطح أمتعة وشاشة نزلاء وهيكل بمستوى الضيافة.", tags: ["service", "hospitality"] },
     ],
   },
   // Manufacturing — the processes themselves, my skills, and the real prints.
@@ -1418,7 +1418,7 @@ export const GALLERY = {
       { name: "NVIDIA Isaac Sim", note: "GPU-accelerated worlds for reinforcement learning (QuadroRL)", note_ar: "عوالم مُسرَّعة بالمعالج الرسومي للتعلّم المعزّز (QuadroRL)", tag: "RL" },
       { name: "Webots", note: "ROS 2-supported sim for quick multi-robot setups", note_ar: "محاكٍ مدعوم بـROS 2 لإعدادات سريعة متعددة الروبوتات", tag: "multi-robot" },
       { name: "Rviz 2", note: "The robot's-eye view — TF trees, point clouds, costmaps, planned paths", note_ar: "منظور الروبوت — أشجار TF، سُحُب النقاط، خرائط الكلفة، المسارات المخطّطة", tag: "viz" },
-      { name: "FLIGHTGEN", note: "My automated ROS 2 UAV dataset generator", note_ar: "مولّد بيانات الطائرات الآلي بـROS 2", tag: "mine" },
+      { name: "FLIGHTGEN", note: "The lab's automated ROS 2 UAV dataset generator (I am a co-author)", note_ar: "مولّد المعمل الآلي لبيانات الطائرات بـROS 2 (وأنا من مؤلفيه)", tag: "co-author" },
       { name: "ROSNavBench", note: "Automated benchmark of Nav2 planners and controllers in Gazebo, from the lab (I am a co-author)", note_ar: "أداة المعمل لقياس أداء مخطّطات ومتحكّمات Nav2 في Gazebo (وأنا من مؤلفيها)", tag: "co-author" },
     ],
   },
@@ -1444,7 +1444,7 @@ export const I18N = {
     hint_sphere: "drag ⟲ to explore · tap to open",
     eb_gallery: "Gallery", t_gallery: "Photos.",
     gal_robots: "Robots & UAVs", gal_prints: "3D printing & fabrication",
-    eb_patents: "Patents", t_patents: "Two granted industrial designs.",
+    eb_patents: "Industrial designs", t_patents: "Two granted industrial designs.",
     eb_track: "Track record", t_track: "Experience & education.", h_exp: "Experience", h_edu: "Education",
     eb_toolkit: "Toolkit", t_toolkit: "What I work with.",
     eb_oss: "Open source", t_oss: "Code on GitHub.", lead_oss: "Featured projects.",
@@ -1550,7 +1550,7 @@ export const I18N = {
     hint_sphere: "اسحب ⟲ للاستكشاف · اضغط للفتح",
     eb_gallery: "المعرض", t_gallery: "صور لبعض المشاريع.",
     gal_robots: "الروبوتات والطائرات", gal_prints: "الطباعة ثلاثية الأبعاد والتصنيع",
-    eb_patents: "البراءات", t_patents: "تصميمان صناعيّان ممنوحان.",
+    eb_patents: "التصاميم الصناعية", t_patents: "تصميمان صناعيّان ممنوحان.",
     eb_track: "السجلّ", t_track: "الخبرة والتعليم.", h_exp: "الخبرة", h_edu: "التعليم",
     eb_toolkit: "الأدوات", t_toolkit: "ما أعمل به.",
     eb_oss: "مفتوح المصدر", t_oss: "على GitHub.", lead_oss: "أبرز المشاريع.",
