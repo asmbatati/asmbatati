@@ -51,11 +51,11 @@ export const PROFILE = {
    count is derived from PUBS at runtime (published + accepted) rather than hardcoded,
    so it can't drift from the table underneath it. */
 export const RESEARCH_STATS = {
-  asof: "Aug 2026", asof_ar: "أغسطس ٢٠٢٦",
+  asof: "Oct 2026", asof_ar: "أكتوبر ٢٠٢٦",
   scholar: "https://scholar.google.com/citations?hl=en&user=cxrJK64AAAAJ",
   items: [
     { key: "pubs", n: null, label: "publications", label_ar: "منشورًا" },   // n filled from PUBS
-    { n: "268", label: "citations", label_ar: "استشهادًا" },
+    { n: "344", label: "citations", label_ar: "استشهادًا" },
     { n: "6", label: "h-index", label_ar: "معامل h" },
     { n: "6", label: "i10-index", label_ar: "معامل i10" },
     { n: "2", label: "industrial designs granted", label_ar: "تصميمان صناعيّان" },
@@ -83,7 +83,7 @@ export const SITEMAP = [
 ];
 
 export const STATS = [
-  { n: "10", label: "papers published", label_ar: "بحثًا منشورًا" },
+  { n: "9", label: "peer-reviewed papers", label_ar: "أبحاث محكّمة" },
   { n: "2", label: "industrial designs granted", label_ar: "تصميمان صناعيّان" },
   { n: "6+", label: "years in robotics", label_ar: "سنوات في الروبوتات" },
   { n: "8", label: "robots designed & built", label_ar: "روبوتات صُمّمت وبُنيت" },
@@ -864,6 +864,28 @@ export const PUBS = [
   author = {Al-Batati, Abdulrahman and Koubaa, Anis and Gabr, Khaled and Abdelkader, Mohamed and Aloqaily, Hamad},
   date = {2026}, journaltitle = {ACM Computing Surveys}, volume = {58}, number = {15}, pages = {1--37}, doi = {10.1145/3815113}
 }` },
+  { title: "Autonomous Robot for Road Lines Markings Inspection and Maintenance",
+    status: "published", type: "Preprint", venue: "Preprints.org", rank: "", impact: "",
+    doi: "https://doi.org/10.20944/preprints202410.1284.v1", project: "", year: 2024, date: "Oct 2024",
+    role: "1st author · sole author", role_ar: "المؤلف الأول · المؤلف الوحيد", taxo: "robotics", tags: ["machine vision", "OpenCV", "mobile robot", "road maintenance"],
+    abstract: "Road lane markings fade over time, and existing autonomous repainting robots need a person to set their path and localize by GPS. This robot inspects a line with machine vision while driving along it and repaints it where needed. It was built, calibrated and tested as a whole: a three-wheeled differential drive, an HVLP paint sprayer, a camera with IR and ultrasonic sensors, and a Raspberry Pi with an Arduino running OpenCV code. From the M.Sc. project.",
+    abstract_ar: "تبهت علامات الطرق مع الزمن، والروبوتات الذاتية الحالية لإعادة طلائها تحتاج إنسانًا يحدّد مسارها وتتموضع عبر GPS. يفحص هذا الروبوت حالة الخط بالرؤية الآلية أثناء سيره عليه ويعيد طلاءه عند الحاجة. بُني ومُعايَر واختُبر كاملًا: قيادة تفاضلية بثلاث عجلات، ورشّاش طلاء HVLP، وكاميرا مع حسّاسات أشعة تحت حمراء وفوق صوتية، وRaspberry Pi مع Arduino يشغّلان شيفرة OpenCV. من مشروع الماجستير.",
+    bibtex: `@misc{2024_RoadLinesRobot_albatati,
+  title = {Autonomous Robot for Road Lines Markings Inspection and Maintenance},
+  author = {Al-Batati, Abdulrahman},
+  howpublished = {Preprints.org}, year = {2024}, doi = {10.20944/preprints202410.1284.v1}
+}` },
+  { title: "Robotics Applications In Criminal Investigations – A Novel Proposal Of Robots Potential For Assisting In Crime Suspects Interrogations and Human Questioning",
+    status: "published", type: "Preprint", venue: "Preprints.org", rank: "", impact: "",
+    doi: "https://doi.org/10.20944/preprints202410.1231.v1", project: "", year: 2024, date: "Oct 2024",
+    role: "1st author", role_ar: "المؤلف الأول", taxo: "robotics", tags: ["robot design", "interrogation", "human-robot interaction"],
+    abstract: "Interrogating suspects and questioning witnesses takes time, effort and highly qualified interrogators. This preprint proposes a robot that assists in interrogations and questioning, for police departments, schools, airports and other places where people are questioned for security or a criminal investigation.",
+    abstract_ar: "يستغرق استجواب المشتبه بهم وسؤال الشهود وقتًا وجهدًا ويتطلّب محقّقين ذوي تأهيل عالٍ. تقترح هذه النسخة الأولية روبوتًا يساعد في الاستجواب والسؤال، لمراكز الشرطة والمدارس والمطارات وكل مكان يُسأل فيه الناس لأغراض أمنية أو لتحقيق جنائي.",
+    bibtex: `@misc{2024_RobotsCriminalInvestigations_albatati,
+  title = {Robotics Applications In Criminal Investigations -- A Novel Proposal Of Robots Potential For Assisting In Crime Suspects Interrogations and Human Questioning},
+  author = {Al-Batati, Abdulrahman and Al-Khaldi, Hamadah},
+  howpublished = {Preprints.org}, year = {2024}, doi = {10.20944/preprints202410.1231.v1}
+}` },
   // ── Accepted ──
   { title: "ACMS: A Multi-Agent Architecture for Automated CAD-to-Mesh Transformation using Tool-Based Reasoning",
     status: "accepted", type: "Book Chapter", venue: "The Rise of Agentic Intelligence: From Theory to Real-World Applications", rank: "", impact: "",
@@ -898,11 +920,11 @@ export const PUBS = [
     abstract_ar: "مُحقّق سلامة ثنائي القناة يتثبّت من خطط مهام الروبوتات المتعددة المولّدة من النماذج اللغوية قبل تنفيذها.", bibtex: "" },
   { title: "From Guidelines to Practice: A New Paradigm for Arabic Language Model Evaluation",
     status: "review", type: "Journal", venue: "ACM Trans. on Asian & Low-Resource Language Information Processing (TALLIP)", rank: "Q2", impact: "",
-    doi: "", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
+    doi: "https://doi.org/10.48550/arXiv.2506.01920", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
     taxo: "nlp", tags: ["Arabic", "evaluation", "guidelines"],
     abstract: "Turning culturally-aware annotation guidelines into a practical, scalable paradigm for evaluating Arabic language models.",
     abstract_ar: "تحويل إرشادات التحكيم المراعية للثقافة إلى منهجية عملية قابلة للتوسّع لتقييم النماذج العربية.", bibtex: "" },
-  { title: "Anchor-Based Neural Network for City-Level UAV Geo-Localization under GNSS Signal Denial",
+  { title: "Anchor-Based Regional Geo-Localization for UAV Position Recovery under GNSS Denial",
     status: "review", type: "Journal", venue: "Journal · under review", rank: "", impact: "",
     doi: "", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
     taxo: "localization", tags: ["geo-localization", "GNSS-denied", "neural"],

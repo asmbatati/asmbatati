@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, EVENTS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=35";
-import { renderGallery } from "./gallery.js?v=35";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=36";
+import { renderGallery } from "./gallery.js?v=36";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -308,9 +308,10 @@ function renderResearchStats() {
   });
   const foot = el("p", "rs-foot",
     `${T().rs_asof} ${pick(RESEARCH_STATS, "asof")} · <a href="${RESEARCH_STATS.scholar}" target="_blank" rel="noopener">${T().rs_scholar}</a>`);
+  // avoid stacking a new footnote on every re-render (language toggle re-runs this). Remove the old ones first: the new
+  // one goes right after the stats, before them, so keeping the last kept the old language's footnote.
+  host.parentElement.querySelectorAll(".rs-foot").forEach(n => n.remove());
   host.after(foot);
-  // avoid stacking a new footnote on every re-render (language toggle re-runs this)
-  [...host.parentElement.querySelectorAll(".rs-foot")].slice(0, -1).forEach(n => n.remove());
 }
 
 /* ── Gallery page: the Photos / Awards emblems ──
@@ -933,7 +934,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=35").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=36").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
