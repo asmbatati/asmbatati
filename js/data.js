@@ -205,8 +205,8 @@ export const PAPERS = [
     doi: "https://doi.org/10.1109/UVS59630.2024.10467173", tag: "Tracking" },
 ];
 
-export const RESEARCH_NOTE = "11 published (9 peer-reviewed + 2 preprints) · 4 accepted (incl. 3 Springer chapters) · 3 under review · 5 uncredited framework contributions.";
-export const RESEARCH_NOTE_AR = "١١ منشورة (٩ محكّمة + نسختان أوّليتان) · ٤ مقبولة (منها ٣ فصول كتب من Springer) · ٣ قيد المراجعة · ٥ مساهمات إطارية غير منسوبة.";
+export const RESEARCH_NOTE = "11 published (9 peer-reviewed + 2 preprints) · 5 accepted (incl. 3 Springer chapters) · 2 under review · 5 uncredited framework contributions.";
+export const RESEARCH_NOTE_AR = "١١ منشورة (٩ محكّمة + نسختان أوّليتان) · ٥ مقبولة (منها ٣ فصول كتب من Springer) · ٢ قيد المراجعة · ٥ مساهمات إطارية غير منسوبة.";
 
 /* ── The path so far: education + career milestones (2018 → now) ──
    Drives the glowing scroll-path on Home. kind: edu | work | milestone | next. */
@@ -277,8 +277,8 @@ export const RESEARCH_MAP = {
       label: "Systems & Simulation", label_ar: "الأنظمة والمحاكاة",
       topics: ["ROS 2 · middleware", "Gazebo · PX4 · Sim2Real", "digital twins", "benchmarking · datasets"],
       topics_ar: ["ROS 2 والوسطيات", "Gazebo · PX4 · Sim2Real", "التوائم الرقمية", "القياس ومجموعات البيانات"],
-      work: "ROS 2 survey (first author, IF ≈ 28) · FLIGHTGEN generator · ROSNavBench · modular digital-twin framework.",
-      work_ar: "مسح ROS 2 (مؤلف أول، IF ≈ 28) · مولّد FLIGHTGEN · ROSNavBench · إطار توأم رقمي معياري." },
+      work: "ROS 2 survey (first author, IF ≈ 28) · FLIGHTGEN generator · ROSNavBench · modular agentic framework.",
+      work_ar: "مسح ROS 2 (مؤلف أول، IF ≈ 28) · مولّد FLIGHTGEN · ROSNavBench · إطار وكلائي معياري." },
   ],
   platforms: [
     { label: "UAV — VTOL · multirotor", label_ar: "طائرات — VTOL · متعددة المراوح" },
@@ -906,25 +906,25 @@ export const PUBS = [
     taxo: "gen3d", tags: ["generative AI", "CAD", "design systems"],
     abstract: "A survey tracing generative AI for meshes and CAD — from classical geometric modeling to intelligent, language-driven design systems.",
     abstract_ar: "مسح يتتبّع الذكاء التوليدي للمجسّمات وCAD من النمذجة الهندسية الكلاسيكية إلى أنظمة تصميم ذكية مدفوعة باللغة.", bibtex: "" },
-  { title: "Engineering Embodied Agents: A Modular ROS 2-Based Digital-Twin Framework for Heterogeneous Multi-Robot Systems",
+  { title: "Engineering Embodied Agents: A Modular ROS 2-Based Agentic Framework for Heterogeneous Multi-Robot Systems",
     status: "accepted", type: "Book Chapter", venue: "Embodied Agents 2026 — The New Convergence of AI and Robotics", rank: "", impact: "",
     doi: "", project: "", year: 2026, date: "2026", role: "1st author", role_ar: "المؤلف الأول",
-    taxo: "agentic", tags: ["digital twin", "ROS 2", "multi-robot"],
-    abstract: "A modular ROS 2 digital-twin framework for heterogeneous multi-robot systems, bridging embodied AI agents with real robot fleets.",
-    abstract_ar: "إطار توأم رقمي معياري بـROS 2 لمنظومات روبوتات غير متجانسة، يربط وكلاء الذكاء المُجسّد بأساطيل الروبوتات.", bibtex: "" },
+    taxo: "agentic", tags: ["agentic framework", "ROS 2", "multi-robot"],
+    abstract: "A modular ROS 2 agentic framework for heterogeneous multi-robot systems, bridging embodied AI agents with real robot fleets.",
+    abstract_ar: "إطار وكلائي معياري بـROS 2 لمنظومات روبوتات غير متجانسة، يربط وكلاء الذكاء المُجسّد بأساطيل الروبوتات.", bibtex: "" },
   { title: "Generative 3D Object Modeling for Robust Robot Manipulation in ROS 2",
     status: "accepted", type: "Conference", venue: "2026 Int. Conf. on Advanced Robotics and Mechatronics (ICARM)", rank: "", impact: "",
     doi: "", project: "https://gen3d-research.github.io/3d_generator/", year: 2026, date: "2026", role: "1st author", role_ar: "المؤلف الأول",
     taxo: "gen3d", tags: ["generative 3D", "manipulation", "ROS 2"],
     abstract: "Generating 3D object models on demand to make ROS 2 robot manipulation robust to novel, unseen objects.",
     abstract_ar: "توليد مجسّمات ثلاثية الأبعاد عند الطلب لجعل مناولة الروبوت في ROS 2 صلبة أمام أجسام جديدة.", bibtex: "" },
+  { title: "BézierVLA: Parameter-Efficient Continuous Trajectory Prediction for Vision-Language Navigation",
+    status: "accepted", type: "Conference", venue: "2026 IEEE 38th Int. Conf. on Tools with Artificial Intelligence (ICTAI)", rank: "", impact: "",
+    doi: "", project: "", year: 2026, date: "Nov 2026", role: "2nd author", role_ar: "ثاني المؤلفين",
+    taxo: "robotics", tags: ["vision-language navigation", "VLA", "Bézier trajectories"],
+    abstract: "A parameter-efficient framework that predicts a short-horizon cubic Bézier trajectory directly from camera images and a natural-language instruction, giving vision-language navigation a compact geometric reference for motion control.",
+    abstract_ar: "إطار موفّر في المعاملات يتنبّأ بمسار بيزييه تكعيبي قصير المدى مباشرةً من صور الكاميرا وتعليمة باللغة الطبيعية، فيمنح الملاحة بالرؤية واللغة مرجعًا هندسيًا مدمجًا للتحكم في الحركة.", bibtex: "" },
   // ── Under review ──
-  { title: "SAFEMRS: Corroborative Dual-Channel Pre-Execution Safety Verification for LLM-Based Heterogeneous Multi-Robot Task Planning",
-    status: "review", type: "Conference", venue: "Under review", rank: "", impact: "",
-    doi: "", project: "https://neuros-x.github.io/safemrs/", year: 2026, date: "2026", role: "1st author", role_ar: "المؤلف الأول",
-    taxo: "agentic", tags: ["safety", "multi-robot", "LLM planning"],
-    abstract: "A dual-channel pre-execution safety verifier that corroborates LLM-generated multi-robot task plans before they run, catching unsafe plans early.",
-    abstract_ar: "مُحقّق سلامة ثنائي القناة يتثبّت من خطط مهام الروبوتات المتعددة المولّدة من النماذج اللغوية قبل تنفيذها.", bibtex: "" },
   { title: "From Guidelines to Practice: A New Paradigm for Arabic Language Model Evaluation",
     status: "review", type: "Journal", venue: "ACM Trans. on Asian & Low-Resource Language Information Processing (TALLIP)", rank: "Q2", impact: "",
     doi: "https://doi.org/10.48550/arXiv.2506.01920", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
@@ -938,6 +938,12 @@ export const PUBS = [
     abstract: "An anchor-based neural network that geo-localizes UAVs at city scale without GNSS signals.",
     abstract_ar: "شبكة عصبية قائمة على المراسي تموضِع الطائرات على مستوى المدينة دون إشارات GNSS.", bibtex: "" },
   // ── In progress ──
+  { title: "SAFEMRS: Corroborative Dual-Channel Pre-Execution Safety Verification for LLM-Based Heterogeneous Multi-Robot Task Planning",
+    status: "progress", type: "Journal", venue: "Journal · in progress", rank: "", impact: "",
+    doi: "", project: "https://neuros-x.github.io/safemrs/", year: 2026, date: "2026", role: "1st author", role_ar: "المؤلف الأول",
+    taxo: "agentic", tags: ["safety", "multi-robot", "LLM planning"],
+    abstract: "A dual-channel pre-execution safety verifier that corroborates LLM-generated multi-robot task plans before they run, catching unsafe plans early.",
+    abstract_ar: "مُحقّق سلامة ثنائي القناة يتثبّت من خطط مهام الروبوتات المتعددة المولّدة من النماذج اللغوية قبل تنفيذها.", bibtex: "" },
   { title: "Toward Intelligent Quadruped Robots: A Survey of Perception, Locomotion, and Vision-Language-Action Models",
     status: "progress", type: "Journal", venue: "Survey · in progress", rank: "", impact: "",
     doi: "", project: "", year: 2026, date: "2026", role: "Lead author", role_ar: "المؤلف الرئيس",
