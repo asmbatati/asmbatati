@@ -90,10 +90,10 @@ export const STATS = [
 ];
 
 export const PROJECTS = [
-  { id: "proj-vtol-build", cat: "aerial", title: "VTOL UAV Platform", title_ar: "منصة طائرة VTOL", kind: "Flagship build", kind_ar: "أبرز الأعمال", year: "2023",
-    blurb: "A large hybrid VTOL fixed-wing — vertical take-off, fixed-wing cruise. Designed, fabricated, and flown in-house for long-endurance missions.",
-    blurb_ar: "طائرة هجينة كبيرة عمودية الإقلاع وثابتة الجناح — إقلاع عمودي وطيران انسيابي. صُمّمت وصُنّعت وطُيّرت داخليًا لمهامٍ طويلة المدى." },
-  { id: "proj-taer", cat: "aerial", title: "TAER", title_ar: "طائر", kind: "VTOL · CAD", kind_ar: "تصميم VTOL", year: "2023",
+  { id: "proj-vtol-build", cat: "aerial", title: "TA'ER VTOL UAV", title_ar: "طائر — طائرة VTOL", kind: "Flagship build", kind_ar: "أبرز الأعمال", year: "2023",
+    blurb: "TA'ER (طائر), a large hybrid VTOL fixed-wing for long-range medical delivery: designed at the lab, built by WootTech, then reviewed, assembled single-handedly, flown and tested by me.",
+    blurb_ar: "«طائر»، طائرة هجينة كبيرة عمودية الإقلاع وثابتة الجناح للتوصيل الطبي بعيد المدى: صُمّمت في المعمل وصنّعتها WootTech، ثم راجعتُ تصميمها وجمّعتُها وحدي وطيّرتُها واختبرتُها." },
+  { id: "proj-taer", cat: "aerial", title: "Tilt-Tail VTOL Concept", title_ar: "مفهوم VTOL بذيل مائل", kind: "VTOL · CAD", kind_ar: "تصميم VTOL", year: "2023",
     blurb: "Long-endurance tilt-tail VTOL concept: folding quad-lift arms over an efficient fixed-wing cruise body. Full SolidWorks design.",
     blurb_ar: "تصميم VTOL طويل المدى بأذرع رفع قابلة للطي فوق جسم ثابت الجناح عالي الكفاءة. تصميم كامل على SolidWorks." },
   { id: "proj-roboeye", cat: "sensor", title: "RoboEye", title_ar: "عين الروبوت", kind: "VIO sensor kit · industrial design", kind_ar: "حساس تموضع · تصميم صناعي", year: "2024",
@@ -288,7 +288,7 @@ export const RESEARCH_MAP = {
 };
 
 export const ROBOTS = [
-  { id: "proj-vtol-build", cap: "VTOL UAV — final assembly in the lab", cap_ar: "طائرة VTOL — التجميع النهائي في المعمل" },
+  { id: "proj-vtol-build", cap: "TA'ER VTOL UAV — final assembly in the lab", cap_ar: "«طائر» — التجميع النهائي في المعمل" },
   { id: "rob-psu-hexa",    cap: "PSU Robotics & IoT Lab hexacopter — exhibition build", cap_ar: "سداسية معمل الروبوتات بجامعة الأمير سلطان — نسخة المعرض" },
   { id: "rob-quad-gym",    cap: "Research quadrotor — flight-test platform", cap_ar: "رباعية بحثية — منصة اختبار الطيران" },
   { id: "rob-ugv-proto",   cap: "Indoor differential-drive UGV — early prototype", cap_ar: "روبوت أرضي داخلي تفاضلي الدفع — نموذج أولي" },
@@ -302,7 +302,7 @@ export const PRINTS = [
   { id: "print-stereo",  cap: "RoboEye stereo-camera enclosure — 125 g, printed in PETG", cap_ar: "حاوية كاميرا RoboEye الثنائية — ١٢٥ غرامًا، مطبوعة من PETG" },
   { id: "print-kacst-1", cap: "Functional prints — impeller, housing, mechanisms (KACST Industry 4.0)", cap_ar: "مطبوعات وظيفية — مروحة، حاوية، آليّات (كاكست للصناعة ٤٫٠)" },
   { id: "print-kacst-2", cap: "Engine piston, turbine & centrifugal housing — printed for testing", cap_ar: "مكبس محرّك وتوربين وحاوية طاردة مركزية — مطبوعة للاختبار" },
-  { id: "patent-vtol",   cap: "1:7 VTOL prototype — scale model", cap_ar: "نموذج طائرة VTOL بمقياس ١:٧" },
+  { id: "patent-vtol",   cap: "TA'ER 1:7 scale model — printed for exhibitions", cap_ar: "نموذج «طائر» بمقياس ١:٧ — مطبوع للمعارض" },
 ];
 
 export const PATENTS = [
@@ -931,6 +931,12 @@ export const PUBS = [
     taxo: "nlp", tags: ["Arabic", "evaluation", "guidelines"],
     abstract: "Turning culturally-aware annotation guidelines into a practical, scalable paradigm for evaluating Arabic language models.",
     abstract_ar: "تحويل إرشادات التحكيم المراعية للثقافة إلى منهجية عملية قابلة للتوسّع لتقييم النماذج العربية.", bibtex: "" },
+  { title: "ADMD: A Pilot Dataset for Culturally Aligned Arabic LLM Evaluation",
+    status: "review", type: "Journal", venue: "Journal · under review", rank: "", impact: "",
+    doi: "", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
+    taxo: "nlp", tags: ["Arabic", "evaluation", "dataset"],
+    abstract: "A pilot dataset for evaluating Arabic large language models on their cultural understanding as well as their linguistic quality.",
+    abstract_ar: "مجموعة بيانات تجريبية لتقييم النماذج اللغوية العربية الكبيرة في فهمها الثقافي إلى جانب جودتها اللغوية.", bibtex: "" },
   { title: "Anchor-Based Regional Geo-Localization for UAV Position Recovery under GNSS Denial",
     status: "review", type: "Journal", venue: "Journal · under review", rank: "", impact: "",
     doi: "", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
@@ -1268,16 +1274,16 @@ export const GALLERY = {
     ],
 
     projects: [
-      { id: "proj-vtol-build", name: "VTOL UAV Platform", name_ar: "منصة VTOL", steps: [
+      { id: "proj-vtol-build", name: "TA'ER VTOL UAV", name_ar: "طائر — طائرة VTOL", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "A long-endurance mission needs both a helicopter's take-off and an airplane's cruise — so: a hybrid.", d_ar: "مهمة طويلة المدى تحتاج إقلاع المروحية وانسياب الطائرة — إذن: هجينة." },
         { t: "CAD", t_ar: "التصميم", d: "Full airframe in SolidWorks — lift quad booms over a fixed wing, sized around batteries and payload.", d_ar: "هيكل كامل في SolidWorks — أذرع رفع رباعية فوق جناح ثابت حول البطاريات والحمولة." },
-        { t: "Build", t_ar: "التصنيع", d: "Carbon, foam and printed fittings, assembled and wired in-house at the lab.", d_ar: "كربون وفوم ووصلات مطبوعة، جُمّعت وسُلّكت داخل المعمل." },
+        { t: "Build", t_ar: "التصنيع", d: "Manufactured by WootTech from the lab's design; I assembled and wired it single-handedly in the lab.", d_ar: "صنّعتها WootTech من تصميم المعمل، وجمّعتُها وسلّكتُها وحدي في المعمل." },
         { t: "Flight", t_ar: "الطيران", d: "Hover, transition, cruise — the take-off that used to open this site was this aircraft's.", d_ar: "تحويم فانتقال فانسياب — الإقلاع الذي كان يفتتح الموقع كان لهذه الطائرة." } ] },
-      { id: "proj-taer", name: "TAER", name_ar: "طائر", steps: [
+      { id: "proj-taer", name: "Tilt-Tail VTOL Concept", name_ar: "مفهوم VTOL بذيل مائل", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "Push endurance further: folding lift arms that tuck away in cruise, a tail that tilts.", d_ar: "مدًى أطول: أذرع رفع تنطوي أثناء الانسياب وذيل يميل." },
         { t: "CAD", t_ar: "التصميم", d: "Complete SolidWorks design — mechanisms, spars, control surfaces, mass budget.", d_ar: "تصميم SolidWorks كامل — آليّات وعوارض وأسطح تحكّم وميزانية كتلة." },
         { t: "Trade studies", t_ar: "المفاضلات", d: "Prop placement vs drag, arm-fold kinematics, tail-tilt authority — iterated on paper before metal.", d_ar: "موضع المراوح مقابل المقاومة، وحركيّة طيّ الأذرع — قبل أي تصنيع." },
-        { t: "Status", t_ar: "الحالة", d: "A design-portfolio flagship; its ideas fed the built VTOL platform.", d_ar: "قطعة رئيسة في ملف التصميم؛ أفكارها غذّت المنصة المبنيّة." } ] },
+        { t: "Status", t_ar: "الحالة", d: "A later concept of my own, drawn after TA'ER; CAD only, not built.", d_ar: "مفهوم لاحق من تصميمي بعد «طائر»؛ تصميم فقط ولم يُصنَّع." } ] },
       { id: "proj-roboeye", name: "RoboEye", name_ar: "عين الروبوت", steps: [
         { t: "Concept", t_ar: "الفكرة", d: "When GPS goes dark, robots go blind — package visual-inertial localization into one kit.", d_ar: "حين ينقطع GPS يعمى الروبوت — فلنحزم التموضع البصري-القصوري في عُدّة واحدة." },
         { t: "CAD", t_ar: "التصميم", d: "Stereo baseline, IMU seat and compute bay in a 125 g printable enclosure.", d_ar: "قاعدة كاميرتين ومقعد IMU وحجيرة معالجة في حاوية ١٢٥ غرامًا قابلة للطباعة." },
@@ -1314,9 +1320,9 @@ export const GALLERY = {
     intro: "Where everything above meets: airframe + estimator + planner + software, integrated into a platform that leaves the bench. Toggle each between the 3D model and the real machine.",
     intro_ar: "حيث يلتقي كل ما سبق: هيكل ومُقدِّر ومخطِّط وبرمجيات، مدموجة في منصة تغادر الطاولة. بدِّل بين المجسّم والصورة الحقيقية.",
     platforms: [
-      { id: "vtol", photo: "proj-vtol-build", name: "VTOL hybrid UAV", name_ar: "طائرة VTOL هجينة",
-        desc: "Vertical take-off, fixed-wing cruise. Designed, fabricated and flown in-house for long-endurance missions.",
-        desc_ar: "إقلاع عمودي وانسياب ثابت الجناح. صُمّمت وصُنّعت وطارت داخليًا لمهام طويلة المدى.", tags: ["PX4", "long endurance"] },
+      { id: "vtol", photo: "proj-vtol-build", name: "TA'ER — VTOL hybrid UAV", name_ar: "طائر — طائرة VTOL هجينة",
+        desc: "Vertical take-off, fixed-wing cruise. Designed at the lab, built by WootTech, assembled and flown in-house.",
+        desc_ar: "إقلاع عمودي وانسياب ثابت الجناح. صُمّمت في المعمل وصنّعتها WootTech، وجُمّعت وطارت داخليًا.", tags: ["PX4", "long endurance"] },
       { id: "quad", photo: "rob-quad-gym", name: "Research quadrotor", name_ar: "رباعية بحثية",
         desc: "The flight-test workhorse behind the trajectory-prediction and interception papers.",
         desc_ar: "منصة اختبار الطيران خلف أبحاث توقّع المسار والاعتراض.", tags: ["D2DTracker", "VECTOR"] },
@@ -1370,7 +1376,7 @@ export const GALLERY = {
       { id: "print-stereo", cap: "RoboEye stereo enclosure — PETG, 125 g", cap_ar: "حاوية عين الروبوت — PETG، ١٢٥ غ" },
       { id: "print-kacst-1", cap: "Impeller, housings, mechanisms — KACST Industry 4.0", cap_ar: "مروحة وحاويات وآليّات — كاكست للصناعة ٤٫٠" },
       { id: "print-kacst-2", cap: "Piston, turbine & centrifugal housing — printed for testing", cap_ar: "مكبس وتوربين وحاوية طاردة — للاختبار" },
-      { id: "patent-vtol", cap: "1:7 VTOL prototype — scale model", cap_ar: "نموذج VTOL بمقياس ١:٧" },
+      { id: "patent-vtol", cap: "TA'ER 1:7 scale model — printed for exhibitions", cap_ar: "نموذج «طائر» بمقياس ١:٧ — مطبوع للمعارض" },
     ],
   },
   // Mathematical Modeling — how a system becomes equations: Newton → Lagrange →
