@@ -31,7 +31,7 @@
    shared by four sites and `photos` already belongs to Maha Lens.
    ═══════════════════════════════════════════════════════════════════ */
 
-import * as DATA from "./data.js?v=38";
+import * as DATA from "./data.js?v=39";
 
 const SB_URL = "https://pvconwkeshzoovchvzqm.supabase.co";
 const SB_KEY = "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ";
