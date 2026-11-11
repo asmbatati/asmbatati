@@ -1,11 +1,11 @@
 """Curate + optimize portfolio media into responsive WebP.
 Reads from the vault media-drop, writes img/{w480,w960,w1600}/<slug>.webp.
-Run from repo root:  python tools/build_images.py
+Run from repo root:  python tools/build_images.py [slug ...]   (named slugs only; none = all)
 """
 from PIL import Image, ImageOps
-import os, pathlib
+import os, pathlib, sys
 
-SRC_BASE = r"G:\My Drive\Notes\Obsidian\Areas\Portfolio\Websites\1-portfolio-abdulrahman\media-drop"
+SRC_BASE = r"C:\Websites\portfolios\1-portfolio-abdulrahman\media-drop"
 OUT = "img"
 
 # slug -> source path (relative to SRC_BASE)
@@ -21,6 +21,8 @@ MANIFEST = {
     "proj-amir":        r"cad\AMIR\AMIR (6).jpg",
     "proj-robohotel":   r"cad\RoboHotel\AMIR (10).jpg",
     "proj-surveil":     r"photos\DSC00550.JPG",
+    "proj-robofleet":   r"cad\RoboFleet\robofleet-warehouse.jpg",
+    "proj-roadlines":   r"cad\RoadLines\road-lines-chassis-cad.jpg",
     "proj-vtol-build":  r"robots\IMG-20230606-WA0001.jpg",
     # robots gallery (real, screened)
     "rob-quad-gym":     r"robots\IMG-20240603-WA0003.jpg",
@@ -43,7 +45,10 @@ WIDTHS = [("w480", 480), ("w960", 960), ("w1600", 1600)]
 
 def main():
     missing = []
+    only = set(sys.argv[1:])
     for slug, rel in MANIFEST.items():
+        if only and slug not in only:
+            continue
         src = os.path.join(SRC_BASE, rel)
         if not os.path.exists(src):
             missing.append((slug, rel))
