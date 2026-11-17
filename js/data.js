@@ -83,7 +83,7 @@ export const SITEMAP = [
 ];
 
 export const STATS = [
-  { n: "9", label: "peer-reviewed papers", label_ar: "أبحاث محكّمة" },
+  { n: "10", label: "peer-reviewed papers", label_ar: "أبحاث محكّمة" },
   { n: "2", label: "industrial designs granted", label_ar: "تصميمان صناعيّان" },
   { n: "6+", label: "years in robotics", label_ar: "سنوات في الروبوتات" },
   { n: "8", label: "robots designed & built", label_ar: "روبوتات صُمّمت وبُنيت" },
@@ -203,8 +203,8 @@ export const PAPERS = [
     doi: "https://doi.org/10.1109/UVS59630.2024.10467173", tag: "Tracking" },
 ];
 
-export const RESEARCH_NOTE = "11 published (9 peer-reviewed + 2 preprints) · 5 accepted (incl. 3 Springer chapters) · 2 under review · 5 uncredited framework contributions.";
-export const RESEARCH_NOTE_AR = "١١ منشورة (٩ محكّمة + نسختان أوّليتان) · ٥ مقبولة (منها ٣ فصول كتب من Springer) · ٢ قيد المراجعة · ٥ مساهمات إطارية غير منسوبة.";
+export const RESEARCH_NOTE = "13 published (10 peer-reviewed + 1 Springer chapter + 2 preprints) · 4 accepted (incl. 2 Springer chapters) · 4 under review · 5 uncredited framework contributions.";
+export const RESEARCH_NOTE_AR = "١٣ منشورة (١٠ محكّمة + فصل كتاب من Springer + نسختان أوّليتان) · ٤ مقبولة (منها فصلا كتابين من Springer) · ٤ قيد المراجعة · ٥ مساهمات إطارية غير منسوبة.";
 
 /* ── The path so far: education + career milestones (2018 → now) ──
    Drives the glowing scroll-path on Home. kind: edu | work | milestone | next. */
@@ -858,6 +858,30 @@ export const PUBS = [
   author = {Alahmed, Fatimah and Gabr, Khaled and Abdelkader, Mohamed and Jarraya, Imen and Al-Batati, Abdulrahman S. and Koubaa, Anis and Boulila, Wadii},
   date = {2026-09-29}, journaltitle = {Robotics}, volume = {15}, number = {10}, pages = {186}, doi = {10.3390/robotics15100186}
 }` },
+  { title: "Anchor-Based Regional Geo-Localization for UAV Position Recovery in GNSS-Denied Environments",
+    status: "published", type: "Journal", venue: "AI Open, vol. 7", rank: "Q1", impact: "8.9",
+    doi: "https://doi.org/10.1016/j.aiopen.2026.10.001", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
+    taxo: "localization", tags: ["geo-localization", "GNSS-denied", "neural"],
+    abstract: "An anchor-based neural network that geo-localizes UAVs at city scale without GNSS signals.",
+    abstract_ar: "شبكة عصبية قائمة على المراسي تموضِع الطائرات على مستوى المدينة دون إشارات GNSS.",
+    bibtex: `@article{2026_AnchorBased_jarraya,
+  title = {Anchor-Based Regional Geo-Localization for {UAV} Position Recovery in {GNSS}-Denied Environments},
+  author = {Jarraya, Imen and Alahmed, Fatimah and Al-Batati, Abdulrahman and Abdelkader, Mohamed and Boulila, Wadii},
+  date = {2026}, journaltitle = {AI Open}, volume = {7}, pages = {313--331}, doi = {10.1016/j.aiopen.2026.10.001}
+}` },
+  { title: "Geometric Intelligence: A Taxonomic Framework for the Evolution of Generative AI in Meshes and CAD",
+    status: "published", type: "Book Chapter", venue: "Generative AI and Large Language Models (Studies in Computational Intelligence), Springer", rank: "", impact: "",
+    doi: "https://doi.org/10.1007/978-3-032-24013-2_8", project: "", year: 2026, date: "Sep 2026", role: "1st author", role_ar: "المؤلف الأول",
+    taxo: "gen3d", tags: ["generative AI", "CAD", "taxonomy"],
+    abstract: "A taxonomic framework tracing generative AI for meshes and CAD — from classical geometric modeling to intelligent, language-driven design systems.",
+    abstract_ar: "إطار تصنيفي يتتبّع الذكاء التوليدي للمجسّمات وCAD من النمذجة الهندسية الكلاسيكية إلى أنظمة تصميم ذكية مدفوعة باللغة.",
+    bibtex: `@incollection{2026_GeometricIntelligence_albatati,
+  title = {Geometric Intelligence: A Taxonomic Framework for the Evolution of Generative {AI} in Meshes and {CAD}},
+  author = {Al-Batati, Abdulrahman S. and Sibaee, Serry and Gabr, Khaled and Alhabashi, Yasser},
+  booktitle = {Generative {AI} and Large Language Models: Opportunities, Challenges, and Applications},
+  series = {Studies in Computational Intelligence}, publisher = {Springer}, date = {2026-09-02}, pages = {235--256},
+  doi = {10.1007/978-3-032-24013-2_8}
+}` },
   { title: "ROS 2 in a Nutshell: A Survey",
     status: "published", type: "Journal", venue: "ACM Computing Surveys, vol. 58, no. 15", rank: "Q1", impact: "28",
     doi: "https://doi.org/10.1145/3815113", project: "https://asmbatati.github.io/ros2_survey/", year: 2026, date: "2026",
@@ -898,12 +922,6 @@ export const PUBS = [
     taxo: "gen3d", tags: ["agentic", "CAD-to-mesh", "tool reasoning"],
     abstract: "A multi-agent system that automates CAD-to-mesh conversion through tool-based reasoning, letting LLM agents orchestrate geometry pipelines for simulation-ready assets.",
     abstract_ar: "منظومة متعدّدة الوكلاء تؤتمت تحويل CAD إلى مجسّمات عبر استدلال بالأدوات، بحيث ينسّق وكلاء النماذج اللغوية خطوط الهندسة.", bibtex: "" },
-  { title: "The Evolution of Generative AI in Meshes and CAD: From Geometric Modeling to Intelligent Design Systems",
-    status: "accepted", type: "Book Chapter", venue: "Generative AI and LLMs — Volume 2", rank: "", impact: "",
-    doi: "", project: "", year: 2026, date: "2026", role: "1st author", role_ar: "المؤلف الأول",
-    taxo: "gen3d", tags: ["generative AI", "CAD", "design systems"],
-    abstract: "A survey tracing generative AI for meshes and CAD — from classical geometric modeling to intelligent, language-driven design systems.",
-    abstract_ar: "مسح يتتبّع الذكاء التوليدي للمجسّمات وCAD من النمذجة الهندسية الكلاسيكية إلى أنظمة تصميم ذكية مدفوعة باللغة.", bibtex: "" },
   { title: "Engineering Embodied Agents: A Modular ROS 2-Based Agentic Framework for Heterogeneous Multi-Robot Systems",
     status: "accepted", type: "Book Chapter", venue: "Embodied Agents 2026 — The New Convergence of AI and Robotics", rank: "", impact: "",
     doi: "", project: "", year: 2026, date: "2026", role: "1st author", role_ar: "المؤلف الأول",
@@ -935,12 +953,18 @@ export const PUBS = [
     taxo: "nlp", tags: ["Arabic", "evaluation", "dataset"],
     abstract: "A pilot dataset for evaluating Arabic large language models on their cultural understanding as well as their linguistic quality.",
     abstract_ar: "مجموعة بيانات تجريبية لتقييم النماذج اللغوية العربية الكبيرة في فهمها الثقافي إلى جانب جودتها اللغوية.", bibtex: "" },
-  { title: "Anchor-Based Regional Geo-Localization for UAV Position Recovery under GNSS Denial",
+  { title: "Digital Elevation Model-Aware Vision Transformer Fusion for Regional Satellite Image Geolocalization",
     status: "review", type: "Journal", venue: "Journal · under review", rank: "", impact: "",
     doi: "", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
-    taxo: "localization", tags: ["geo-localization", "GNSS-denied", "neural"],
-    abstract: "An anchor-based neural network that geo-localizes UAVs at city scale without GNSS signals.",
-    abstract_ar: "شبكة عصبية قائمة على المراسي تموضِع الطائرات على مستوى المدينة دون إشارات GNSS.", bibtex: "" },
+    taxo: "localization", tags: ["geolocalization", "vision transformer", "DEM"],
+    abstract: "Regional geolocalization of satellite imagery by fusing digital elevation models into a vision transformer.",
+    abstract_ar: "تحديد الموقع الإقليمي لصور الأقمار الصناعية بدمج نماذج الارتفاع الرقمية في محوّل رؤية (Vision Transformer).", bibtex: "" },
+  { title: "Intelligent Origami Biomedical Robotics Through Embedded Sensing, Closed-Loop Control, and Digital-Twin Architectures",
+    status: "review", type: "Journal", venue: "Journal · under review", rank: "", impact: "",
+    doi: "", project: "", year: 2026, date: "2026", role: "Co-author", role_ar: "مؤلف مشارك",
+    taxo: "robotics", tags: ["origami robotics", "biomedical", "digital twins"],
+    abstract: "A review of intelligent origami biomedical robots, organized by the clinical control problems they solve: embedded sensing, state estimation, closed-loop control, digital twins and safety-constrained autonomy.",
+    abstract_ar: "مراجعة لروبوتات الأوريغامي الطبية الذكية، مرتّبة حسب مسائل التحكم السريرية التي تحلّها: الاستشعار المدمج وتقدير الحالة والتحكم بالتغذية الراجعة والتوائم الرقمية والاستقلالية المقيّدة بالسلامة.", bibtex: "" },
   // ── In progress ──
   { title: "SAFEMRS: Corroborative Dual-Channel Pre-Execution Safety Verification for LLM-Based Heterogeneous Multi-Robot Task Planning",
     status: "progress", type: "Journal", venue: "Journal · in progress", rank: "", impact: "",
