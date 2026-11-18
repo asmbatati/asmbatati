@@ -15,7 +15,7 @@
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, IMG } from "./data.js?v=43";
+import { GALLERY, REPOS, IMG } from "./data.js?v=44";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -238,8 +238,12 @@ function viewDesign(host) {
     it => {
       brief.innerHTML = `<div class="db-head"><img src="${IMG(it.id, "w960")}" alt=""><h3>${ctx.pick(it, "name")}</h3></div>
         <div class="db-steps">` + it.steps.map((s, i) =>
-          `<div class="db-step"><span class="db-n">${i + 1}</span><b>${ctx.pick(s, "t")}</b><p>${ctx.pick(s, "d")}</p></div>`).join("") + `</div>`;
+          `<div class="db-step"><span class="db-n">${i + 1}</span><b>${ctx.pick(s, "t")}</b><p>${ctx.pick(s, "d")}</p></div>`).join("") + `</div>`
+        + (ctx.hasJourney?.(it.id) ? `<button class="db-journey">${T.j_open}</button>` : "");
+      brief.querySelector(".db-journey")?.addEventListener("click", () => ctx.openProject(it.id));
       brief.classList.add("on");
+      // a project with a written journey opens it straight away (17 Nov 2026)
+      if (ctx.hasJourney?.(it.id)) { ctx.openProject(it.id); return; }
       if (window.gsap && !ctx.reduced) gsap.from(brief.querySelectorAll(".db-step"), { y: 18, opacity: 0, stagger: 0.07, duration: 0.5, ease: "expo.out" });
       brief.scrollIntoView({ behavior: ctx.reduced ? "instant" : "smooth", block: "nearest" });
     });
@@ -248,7 +252,77 @@ function viewDesign(host) {
   // Moved here from the Manufacturing gallery (16 Aug 2026) — these are parts I
   // designed, so they close the design story rather than open the process one.
   host.append(el("h3", "gp-subh", T.gp_stl_h));
-  trophyScene(host, GALLERY.design.trophies, ctx.pick(GALLERY.design, "trophy_intro"));
+  // Whole assemblies that explode (17 Nov 2026) replaced the single printed parts here.
+  // trophyScene stays for any single-part collection that wants it.
+  assemblyScene(host, GALLERY.design.assemblies, ctx.pick(GALLERY.design, "assemblies_intro"));
+}
+
+/* ── an assembly per step, coloured by module, with an explode slider ──
+   Each GLB node carries extras.explode = the part's offset in the exploded model
+   (three.js puts it in userData), so the slider moves every part along its own offset. */
+function assemblyScene(host, list, intro) {
+  const T = ctx.t();
+  if (intro) host.append(el("p", "gp-hint center", intro));
+  const sc = makeScene(host, Math.min(540, innerWidth * 0.92));
+  const cap = el("div", "trophy-cap"); host.append(cap);
+  const nav = el("div", "trophy-nav asm-nav",
+    `<button class="trophy-btn trophy-prev" aria-label="Previous">‹</button>
+     <label class="asm-explode"><span>${T.gp_explode}</span><input type="range" min="0" max="1" step="0.01" value="0" aria-label="${T.gp_explode}"></label>
+     <button class="trophy-btn trophy-next" aria-label="Next">›</button>`);
+  host.append(nav); host.append(el("p", "gp-hint center", T.gp_asm_hint));
+  if (!sc) return;
+  sc.camera.position.set(0, 1.25, 3.6); sc.camera.lookAt(0, 0, 0);
+  const loader = new GLTFLoader(), slider = nav.querySelector("input");
+  let current = null, parts = [], idx = 0, rot = 0.6, vel = 0, dragging = false, px = 0, token = 0, ex = 0, exTarget = 0, touched = false;
+  const apply = () => parts.forEach(p => p.o.position.set(p.base.x + p.d[0] * ex, p.base.y + p.d[1] * ex, p.base.z + p.d[2] * ex));
+  function place(obj) {
+    parts = [];
+    obj.traverse(o => {
+      if (o.isMesh) {
+        // the CAD exports carry positions and colours only: shade them with computed normals
+        if (!o.geometry.attributes.normal) o.geometry.computeVertexNormals();
+        o.material = new THREE.MeshStandardMaterial({ vertexColors: !!o.geometry.attributes.color, color: o.geometry.attributes.color ? 0xffffff : 0x8fb8a0, roughness: 0.55, metalness: 0.08, flatShading: true });
+      }
+      const d = o.userData && o.userData.explode;
+      if (Array.isArray(d)) parts.push({ o, d, base: o.position.clone() });
+    });
+    // fit the assembled model, then leave room for the exploded one
+    const box = new THREE.Box3().setFromObject(obj), c = new THREE.Vector3(), size = new THREE.Vector3();
+    box.getCenter(c); box.getSize(size);
+    let reach = parts.reduce((m, p) => Math.max(m, Math.hypot(...p.d)), 0);
+    // an exported explode that barely separates the parts is stretched until it reads
+    const big = Math.max(size.x, size.y, size.z, 1e-6), amp = reach > 0 ? Math.max(1, 0.45 * big / reach) : 1;
+    if (amp > 1) { parts.forEach(p => { p.d = p.d.map(v => v * amp); }); reach *= amp; }
+    const maxd = big + reach * 0.6;
+    obj.position.sub(c);
+    const g = new THREE.Group(); g.add(obj); g.scale.setScalar(2.4 / maxd); g.position.y = -0.25;
+    if (current) sc.root.remove(current);
+    current = g; sc.root.add(g);
+  }
+  function show(i) {
+    idx = (i + list.length) % list.length;
+    const a = list[idx], my = ++token;
+    cap.innerHTML = `<h3>${ctx.pick(a, "name")}</h3><p>${ctx.pick(a, "note")}</p><span class="trophy-count">${idx + 1} / ${list.length}</span>`;
+    ex = 0; exTarget = 0; slider.value = 0; touched = false;
+    loader.load(url(a.file, "assets/models/assemblies/"), gltf => {
+      if (my !== token) return; place(gltf.scene); apply();
+      // show what the slider does once: open part-way, then close again
+      if (!ctx.reduced) { exTarget = 0.55; setTimeout(() => { if (my === token && !touched) exTarget = 0; }, 2200); }
+    }, undefined, () => { if (my === token) cap.innerHTML += `<p class="gp-hint">(model failed to load)</p>`; });
+  }
+  slider.addEventListener("input", () => { touched = true; exTarget = +slider.value; });
+  nav.querySelector(".trophy-prev").addEventListener("click", () => show(idx - 1));
+  nav.querySelector(".trophy-next").addEventListener("click", () => show(idx + 1));
+  const cv = sc.renderer.domElement; cv.style.touchAction = "pan-y";
+  cv.addEventListener("pointerdown", e => { dragging = true; px = e.clientX; });
+  onWin("pointermove", e => { if (!dragging) return; const dx = e.clientX - px; px = e.clientX; vel = dx * 0.01; rot += dx * 0.01; });
+  onWin("pointerup", () => dragging = false);
+  show(0);
+  sc.start(() => {
+    if (!dragging) { rot += ctx.reduced ? 0 : 0.004 + vel; vel *= 0.95; }
+    if (Math.abs(exTarget - ex) > 0.001) { ex += (exTarget - ex) * (ctx.reduced ? 1 : 0.08); if (!touched) slider.value = ex; apply(); }
+    if (current) current.rotation.y = rot;
+  });
 }
 
 /* ── Software packages: the intro, my toolchain, and the repos themselves ──
@@ -679,6 +753,43 @@ function viewMath(host) {
   GALLERY.mathmodel.topics.forEach(tp => grid.append(el("article", "theory-card",
     `<div class="theory-eq">${tp.eq}</div><b>${ctx.pick(tp, "t")}</b><p>${ctx.pick(tp, "note")}</p>`)));
   host.append(grid);
+  conceptTree(host);
+}
+
+/* ── the concept tree (17 Nov 2026): every concept in the knowledge vault, by the
+   subject tree that holds it — branch → field → map → concept. Built from the Knowledge
+   OS by tools/build_concept_tree.py: names and structure only. ── */
+function conceptTree(host) {
+  const T = ctx.t(), ar = document.documentElement.lang === "ar" || document.documentElement.dir === "rtl";
+  host.append(el("h3", "gp-subh", T.gp_ctree));
+  host.append(el("p", "gp-hint center", T.gp_ctree_lead));
+  const box = el("div", "ctree"); host.append(box);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const nm = n => esc(ar && n.ar ? n.ar.replace(/^خارطة\s+/, "") : n.n);
+  const fmt = k => k.toLocaleString(ar ? "ar-SA" : "en");
+  fetch("data/concept-tree.json", { cache: "no-cache" }).then(r => r.json()).then(d => {
+    const flat = [];
+    const node = (n, path) => {
+      if (!n.c) { flat.push({ n: n.n, path }); return `<li class="ct-leaf">${esc(n.n)}</li>`; }
+      const kids = n.c.map(x => node(x, path.concat(n.n))).join("");
+      const maps = n.c.filter(x => x.c).length ? "ct-maps" : "ct-leaves";
+      return `<li><details><summary>${nm(n)} <span class="ct-k">${fmt(n.k)}</span></summary><ul class="${maps}">${kids}</ul></details></li>`;
+    };
+    const branches = d.branches.map(b => b.c.length
+      ? `<li class="ct-branch"><details${b === d.branches.find(x => x.k) ? " open" : ""}><summary><b>${nm(b)}</b> <span class="ct-k">${fmt(b.k)}</span></summary><ul class="ct-maps">${b.c.map(f => node(f, [b.n])).join("")}</ul></details></li>`
+      : `<li class="ct-branch ct-empty"><b>${nm(b)}</b> <span class="ct-k">${T.gp_ctree_empty}</span></li>`).join("");
+    box.innerHTML = `<div class="ct-bar"><span class="ct-total">${fmt(d.k)} ${T.gp_ctree_n}</span>
+        <input type="search" class="ct-search" placeholder="${T.gp_ctree_search}" aria-label="${T.gp_ctree_search}"></div>
+      <div class="ct-hits" hidden></div><ul class="ct-root">${branches}</ul>`;
+    const q = box.querySelector(".ct-search"), hits = box.querySelector(".ct-hits"), root = box.querySelector(".ct-root");
+    q.addEventListener("input", () => {
+      const s = q.value.trim().toLowerCase();
+      if (s.length < 2) { hits.hidden = true; root.hidden = false; return; }
+      const m = flat.filter(f => f.n.toLowerCase().includes(s)).slice(0, 80);
+      hits.innerHTML = m.length ? m.map(f => `<div class="ct-hit"><b>${esc(f.n)}</b><span>${esc(f.path.slice(1).join(" › "))}</span></div>`).join("") : `<p class="gp-hint">—</p>`;
+      hits.hidden = false; root.hidden = true;
+    });
+  }).catch(() => box.append(el("p", "gp-hint", "(the concept tree failed to load)")));
 }
 
 /* ── Simulation world: live GPS-denied estimate + ROS 2 sim/viz stack ── */

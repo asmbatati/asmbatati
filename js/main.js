@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, EVENTS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG } from "./data.js?v=43";
-import { renderGallery } from "./gallery.js?v=43";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES } from "./data.js?v=44";
+import { renderGallery } from "./gallery.js?v=44";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -29,6 +29,7 @@ let journeyST = null;
 
 /* ── Lenis ── */
 let lenis = null;
+let curProject = null;   // the project whose panel is open (re-rendered on a language switch)
 if (!reduced) {
   lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 0.9 });
   window.__lenis = lenis;
@@ -823,7 +824,8 @@ function galleryCtx() {
   // `webwork` is passed in rather than imported by gallery.js: the showcase renderer
   // lives here, gallery.js is imported BY this module, and a cycle to reach one
   // function is not worth it.
-  renderGallery({ pick, t: T, lang, reduced, lightbox: (items, idx) => openLightbox(items, idx), webwork: renderWebwork });
+  renderGallery({ pick, t: T, lang, reduced, lightbox: (items, idx) => openLightbox(items, idx), webwork: renderWebwork,
+    hasJourney: id => !!PROJECT_JOURNEYS[id], openProject: id => { const p = PROJECTS.find(x => x.id === id); if (p) openProject(p); } });
 }
 
 /* ════════════ BLOG (markdown posts) ════════════ */
@@ -921,6 +923,7 @@ function applyLang() {
   if (active === "gallery") galleryCtx();
   if (active === "gallery") wireFlow();
   if (active === "home") wireJourney();
+  if (curProject && panel.classList.contains("active")) openProject(curProject);
   requestAnimationFrame(() => ST.refresh());
 }
 $("#langToggle").addEventListener("click", () => { lang = lang === "en" ? "ar" : "en"; applyLang(); });
@@ -934,7 +937,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=43").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=44").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
@@ -1034,8 +1037,46 @@ function wireFlow() {
 
 /* ── project panel + lightbox ── */
 const panel = $("#projPanel");
-function openProject(p) { $("#ppImg").src = IMG(p.id, "w1600"); $("#ppImg").alt = pick(p, "title"); $("#ppKind").textContent = pick(p, "kind") + " · " + p.year; $("#ppTitle").textContent = pick(p, "title"); $("#ppBlurb").textContent = pick(p, "blurb"); panel.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop(); }
-function closePanel() { panel.classList.remove("active"); document.body.style.overflow = ""; lenis?.start(); }
+function openProject(p) { $("#ppImg").src = IMG(p.id, "w1600"); $("#ppImg").alt = pick(p, "title"); $("#ppKind").textContent = pick(p, "kind") + " · " + p.year; $("#ppTitle").textContent = pick(p, "title"); $("#ppBlurb").textContent = pick(p, "blurb"); curProject = p; renderProjectJourney(p); panel.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop(); }
+function closePanel() { panel.classList.remove("active"); panel.classList.remove("has-journey"); $("#ppJourney").querySelectorAll("video").forEach(v => v.pause()); document.body.style.overflow = ""; lenis?.start(); }
+
+/* ── the project's engineering journey (17 Nov 2026): the same 17 stages for every
+   project; a stage the files hold nothing for is drawn as such, never dropped ── */
+function renderProjectJourney(p) {
+  const host = $("#ppJourney"), J = PROJECT_JOURNEYS[p.id];
+  panel.classList.toggle("has-journey", !!J);
+  $("#ppScroll").scrollTop = 0;
+  if (!J) { host.hidden = true; host.innerHTML = ""; return; }
+  const t = T(), esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const recLabel = { full: t.j_full, part: t.j_part, none: t.j_none };
+  const counts = { full: 0, part: 0, none: 0 };
+  JOURNEY_STAGES.forEach(s => { const st = J.stages[s.k]; counts[st ? st.rec : "none"]++; });
+  host.innerHTML = `<header class="pj-head"><span class="pj-eb">${t.j_eb}</span><h4>${t.j_title}</h4>
+      <p class="pj-lead">${esc(pick(J, "lead"))}</p><p class="pj-role">${esc(pick(J, "role"))}</p>
+      <ul class="pj-legend"><li class="rec-full">${recLabel.full} · ${counts.full}</li><li class="rec-part">${recLabel.part} · ${counts.part}</li><li class="rec-none">${recLabel.none} · ${counts.none}</li></ul>
+      <nav class="pj-index">${JOURNEY_STAGES.map((s, i) => `<a href="#pj-${s.k}" class="rec-${(J.stages[s.k] || { rec: "none" }).rec}" data-k="${s.k}">${i + 1}</a>`).join("")}</nav></header>
+    <ol class="pj-stages">${JOURNEY_STAGES.map((s, i) => {
+      const st = J.stages[s.k] || { rec: "none", d: t.j_norec, d_ar: t.j_norec };
+      const media = (st.media || []).map((m, mi) => m.vid
+        ? `<figure class="pj-media pj-vid"><video src="${m.vid}" poster="${IMG(m.poster, "w960")}" controls muted playsinline preload="none"></video><figcaption>${esc(pick(m, "cap"))}</figcaption></figure>`
+        : `<figure class="pj-media${m.wide ? " pj-wide" : ""}" data-mi="${mi}"><img src="${IMG(m.id, m.wide ? "w1600" : "w480")}" alt="${esc(pick(m, "cap"))}" loading="lazy"><figcaption>${esc(pick(m, "cap"))}</figcaption></figure>`).join("");
+      return `<li class="pj-stage rec-${st.rec}" id="pj-${s.k}" data-k="${s.k}">
+        <div class="pj-num">${i + 1}</div>
+        <div class="pj-body"><div class="pj-top"><h5>${esc(pick(s, "t"))}</h5><span class="pj-rec">${recLabel[st.rec]}</span>${st.when ? `<span class="pj-when">${esc(pick(st, "when"))}</span>` : ""}</div>
+          <p>${esc(pick(st, "d"))}</p>${media ? `<div class="pj-gallery">${media}</div>` : ""}</div></li>`;
+    }).join("")}</ol>`;
+  host.hidden = false;
+  host.querySelectorAll(".pj-index a").forEach(a => a.addEventListener("click", e => {
+    e.preventDefault(); host.querySelector("#pj-" + a.dataset.k)?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  }));
+  host.querySelectorAll(".pj-stage").forEach(li => {
+    const imgs = (J.stages[li.dataset.k]?.media || []).filter(m => !m.vid);
+    li.querySelectorAll(".pj-media[data-mi]").forEach(f => f.addEventListener("click", () => {
+      const m = (J.stages[li.dataset.k].media)[+f.dataset.mi];
+      openLightbox(imgs, imgs.indexOf(m));
+    }));
+  });
+}
 $("#ppClose").addEventListener("click", closePanel); panel.addEventListener("click", e => { if (e.target === panel) closePanel(); });
 
 let lbItems = [], lbIdx = 0; const lb = $("#lightbox");
@@ -1043,7 +1084,7 @@ function openLightbox(items, idx) { lbItems = items; lbIdx = idx; renderLb(); lb
 // `src` lets a caller put an exact file in the lightbox (the mind-map SVGs);
 // everything else still resolves a responsive webp tier from the item id.
 function renderLb() { const it = lbItems[lbIdx]; $("#lbImg").src = it.src || IMG(it.id, "w1600"); $("#lbImg").alt = pick(it, "cap") || pick(it, "name") || ""; $("#lbCap").textContent = pick(it, "cap") || pick(it, "name") || ""; $("#lbCount").textContent = `${lbIdx + 1} / ${lbItems.length}`; }
-function closeLb() { lb.classList.remove("active"); document.body.style.overflow = ""; lenis?.start(); }
+function closeLb() { lb.classList.remove("active"); if (panel.classList.contains("active")) return; document.body.style.overflow = ""; lenis?.start(); }
 const step = d => { lbIdx = (lbIdx + d + lbItems.length) % lbItems.length; renderLb(); };
 $(".lb-close").addEventListener("click", closeLb); lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });
 $(".lb-prev").addEventListener("click", e => { e.stopPropagation(); step(-1); }); $(".lb-next").addEventListener("click", e => { e.stopPropagation(); step(1); });

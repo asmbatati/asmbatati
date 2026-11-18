@@ -40,6 +40,20 @@ MANIFEST = {
     "patent-vtol":      r"3d-prints\IMG-20230207-WA0011.jpg",
 }
 
+# Project journeys (17 Nov 2026): every file in cad/<project>/journey becomes a slug
+# (its lower-case stem; a camera's IMGyyyymmdd… becomes amir-j-build-yyyymmdd),
+# each screened by hand before it is put there.
+for _proj in ("AMIR", "RoboEye", "RoadLines"):
+    _d = os.path.join(SRC_BASE, "cad", _proj, "journey")
+    if os.path.isdir(_d):
+        for _f in sorted(os.listdir(_d)):
+            _stem, _ext = os.path.splitext(_f)
+            if _ext.lower() in (".jpg", ".jpeg", ".png"):
+                _slug = _stem.lower().replace(" ", "-")
+                if _slug.startswith("img2022"):
+                    _slug = "amir-j-build-" + _slug[3:11]
+                MANIFEST.setdefault(_slug, os.path.join("cad", _proj, "journey", _f))
+
 WIDTHS = [("w480", 480), ("w960", 960), ("w1600", 1600)]
 
 
