@@ -88,8 +88,15 @@ export const SITEMAP = [
    ACTIVE_PROJECTS), modeling by the simulation gallery's run id, sites by WEBWORK id.
    Designs is the assembly viewer itself; media ends with the newest posts. */
 export const FEATURED = {
-  research: ["ROS 2 in a Nutshell: A Survey", "GNSS-Denied UAV Navigation", "Generative 3D Object Modeling for Robust Robot Manipulation in ROS 2",
-             "Geometric Intelligence", "FLIGHTGEN", "D2DTracker"],
+  // each paper with a picture: its own Fig. 1 where the paper has one, else the research map's plate
+  research: [
+    { q: "ROS 2 in a Nutshell: A Survey", img: "img/research/w960/ros2.webp" },
+    { q: "GNSS-Denied UAV Navigation", img: "img/research/w960/gps-denied.webp" },
+    { q: "Generative 3D Object Modeling for Robust Robot Manipulation in ROS 2", img: "paper-gen3d" },
+    { q: "Geometric Intelligence", img: "paper-geometric" },
+    { q: "FLIGHTGEN", img: "paper-flightgen" },
+    { q: "D2DTracker", img: "ihunter-j-d2dtracker" },
+  ],
   projects: ["proj-amir", "proj-vtol-build", "proj-roadlines", "ap-shuttle", "ap-ihunter", "ap-rpw", "ap-gps-denied", "proj-roboeye", "proj-agridrone"],
   modeling: [
     { run: "sim-uav-px4" }, { run: "sim-ihunter-mission" }, { run: "sim-construct-rmf" },
@@ -100,10 +107,19 @@ export const FEATURED = {
       note_ar: "إطار مفتوح لأشجار السلوك لروبوت TiAGo المتنقّل ذي الذراع، مبنيّ على BehaviorTree.CPP وNav2؛ وأنا من المساهمين فيه." },
   ],
   sites: ["ros-database", "latex-converter", "khattat3d"],
+  // four cards, each opening in place on Home
   media: [
-    { show: "photos", img: "rob-quad-gym", t: "Selected photos and videos", t_ar: "صور ومقاطع مختارة",
-      d: "The robots I built and the parts I printed, as they really look.", d_ar: "الروبوتات التي بنيتها والقطع التي طبعتها، كما تبدو فعلًا." },
+    { kind: "photos", img: "rob-quad-gym", t: "Selected photos and videos", t_ar: "صور ومقاطع مختارة",
+      d: "The robots I built and the parts I printed, and the builds on video.", d_ar: "الروبوتات التي بنيتها والقطع التي طبعتها، والأعمال في مقاطع." },
+    { kind: "events", img: "img/gal/events.svg", t: "Selected events", t_ar: "فعاليات مختارة",
+      d: "Conferences I presented at, expos for the lab, and the press that followed.", d_ar: "مؤتمرات قدّمتُ فيها، ومعارض للمختبر، وما تلاها من تغطية." },
+    { kind: "awards", img: "img/gal/awards.svg", t: "Selected awards", t_ar: "جوائز مختارة",
+      d: "Awards for papers, projects and competitions.", d_ar: "جوائز عن أوراق ومشاريع ومسابقات." },
+    { kind: "posts", img: "", t: "Selected posts", t_ar: "تدوينات مختارة",
+      d: "Notes on robotics, research and building things, to read here.", d_ar: "ملاحظات عن الروبوتات والبحث وبناء الأشياء، تُقرأ هنا." },
   ],
+  // the clips the photos card plays, by file; each takes its caption from its project's journey
+  videos: ["vid/taer-hover-test.mp4", "vid/roadlines-test-drive.mp4", "vid/faseeh-lab-drive.mp4", "vid/robofleet-last-point.mp4", "vid/ihunter-navigator-test.mp4"],
   blog: 3,
 };
 
@@ -2368,7 +2384,7 @@ export const I18N = {
     researchpg_lead: "The map, the mental model, and every publication — in one place.",
     projpg_kicker: "Projects", projpg_title: "The machines.",
     rs_eb: "Highlights", rs_title: "Research at a glance.", rs_asof: "as of", rs_scholar: "Google Scholar ↗",
-    sm_eb: "Explore", sm_title: "My portfolio", sm_lead: "Explore these next..", ft_research: "Featured Research", ft_projects: "Featured Projects", ft_designs: "Featured Designs", ft_modeling: "Featured Modeling", ft_sites: "Featured Sites", ft_media: "Featured Media", ft_all: "All", ft_full: "The full portfolio", ft_post: "Post", ft_visit: "Open the site ↗", ft_designs_lead: "Drag to turn, press Explode, step through with ‹ ›.", pc_doi: "DOI ↗", pc_page: "Project page ↗", pc_list: "In the publications list →", pc_close: "Close", pc_authors: "My role", vc_visitors: "visitors", vc_title: "Browsers that have opened this site since",
+    sm_eb: "Explore", sm_title: "My portfolio", sm_lead: "Explore these next..", ft_research: "Featured Research", ft_projects: "Featured Projects", ft_designs: "Featured Designs", ft_modeling: "Featured Modeling", ft_sites: "Featured Sites", ft_media: "Featured Media", ft_all: "All", ft_full: "The full portfolio", ft_post: "Post", ft_visit: "Open the site ↗", md_photos: "Photos", md_videos: "Videos", md_back: "← All posts", md_read: "Read", ft_designs_lead: "Drag to turn, press Explode, step through with ‹ ›.", pc_doi: "DOI ↗", pc_page: "Project page ↗", pc_list: "In the publications list →", pc_close: "Close", pc_authors: "My role", vc_visitors: "visitors", vc_title: "Browsers that have opened this site since",
     eb_active: "Active", t_active: "What I'm building now.",
     lead_active: "Research running today and proposals submitted — who leads each one, what backs it, and where it stands.",
     eb_finished: "Finished", t_finished: "Built, flown, and shipped.",
@@ -2475,7 +2491,7 @@ export const I18N = {
     researchpg_lead: "الخارطة، والنموذج الذهني، وكل منشور — في مكان واحد.",
     projpg_kicker: "المشاريع", projpg_title: "الآلات.",
     rs_eb: "أهم النقاط", rs_title: "لمحة عامة.", rs_asof: "حتى", rs_scholar: "الباحث العلمي ↗",
-    sm_eb: "استكشف", sm_title: "معرضي", sm_lead: "استكشف موقعي..", ft_research: "أبحاث مختارة", ft_projects: "مشاريع مختارة", ft_designs: "تصاميم مختارة", ft_modeling: "نمذجة مختارة", ft_sites: "مواقع مختارة", ft_media: "وسائط مختارة", ft_all: "الكل", ft_full: "المعرض كاملًا", ft_post: "تدوينة", ft_visit: "افتح الموقع ↗", ft_designs_lead: "اسحب للتدوير، واضغط «فكّها»، وتنقّل بـ‹ ›.", pc_doi: "DOI ↗", pc_page: "صفحة المشروع ↗", pc_list: "في قائمة المنشورات ←", pc_close: "إغلاق", pc_authors: "دوري", vc_visitors: "زائر", vc_title: "المتصفّحات التي فتحت هذا الموقع منذ",
+    sm_eb: "استكشف", sm_title: "معرضي", sm_lead: "استكشف موقعي..", ft_research: "أبحاث مختارة", ft_projects: "مشاريع مختارة", ft_designs: "تصاميم مختارة", ft_modeling: "نمذجة مختارة", ft_sites: "مواقع مختارة", ft_media: "وسائط مختارة", ft_all: "الكل", ft_full: "المعرض كاملًا", ft_post: "تدوينة", ft_visit: "افتح الموقع ↗", md_photos: "صور", md_videos: "مقاطع", md_back: "→ كل التدوينات", md_read: "اقرأ", ft_designs_lead: "اسحب للتدوير، واضغط «فكّها»، وتنقّل بـ‹ ›.", pc_doi: "DOI ↗", pc_page: "صفحة المشروع ↗", pc_list: "في قائمة المنشورات ←", pc_close: "إغلاق", pc_authors: "دوري", vc_visitors: "زائر", vc_title: "المتصفّحات التي فتحت هذا الموقع منذ",
     eb_active: "جارية", t_active: "ما أبنيه الآن.",
     lead_active: "أبحاث جارية اليوم ومقترحات مُقدَّمة — من يقودها، وما الذي يدعمها، وأين وصلت.",
     eb_finished: "مكتملة", t_finished: "بُنيت وطارت وسُلّمت.",

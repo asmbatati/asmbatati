@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, EVENTS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES, FEATURED, GALLERY } from "./data.js?v=49";
-import { renderGallery, openGalleryCat, openGalleryHub, mountHomeAssemblies, stopHomeAssemblies } from "./gallery.js?v=49";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES, FEATURED, GALLERY } from "./data.js?v=50";
+import { renderGallery, openGalleryCat, openGalleryHub, mountHomeAssemblies, stopHomeAssemblies } from "./gallery.js?v=50";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -361,9 +361,9 @@ function renderFeatured() {
   };
 
   // 1. research: the paper's own status badge, never a stronger one
-  const pubs = FEATURED.research.map(q => PUBS.find(p => p.title.startsWith(q))).filter(Boolean);
-  group("research", "research", pubs.map(p => card(null, `${p.venue.split(",")[0]} · ${p.year}`, p.title, pick(p, "role"),
-    () => openPaperCard(p), `<span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span>`)));
+  const pubs = FEATURED.research.map(r => [PUBS.find(p => p.title.startsWith(r.q)), r.img]).filter(([p]) => p);
+  group("research", "research", pubs.map(([p, img]) => card(IMG(img, "w480"), `${p.venue.split(",")[0]} · ${p.year}`, p.title, pick(p, "role"),
+    () => openPaperCard(p, img), `<span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span>`)));
 
   // 2. projects
   const projs = FEATURED.projects.map(id => PROJECTS.find(p => p.id === id) || ACTIVE_PROJECTS.find(p => p.id === id)).filter(Boolean);
@@ -398,33 +398,49 @@ function renderFeatured() {
   group("sites", () => openFrom("gallery", () => openGalleryCat("software")), FEATURED.sites.map(id => WEBWORK.find(w => w.id === id)).filter(Boolean)
     .map(w => link(IMG("site-" + w.id, "w480"), pick(w, "tag"), pick(w, "title"), pick(w, "blurb"), w.live, `<span class="ft-go">${t.ft_visit}</span>`)));
 
-  // 6. media: the photo door, then the newest posts, which arrive with the blog's index
-  const media = FEATURED.media.map(m => card(IMG(m.img, "w480"), t.ft_media, pick(m, "t"), pick(m, "d"),
-    () => openFrom("gallery", () => { openGalleryHub(); pendingShow = m.show; })));
-  const mg = group("media", "articles", media);
-  loadPosts().then(posts => {
-    const row = mg?.querySelector(".ft-row"); if (!row || !row.isConnected) return;
-    posts.slice(0, FEATURED.blog).forEach(a => row.append(card(a.cover, `${t.ft_post} · ${a.date} · ${a.read} ${t.art_min}`, pick(a, "title"), pick(a, "excerpt"),
-      () => openFrom("articles", () => { pendingPost = a; }))));
-    window.__cursorBind?.(); requestAnimationFrame(() => ST.refresh());
+  // 6. media: four cards, each opening in place (the posts card takes the newest post's cover)
+  const media = FEATURED.media.map(m => {
+    const c = card(m.img ? IMG(m.img, "w480") : null, t.ft_media, pick(m, "t"), pick(m, "d"), () => openMedia(m));
+    if (m.kind === "posts") loadPosts().then(ps => { if (ps[0]?.cover && c.isConnected && !c.querySelector(".ft-img")) {
+      c.classList.remove("ft-text"); c.insertAdjacentHTML("afterbegin", `<span class="ft-img"><img src="${ps[0].cover}" alt="" loading="lazy"></span>`); } });
+    return c;
   });
+  group("media", () => openFrom("gallery", () => { openGalleryHub(); pendingShow = "photos"; }), media);
   window.__cursorBind?.();
 }
 
-/* A featured paper's own card: what it is, where, my role, its abstract, and its links.
-   Built once, filled per paper; Escape, the backdrop or ✕ closes it. */
-function openPaperCard(p) {
-  const t = T();
+/* One card modal for Home's featured items (18 Nov 2026): a paper, or one of the four media
+   views. Escape, the backdrop or ✕ closes it; the lightbox opens above it. */
+function cardModal() {
   let m = $("#paperCard");
   if (!m) {
     m = el("div", "pc-modal"); m.id = "paperCard"; m.setAttribute("role", "dialog"); m.setAttribute("aria-modal", "true");
+    m.setAttribute("data-lenis-prevent", "");
     document.body.append(m);
     m.addEventListener("click", e => { if (e.target === m || e.target.closest(".pc-close")) closePaperCard(); });
-    addEventListener("keydown", e => { if (e.key === "Escape" && m.classList.contains("active")) closePaperCard(); });
+    addEventListener("keydown", e => { if (e.key === "Escape" && m.classList.contains("active") && !lb.classList.contains("active")) closePaperCard(); });
   }
+  return m;
+}
+function showCard(html, wide) {
+  const m = cardModal(), t = T();
+  m.innerHTML = `<article class="pc-card${wide ? " pc-wide" : ""}" ${lang === "ar" ? 'dir="rtl"' : ""}>
+    <button class="pc-close" type="button" aria-label="${t.pc_close}">✕</button>${html}</article>`;
+  m.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop();
+  const c = m.querySelector(".pc-card"); c.scrollTop = 0;
+  m.querySelector(".pc-close").focus({ preventScroll: true });
+  return c;
+}
+function closePaperCard() {
+  const m = $("#paperCard"); if (!m) return;
+  m.classList.remove("active"); m.querySelectorAll("video").forEach(v => v.pause());
+  if (panel.classList.contains("active")) return;
+  document.body.style.overflow = ""; lenis?.start();
+}
+function openPaperCard(p, img) {
+  const t = T();
   const rank = p.rank ? `<span class="pub-rank">${p.rank}${p.impact ? ` · IF ${p.impact}` : ""}</span>` : "";
-  m.innerHTML = `<article class="pc-card" ${lang === "ar" ? 'dir="rtl"' : ""}>
-      <button class="pc-close" type="button" aria-label="${t.pc_close}">✕</button>
+  const c = showCard(`${img ? `<img class="pc-fig" src="${IMG(img, "w960")}" alt="">` : ""}
       <span class="ft-kick">${escH(p.type)} · ${escH(p.venue)} · ${escH(p.date || p.year)}</span>
       <h3 dir="ltr">${escH(p.title)}</h3>
       <div class="pc-badges"><span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span>${rank}<span class="pc-role">${t.pc_authors}: ${escH(pick(p, "role"))}</span></div>
@@ -435,15 +451,57 @@ function openPaperCard(p) {
         ${p.project ? `<a class="btn btn-ghost" href="${p.project}" target="_blank" rel="noopener">${t.pc_page}</a>` : ""}
         ${p.bibtex ? `<button class="btn btn-ghost pc-bib" type="button">${t.pub_copy}</button>` : ""}
         <button class="btn btn-ghost pc-list" type="button">${t.pc_list}</button>
-      </div></article>`;
-  m.querySelector(".pc-bib")?.addEventListener("click", e => { navigator.clipboard?.writeText(p.bibtex); e.target.textContent = t.pub_copied; });
-  m.querySelector(".pc-list").addEventListener("click", () => { closePaperCard(); openFrom("research", () => { pendingPub = p; }); });
-  m.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop();
-  m.querySelector(".pc-close").focus({ preventScroll: true });
+      </div>`);
+  c.querySelector(".pc-bib")?.addEventListener("click", e => { navigator.clipboard?.writeText(p.bibtex); e.target.textContent = t.pub_copied; });
+  c.querySelector(".pc-list").addEventListener("click", () => { closePaperCard(); openFrom("research", () => { pendingPub = p; }); });
 }
-function closePaperCard() {
-  const m = $("#paperCard"); if (!m) return;
-  m.classList.remove("active"); document.body.style.overflow = ""; lenis?.start();
+function openMedia(m) {
+  const t = T(), head = `<span class="ft-kick">${t.ft_media}</span><h3>${escH(pick(m, "t"))}</h3>`;
+  if (m.kind === "photos") {
+    const items = [...ROBOTS, ...PRINTS];
+    // a clip's caption is the one its project's journey gives it
+    const caps = new Map();
+    Object.values(PROJECT_JOURNEYS).forEach(j => Object.values(j.stages || {}).forEach(s => (s.media || []).forEach(x => { if (x.vid) caps.set(x.vid, x); })));
+    const vids = FEATURED.videos.map(v => caps.get(v)).filter(Boolean);
+    const c = showCard(`${head}<h4 class="md-sub">${t.md_photos}</h4>
+      <div class="md-grid">${items.map((x, i) => `<button type="button" class="md-ph" data-i="${i}"><img src="${IMG(x.id, "w480")}" alt="" loading="lazy"><span>${escH(pick(x, "cap"))}</span></button>`).join("")}</div>
+      ${vids.length ? `<h4 class="md-sub">${t.md_videos}</h4><div class="md-vids">${vids.map(v => `<figure><video src="${v.vid}" poster="${IMG(v.poster, "w960")}" controls muted playsinline preload="none"></video><figcaption>${escH(pick(v, "cap"))}</figcaption></figure>`).join("")}</div>` : ""}`, true);
+    c.querySelectorAll(".md-ph").forEach(b => b.addEventListener("click", () => openLightbox(items, +b.dataset.i)));
+  } else if (m.kind === "events") {
+    const rows = g => EVENTS.items.filter(i => i.g === g.id).sort((a, b) => (b.year || 0) - (a.year || 0));
+    const press = (EVENTS.coverage || []).filter(x => x.url);
+    showCard(`${head}${EVENTS.groups.map(g => { const r = rows(g); return r.length ? `<h4 class="md-sub">${escH(pick(g, "label"))}</h4>
+      <ul class="md-list">${r.map(i => `<li><span class="md-yr">${i.year || t.ev_undated}</span><span><b>${escH(pick(i, "title"))}</b> — ${escH(pick(i, "what"))}${i.place ? ` · ${escH(pick(i, "place"))}` : ""}</span></li>`).join("")}</ul>` : ""; }).join("")}
+      ${press.length ? `<h4 class="md-sub">${t.ev_press}</h4><ul class="md-list">${press.map(x => `<li><span class="md-yr">${x.year || ""}</span><span><a href="${x.url}" target="_blank" rel="noopener">${escH(pick(x, "title"))} ↗</a> · ${escH(pick(x, "outlet"))}</span></li>`).join("")}</ul>` : ""}`, true);
+  } else if (m.kind === "awards") {
+    showCard(`${head}<div class="gaw-grid">${QUALS.awards.map(a => `<article class="gaw-card"><span class="gaw-year">${a.year}</span><b>${escH(pick(a, "title"))}</b><p>${escH(pick(a, "org"))}</p></article>`).join("")}</div>`, true);
+  } else if (m.kind === "posts") {
+    loadPosts().then(posts => {
+      const list = posts.slice(0, FEATURED.blog);
+      const c = showCard(`${head}<div class="ft-row md-posts">${list.map((a, i) => `<button type="button" class="ft-card" data-i="${i}">
+          ${a.cover ? `<span class="ft-img"><img src="${a.cover}" alt="" loading="lazy"></span>` : ""}
+          <span class="ft-body"><span class="ft-kick">${a.date} · ${a.read} ${t.art_min}</span><b>${escH(pick(a, "title"))}</b><span class="ft-txt">${escH(pick(a, "excerpt"))}</span></span></button>`).join("")}</div>`, true);
+      c.querySelectorAll(".md-posts .ft-card").forEach(b => b.addEventListener("click", () => readPostInCard(list[+b.dataset.i], m)));
+    });
+  }
+}
+// a post read inside the card; a live figure comes as a still copy, its ids removed so the
+// blog's own copy (which the language switch looks up by id) is never doubled
+async function readPostInCard(a, m) {
+  const t = T(), file = (lang === "ar" && a.file_ar) || a.file, rtl = lang === "ar" ? a.file_ar : a.lang === "ar";
+  let body = "";
+  try { body = DOMPurify.sanitize(marked.parse(await (await fetch(`posts/${file}`, { cache: "no-cache" })).text())); }
+  catch { body = `<p>${t.art_empty}</p>`; }
+  const c = showCard(`<button type="button" class="md-back">${t.md_back}</button>
+    <div class="article-full md-article" ${rtl ? 'dir="rtl"' : ""}><h1>${escH(pick(a, "title"))}</h1><div class="a-meta">${a.date} · ${a.read} ${t.art_min}</div>
+    ${a.cover ? `<img class="pc-fig" src="${a.cover}" alt="">` : ""}<div class="a-content">${body}</div></div>`, true);
+  if (a.embed) {
+    const src = document.getElementById(a.embed), content = c.querySelector(".a-content");
+    const slot = [...content.querySelectorAll("p")].find(p => p.textContent.trim() === "{{figure}}");
+    if (src) { const k = src.cloneNode(true); k.removeAttribute("id"); k.querySelectorAll("[id]").forEach(n => n.removeAttribute("id")); k.classList.add("a-figure"); slot ? slot.replaceWith(k) : content.append(k); }
+    else slot?.remove();
+  }
+  c.querySelector(".md-back").addEventListener("click", () => openMedia(m));
 }
 // a paper in the list: find its row, open the abstract, and bring it into view
 function showPub(p) {
@@ -1130,7 +1188,7 @@ function paintVisits() {
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=49").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=50").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
@@ -1277,7 +1335,7 @@ function openLightbox(items, idx) { lbItems = items; lbIdx = idx; renderLb(); lb
 // `src` lets a caller put an exact file in the lightbox (the mind-map SVGs);
 // everything else still resolves a responsive webp tier from the item id.
 function renderLb() { const it = lbItems[lbIdx]; $("#lbImg").src = it.src || IMG(it.id, "w1600"); $("#lbImg").alt = pick(it, "cap") || pick(it, "name") || ""; $("#lbCap").textContent = pick(it, "cap") || pick(it, "name") || ""; $("#lbCount").textContent = `${lbIdx + 1} / ${lbItems.length}`; }
-function closeLb() { lb.classList.remove("active"); if (panel.classList.contains("active")) return; document.body.style.overflow = ""; lenis?.start(); }
+function closeLb() { lb.classList.remove("active"); if (panel.classList.contains("active") || $("#paperCard")?.classList.contains("active")) return; document.body.style.overflow = ""; lenis?.start(); }
 const step = d => { lbIdx = (lbIdx + d + lbItems.length) % lbItems.length; renderLb(); };
 $(".lb-close").addEventListener("click", closeLb); lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });
 $(".lb-prev").addEventListener("click", e => { e.stopPropagation(); step(-1); }); $(".lb-next").addEventListener("click", e => { e.stopPropagation(); step(1); });
