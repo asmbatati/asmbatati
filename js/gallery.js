@@ -15,7 +15,7 @@
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, IMG } from "./data.js?v=53";
+import { GALLERY, REPOS, IMG } from "./data.js?v=56";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -311,9 +311,21 @@ function assemblyScene(host, list, intro) {
     if (amp > 1) { parts.forEach(p => { p.d = p.d.map(v => v * amp); }); reach *= amp; }
     // fit both states (18 Nov 2026): a tall stack like the AgriDrone's ran off the stage, so the
     // box is measured fully exploded too, and the model is sized and centred on the union of the two
-    parts.forEach(p => p.o.position.set(p.base.x + p.d[0], p.base.y + p.d[1], p.base.z + p.d[2]));
-    obj.updateMatrixWorld(true);
-    const both = new THREE.Box3().setFromObject(obj).union(box);
+    const explodedBox = () => {
+      parts.forEach(p => p.o.position.set(p.base.x + p.d[0], p.base.y + p.d[1], p.base.z + p.d[2]));
+      obj.updateMatrixWorld(true);
+      return new THREE.Box3().setFromObject(obj).union(box);
+    };
+    let both = explodedBox();
+    // a long explode (TA'ER's) is pulled in until it spans at most 1.35 times the model,
+    // so the assembled model is not drawn small to make room for it
+    for (let k = 0; k < 3; k++) {
+      const span = Math.max(...both.getSize(new THREE.Vector3()).toArray());
+      if (span <= 1.35 * big) break;
+      const f = Math.max(0.05, (0.35 * big) / (span - big));
+      parts.forEach(p => { p.d = p.d.map(v => v * f); });
+      both = explodedBox();
+    }
     parts.forEach(p => p.o.position.copy(p.base));
     const bs = new THREE.Vector3(), bc = new THREE.Vector3(); both.getSize(bs); both.getCenter(bc);
     const maxd = Math.max(bs.x, bs.y, bs.z, 1e-6) * 1.05;
