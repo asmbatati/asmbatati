@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, EVENTS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES } from "./data.js?v=44";
-import { renderGallery } from "./gallery.js?v=44";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES } from "./data.js?v=45";
+import { renderGallery } from "./gallery.js?v=45";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -642,7 +642,10 @@ function renderActiveProjects() {
         ${row(T().ap_lead, pick(p, "lead"))}
         ${row(T().ap_fund, pick(p, "fund"))}
       </dl>
-      <div class="ap-tech">${(p.tech || []).map(t => `<span>${t}</span>`).join("")}</div>`;
+      <div class="ap-tech">${(p.tech || []).map(t => `<span>${t}</span>`).join("")}</div>`
+      + (PROJECT_JOURNEYS[p.id] ? `<button class="db-journey ap-journey">${T().j_open}</button>` : "");
+    // an active project with a written journey opens it in the project panel (18 Nov 2026)
+    c.querySelector(".ap-journey")?.addEventListener("click", () => openProject(p));
     grid.append(c);
   });
   window.__cursorBind?.();
@@ -937,7 +940,7 @@ applyLang();
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=44").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=45").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
@@ -1037,7 +1040,7 @@ function wireFlow() {
 
 /* ── project panel + lightbox ── */
 const panel = $("#projPanel");
-function openProject(p) { $("#ppImg").src = IMG(p.id, "w1600"); $("#ppImg").alt = pick(p, "title"); $("#ppKind").textContent = pick(p, "kind") + " · " + p.year; $("#ppTitle").textContent = pick(p, "title"); $("#ppBlurb").textContent = pick(p, "blurb"); curProject = p; renderProjectJourney(p); panel.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop(); }
+function openProject(p) { $("#ppImg").src = IMG(p.cover || p.id, "w1600"); $("#ppImg").alt = pick(p, "title"); $("#ppKind").textContent = [pick(p, "kind"), p.year].filter(Boolean).join(" · "); $("#ppTitle").textContent = pick(p, "title"); $("#ppBlurb").textContent = pick(p, "blurb"); curProject = p; renderProjectJourney(p); panel.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop(); }
 function closePanel() { panel.classList.remove("active"); panel.classList.remove("has-journey"); $("#ppJourney").querySelectorAll("video").forEach(v => v.pause()); document.body.style.overflow = ""; lenis?.start(); }
 
 /* ── the project's engineering journey (17 Nov 2026): the same 17 stages for every

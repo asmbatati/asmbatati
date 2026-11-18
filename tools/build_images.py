@@ -22,7 +22,7 @@ MANIFEST = {
     "proj-robohotel":   r"cad\RoboHotel\AMIR (10).jpg",
     "proj-surveil":     r"photos\DSC00550.JPG",
     "proj-robofleet":   r"cad\RoboFleet\robofleet-warehouse.jpg",
-    "proj-roadlines":   r"cad\RoadLines\road-lines-chassis-cad.jpg",
+    "proj-roadlines":   r"cad\RoadLines\journey\roadlines-j-assembly.jpg",  # the robot as built, Jun 2021; the cart render was not it (18 Nov 2026)
     "proj-vtol-build":  r"robots\IMG-20230606-WA0001.jpg",
     # robots gallery (real, screened)
     "rob-quad-gym":     r"robots\IMG-20240603-WA0003.jpg",
@@ -43,7 +43,7 @@ MANIFEST = {
 # Project journeys (17 Nov 2026): every file in cad/<project>/journey becomes a slug
 # (its lower-case stem; a camera's IMGyyyymmdd… becomes amir-j-build-yyyymmdd),
 # each screened by hand before it is put there.
-for _proj in ("AMIR", "RoboEye", "RoadLines"):
+for _proj in ("AMIR", "RoboEye", "RoadLines", "iHunter", "TAER", "FASEEH", "RoboFleet", "RPW", "Shuttle"):
     _d = os.path.join(SRC_BASE, "cad", _proj, "journey")
     if os.path.isdir(_d):
         for _f in sorted(os.listdir(_d)):
