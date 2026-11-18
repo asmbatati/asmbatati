@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, EVENTS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES } from "./data.js?v=45";
-import { renderGallery } from "./gallery.js?v=45";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES, FEATURED, GALLERY } from "./data.js?v=48";
+import { renderGallery, openGalleryCat } from "./gallery.js?v=48";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -57,16 +57,40 @@ if (!touch && !reduced) {
 }
 
 /* ════════════ ROUTER + block-curtain transition (2×5 blocks + drone flyby) ════════════ */
+/* Where each page was left, for this visit only (18 Nov 2026): a page seen for the first
+   time opens at the top, a page seen before opens where it was left. The jumps are instant
+   on purpose: <html> has scroll-behavior: smooth, so a plain scrollTo(0, 0) only STARTED
+   moving, and the ScrollTrigger.refresh() in the next frame recorded the old offset and
+   put it back, which is why a new page could open at its bottom. */
+const pageScroll = new Map();
+let sectionJump = false;          // a [data-scroll] link is about to scroll Home itself
+let pendingPost = null, pendingPub = null;   // what a featured card on Home opens on arrival
+// a featured card opens its item where it is, never at the page's remembered offset
+const openFrom = (page, before) => { before?.(); sectionJump = true; setTimeout(() => { sectionJump = false; }, 3500); showPage(page); };
+const jumpTo = y => { lenis?.resize?.(); lenis?.scrollTo(y, { immediate: true, force: true }); scrollTo({ top: y, behavior: "instant" }); };
 function switchPage(name) {
+  const prev = $(".page.active")?.id.slice(5);
+  const revisit = pageScroll.has(name);
+  if (prev && prev !== name) pageScroll.set(prev, scrollY);
+  const target = sectionJump ? 0 : (pageScroll.get(name) ?? 0);
   $$(".page").forEach(p => p.classList.toggle("active", p.id === "page-" + name));
   $$("[data-nav]").forEach(a => a.classList.toggle("active", a.dataset.nav === name));
-  lenis?.scrollTo(0, { immediate: true }); scrollTo(0, 0);          // new page starts from the top
+  jumpTo(0);
   if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
-  if (name === "articles") renderArticles();
+  // the blog keeps the post or list it was left on; it is rebuilt only on the first visit
+  if (name === "articles" && pendingPost) { const p = pendingPost; pendingPost = null; (revisit ? Promise.resolve() : renderArticles()).then(() => openArticle(p)); }
+  else if (name === "articles" && !revisit) renderArticles();
+  if (name === "research" && pendingPub) { const p = pendingPub; pendingPub = null; requestAnimationFrame(() => requestAnimationFrame(() => showPub(p))); }
   if (name === "gallery") galleryCtx();
   if (name === "gallery") wireFlow();
   if (name === "home") wireJourney();
-  requestAnimationFrame(() => { ST.refresh(); revealIn("#page-" + name); });
+  requestAnimationFrame(() => {
+    ST.refresh(); revealIn("#page-" + name);
+    if (sectionJump) return;
+    jumpTo(target);
+    // late layout (images, the gallery's 3D stages) can still clamp it: land once more
+    if (target) setTimeout(() => { if (!sectionJump && Math.abs(scrollY - target) > 4) jumpTo(target); }, 250);
+  });
 }
 let transBusy = false;
 const BLOCK_STAGGER = { each: 0.05, from: "start", grid: [2, 5], axis: "x" };
@@ -108,6 +132,7 @@ $$("[data-nav]").forEach(a => a.addEventListener("click", e => { e.preventDefaul
 $$("[data-scroll]").forEach(a => a.addEventListener("click", e => {
   e.preventDefault();
   if (!$("#page-home").classList.contains("active")) {
+    sectionJump = true; setTimeout(() => { sectionJump = false; }, 3500);
     showPage("home");
     // showPage runs a ~1.3s curtain before switchPage swaps the page in. The old
     // requestAnimationFrame fired ~16ms later, while Home was still display:none —
@@ -136,6 +161,7 @@ function renderDynamic() {
   $("#langs").innerHTML = (lang === "ar" ? PROFILE.languages_ar : PROFILE.languages).map(l => `<span class="chip">${l}</span>`).join("");
 
   renderJourney();
+  renderFeatured();
   renderSitemap();
   renderResearchStats();
   renderResearchMap();
@@ -295,6 +321,65 @@ function renderSitemap() {
     host.append(c);
   });
   window.__cursorBind?.();
+}
+
+/* ── Featured (Home, 18 Nov 2026) ──
+   A few items from each part of the site, each opening the item itself: a paper's row
+   with its abstract, a project's panel, a gallery category, the teaching page, a post.
+   The picks live in FEATURED (data.js). */
+function renderFeatured() {
+  const host = $("#featured"); if (!host) return;
+  const t = T(), esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  host.innerHTML = "";
+  const group = (key, page, cards, slot) => {
+    if (!cards.length || !$("#page-" + page)) { slot?.remove(); return; }
+    const g = el("div", "ft-group");
+    g.innerHTML = `<div class="ft-head"><h3>${t["ft_" + key]}</h3><button type="button" class="ft-all">${t.ft_all} →</button></div>`;
+    g.querySelector(".ft-all").addEventListener("click", () => showPage(page));
+    const row = el("div", "ft-row"); cards.forEach(c => row.append(c)); g.append(row);
+    slot ? slot.replaceWith(g) : host.append(g);
+  };
+  const card = (img, kicker, title, text, onClick, extra = "") => {
+    const c = el("button", "ft-card" + (img ? "" : " ft-text")); c.type = "button";
+    c.innerHTML = `${img ? `<span class="ft-img"><img src="${img}" alt="" loading="lazy"></span>` : ""}
+      <span class="ft-body"><span class="ft-kick">${esc(kicker)}</span><b>${esc(title)}</b>${text ? `<span class="ft-txt">${esc(text)}</span>` : ""}${extra}</span>`;
+    c.addEventListener("click", onClick); return c;
+  };
+  // research: the paper's own status badge, never a stronger one
+  const pubs = FEATURED.research.map(q => PUBS.find(p => p.title.startsWith(q))).filter(Boolean);
+  group("research", "research", pubs.map(p => card(null, `${p.venue.split(",")[0]} · ${p.year}`, p.title, pick(p, "role"),
+    () => openFrom("research", () => { pendingPub = p; }), `<span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span>`)));
+  const projs = FEATURED.projects.map(id => PROJECTS.find(p => p.id === id) || ACTIVE_PROJECTS.find(p => p.id === id)).filter(Boolean);
+  group("projects", "projects", projs.map(p => card(IMG(p.cover || p.id, "w480"), [pick(p, "kind"), p.year].filter(Boolean).join(" · "),
+    pick(p, "title"), "", () => openProject(p))));
+  const catLabel = id => { const c = GALLERY.cats.find(x => x.id === id); return c ? pick(c, "label") : ""; };
+  group("gallery", "gallery", FEATURED.gallery.map(g => card(g.img, catLabel(g.cat), pick(g, "t"), pick(g, "d"),
+    () => openFrom("gallery", () => openGalleryCat(g.cat)))));
+  const teach = FEATURED.teaching.map(k => {
+    const c = TEACHING.courses.find(x => x.code === k); if (c) return [c, t.ft_course];
+    return [TEACHING.workshops.find(x => x.title === k), t.ft_workshop];
+  }).filter(([x]) => x);
+  group("teaching", "teaching", teach.map(([c, kind]) => card(null, `${kind} · ${pick(c, "org")} · ${pick(c, "when")}`,
+    (c.code ? c.code + " · " : "") + pick(c, "title"), pick(c, "note"), () => showPage("teaching"))));
+  // the blog's index is fetched: its group takes its place when the posts land
+  const slot = el("div", "ft-slot"); host.append(slot);
+  loadPosts().then(posts => {
+    if (!slot.isConnected) return;
+    group("blog", "articles", posts.slice(0, FEATURED.blog).map(a => card(a.cover, `${a.date} · ${a.read} ${t.art_min}`, pick(a, "title"), pick(a, "excerpt"),
+      () => openFrom("articles", () => { pendingPost = a; }))), slot);
+    window.__cursorBind?.(); requestAnimationFrame(() => ST.refresh());
+  });
+  window.__cursorBind?.();
+}
+// a featured paper: find its row, open the abstract, and bring it into view
+function showPub(p) {
+  const find = () => $$("#pubBody .pub-row").find(r => r.querySelector(".pub-title")?.textContent === p.title);
+  let row = find();
+  if (!row) { pubFilter.q = ""; $("#pubSearch").value = ""; ["taxo", "type", "year", "status"].forEach(k => { pubFilter[k] = "all"; }); renderPubs(); row = find(); }
+  if (!row) return;
+  row.nextElementSibling?.classList.add("open");
+  row.classList.add("ft-flash"); setTimeout(() => row.classList.remove("ft-flash"), 2400);
+  scrollToSection(row);
 }
 
 /* ── Research highlights ──
@@ -927,6 +1012,7 @@ function applyLang() {
   if (active === "gallery") wireFlow();
   if (active === "home") wireJourney();
   if (curProject && panel.classList.contains("active")) openProject(curProject);
+  paintVisits();
   requestAnimationFrame(() => ST.refresh());
 }
 $("#langToggle").addEventListener("click", () => { lang = lang === "en" ? "ar" : "en"; applyLang(); });
@@ -936,11 +1022,41 @@ $("#cGithub").href = PROFILE.links.github; $("#cLinkedin").href = PROFILE.links.
 
 applyLang();
 
+/* ── Visitor count (18 Nov 2026) ──
+   One Supabase function, public.portfolio_visit(), keeps two totals and nothing else: a
+   browser counts once as a visitor (a flag in its localStorage) and once per session as a
+   visit. No IP, user agent or id leaves the page. The table itself is closed to the public
+   key; only the function writes it. Local previews read the totals without adding to them,
+   and any failure leaves the footer as it was. */
+var VISITS = null;   // var: applyLang() runs above this line and calls paintVisits()
+function paintVisits() {
+  const v = $("#visits"); if (!v || !VISITS) return;
+  const n = Number(VISITS.visitors || 0).toLocaleString(lang === "ar" ? "ar-SA" : "en-US");
+  v.textContent = ` · ${n} ${T().vc_visitors}`;
+  v.title = `${T().vc_title} ${new Date(VISITS.since).toLocaleDateString(lang === "ar" ? "ar-SA-u-ca-gregory" : "en-GB", { day: "numeric", month: "long", year: "numeric" })}`;
+  v.hidden = false;
+}
+(function countVisit() {
+  const local = /^(localhost|127\.|\[::1\])/.test(location.hostname) || location.protocol === "file:";
+  const get = (s, k) => { try { return s.getItem(k); } catch { return "1"; } };       // storage off: never count
+  const set = (s, k) => { try { s.setItem(k, "1"); } catch {} };
+  const newVisitor = !local && !get(localStorage, "pf-visitor"), newVisit = !local && !get(sessionStorage, "pf-visit");
+  fetch("https://pvconwkeshzoovchvzqm.supabase.co/rest/v1/rpc/portfolio_visit", {
+    method: "POST", headers: { apikey: "sb_publishable_P2yIjpSw7vCSm8uWhkKixw_ZGbdB7jJ", "Content-Type": "application/json" },
+    body: JSON.stringify({ new_visitor: newVisitor, new_visit: newVisit }),
+  }).then(r => r.ok ? r.json() : null).then(d => {
+    if (!d) return;
+    if (newVisitor) set(localStorage, "pf-visitor");
+    if (newVisit) set(sessionStorage, "pf-visit");
+    VISITS = d; paintVisits();
+  }).catch(() => {});
+})();
+
 /* ── owner-editable content: merge cloud overrides over data.js, then re-render;
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=45").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=48").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {

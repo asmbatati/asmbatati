@@ -82,6 +82,26 @@ export const SITEMAP = [
     desc: "Notes on robotics, research, and building things.", desc_ar: "ملاحظات عن الروبوتات والبحث وبناء الأشياء." },
 ];
 
+/* What Home's "My portfolio" section features before the full map (18 Nov 2026).
+   Each list names items held elsewhere in this file, so a pick is changed here alone:
+   research by the start of the paper's title as PUBS writes it, projects by id (PROJECTS
+   or ACTIVE_PROJECTS), gallery by category id, teaching by course code or workshop title.
+   The blog shows the newest posts in posts/posts.json. */
+export const FEATURED = {
+  research: ["ROS 2 in a Nutshell: A Survey", "GNSS-Denied UAV Navigation", "Generative 3D Object Modeling for Robust Robot Manipulation in ROS 2"],
+  projects: ["ap-ihunter", "ap-shuttle", "proj-vtol-build"],
+  gallery: [
+    { cat: "design", img: "img/gal/cad.webp", t: "Assemblies that explode", t_ar: "تجميعات تتفكّك",
+      d: "Whole robots and drones from their CAD, pulled apart module by module.", d_ar: "روبوتات وطائرات كاملة من ملفات CAD، تتفكّك وحدةً وحدة." },
+    { cat: "physsim", img: "img/gal/sim.webp", t: "Robots in simulation", t_ar: "روبوتات في المحاكاة",
+      d: "Gazebo, PX4 SITL and RViz runs from my projects and courses.", d_ar: "تجارب Gazebo وPX4 SITL وRViz من مشاريعي ودوراتي." },
+    { cat: "integration", img: "img/gal/robotics.webp", t: "Robotic systems", t_ar: "الأنظمة الروبوتية",
+      d: "Full systems, in 3D and as built.", d_ar: "أنظمة كاملة، مجسّمةً وكما بُنيت." },
+  ],
+  teaching: ["ME 218", "Managing a Fleet of Robots with ROS 2"],
+  blog: 3,
+};
+
 export const STATS = [
   { n: "10", label: "peer-reviewed papers", label_ar: "أبحاث محكّمة" },
   { n: "2", label: "industrial designs granted", label_ar: "تصميمان صناعيّان" },
@@ -2020,8 +2040,8 @@ export const GALLERY = {
     // project's own SolidWorks assembly, coloured by module, simplified for the web by
     // x/scripts/_cad_export.py's GLBs plus each part's exploded offset (extras.explode).
     // The explode order is the export's (Nov 2026), not a recorded assembly sequence.
-    assemblies_intro: "Whole assemblies from my CAD, each coloured by module. Drag to turn one, slide to pull it apart module by module, and step through them with ‹ ›.",
-    assemblies_intro_ar: "تجميعات كاملة من تصاميمي، كلٌّ منها ملوّن بحسب وحداته. اسحب لتدويرها، وحرّك المنزلق لتفكيكها وحدةً وحدة، وتنقّل بينها بـ‹ ›.",
+    assemblies_intro: "Whole assemblies from my projects' CAD, each coloured by module; each note says whose design it is. Drag to turn one, press Explode or slide to pull it apart module by module, and step through them with ‹ ›.",
+    assemblies_intro_ar: "تجميعات كاملة من ملفات CAD لمشاريعي، كلٌّ منها ملوّن بحسب وحداته، وتذكر كلُّ ملاحظة صاحبَ التصميم. اسحب لتدويرها، واضغط «فكّها» أو حرّك المنزلق لتفكيكها وحدةً وحدة، وتنقّل بينها بـ‹ ›.",
     assemblies: [
       { file: "amir-2023.glb", name: "AMIR — the 2023 assembly", name_ar: "عامر — تجميعة ٢٠٢٣",
         note: "The warehouse robot's last model: mobility, structure, power, processing, sensing and the shell with its crates. Industrial design SA 11614.",
@@ -2032,6 +2052,9 @@ export const GALLERY = {
       { file: "agile-drone-2023.glb", name: "Agile Drone — iHunter, January 2023", name_ar: "الطائرة الرشيقة — iHunter، يناير ٢٠٢٣",
         note: "An interception research quadcopter, by unit: motion, power, processing, perception and structure.",
         note_ar: "طائرة رباعية لأبحاث الاعتراض، بحسب الوحدة: الحركة والطاقة والمعالجة والإدراك والهيكل." },
+      { file: "ihunter-x500-v2.glb", name: "iHunter — the X500-v2, August 2026", name_ar: "iHunter — طائرة X500-v2، أغسطس ٢٠٢٦",
+        note: "Holybro's X500 V2 frame, with the payload I fitted for the field tests: the Jetson and the gimbal camera on the mounts I printed. Two groups: the frame, and the payloads and propellers.",
+        note_ar: "هيكل X500 V2 من Holybro، بالحمولة التي ركّبتُها للتجارب الميدانية: حاسوب Jetson وكاميرا الجيمبال على الحوامل التي طبعتُها. مجموعتان: الهيكل، والحمولات والمراوح." },
       { file: "shuttle-mount.glb", name: "PSU Smart Shuttle — sensor mount", name_ar: "الحافلة الذكية — حامل الحساسات",
         note: "The mount for the shuttle's sensors in its outdoor case, with the two antennas as far apart as heading needs (2026).",
         note_ar: "حامل حساسات الحافلة في علبته الخارجية، والهوائيان متباعدان بقدر ما يحتاجه تقدير الاتجاه (٢٠٢٦)." },
@@ -2340,7 +2363,7 @@ export const I18N = {
     researchpg_lead: "The map, the mental model, and every publication — in one place.",
     projpg_kicker: "Projects", projpg_title: "The machines.",
     rs_eb: "Highlights", rs_title: "Research at a glance.", rs_asof: "as of", rs_scholar: "Google Scholar ↗",
-    sm_eb: "Explore", sm_title: "My portfolio", sm_lead: "Explore these next..",
+    sm_eb: "Explore", sm_title: "My portfolio", sm_lead: "Explore these next..", ft_research: "Research", ft_projects: "Projects", ft_gallery: "Gallery", ft_teaching: "Teaching", ft_blog: "Blog", ft_all: "All", ft_full: "The full portfolio", ft_course: "Course", ft_workshop: "Workshop", vc_visitors: "visitors", vc_title: "Browsers that have opened this site since",
     eb_active: "Active", t_active: "What I'm building now.",
     lead_active: "Research running today and proposals submitted — who leads each one, what backs it, and where it stands.",
     eb_finished: "Finished", t_finished: "Built, flown, and shipped.",
@@ -2357,7 +2380,7 @@ export const I18N = {
     eb_orgs: "Organizations", t_orgs: "Where I build.", orgs_lead: "The labs and programs my research ships under.",
     org_follow: "View organization ↗", org_site: "Site ↗",
     gp_photo: "Photo", gp_3d: "3D model",
-    gp_trophy_hint: "Real STLs I designed and printed — use ‹ › to step through the collection.", gp_explode: "Explode", gp_ctree: "The concept tree", gp_ctree_lead: "Every concept in my knowledge vault, where its subject tree holds it: the branches of knowledge, their fields, the maps inside them and the concepts on each map. Open a branch, or search a name.", gp_ctree_n: "concepts", gp_ctree_search: "Search a concept…", gp_ctree_empty: "not written yet", gp_asm_hint: "drag to turn · ‹ › to step through",
+    gp_trophy_hint: "Real STLs I designed and printed — use ‹ › to step through the collection.", gp_explode: "Explode", gp_explode_btn: "Explode", gp_assemble_btn: "Assemble", gp_ctree: "The concept tree", gp_ctree_lead: "Every concept in my knowledge vault, where its subject tree holds it: the branches of knowledge, their fields, the maps inside them and the concepts on each map. Open a branch, or search a name.", gp_ctree_n: "concepts", gp_ctree_search: "Search a concept…", gp_ctree_empty: "not written yet", gp_asm_hint: "drag to turn · ‹ › to step through",
     gp_theory: "The results I reach for", sim_stack: "The simulators, and what each one is for", gp_prints_h: "And in the real world",
     gp_edp: "The Engineering Design Process", gp_showcase: "The machines, and how each was designed",
     gp_stl_h: "Assemblies I designed — pull them apart", gp_fields: "The six it draws on",
@@ -2447,7 +2470,7 @@ export const I18N = {
     researchpg_lead: "الخارطة، والنموذج الذهني، وكل منشور — في مكان واحد.",
     projpg_kicker: "المشاريع", projpg_title: "الآلات.",
     rs_eb: "أهم النقاط", rs_title: "لمحة عامة.", rs_asof: "حتى", rs_scholar: "الباحث العلمي ↗",
-    sm_eb: "استكشف", sm_title: "معرضي", sm_lead: "استكشف موقعي..",
+    sm_eb: "استكشف", sm_title: "معرضي", sm_lead: "استكشف موقعي..", ft_research: "الأبحاث", ft_projects: "المشاريع", ft_gallery: "المعرض", ft_teaching: "التدريس", ft_blog: "المدوّنة", ft_all: "الكل", ft_full: "المعرض كاملًا", ft_course: "مقرّر", ft_workshop: "ورشة", vc_visitors: "زائر", vc_title: "المتصفّحات التي فتحت هذا الموقع منذ",
     eb_active: "جارية", t_active: "ما أبنيه الآن.",
     lead_active: "أبحاث جارية اليوم ومقترحات مُقدَّمة — من يقودها، وما الذي يدعمها، وأين وصلت.",
     eb_finished: "مكتملة", t_finished: "بُنيت وطارت وسُلّمت.",
@@ -2464,7 +2487,7 @@ export const I18N = {
     eb_orgs: "المنظّمات", t_orgs: "أين أبني.", orgs_lead: "المعامل والبرامج التي تُنشر تحتها أبحاثي.",
     org_follow: "زيارة المنظّمة ↗", org_site: "الموقع ↗",
     gp_photo: "صورة", gp_3d: "مجسّم ثلاثي",
-    gp_trophy_hint: "مجسّمات STL حقيقية صمّمتها وطبعتها — استخدم ‹ › للتنقّل في المجموعة.", gp_explode: "تفكيك", gp_ctree: "شجرة المفاهيم", gp_ctree_lead: "كل مفهوم في خزانة معرفتي حيث تضعه شجرة الموضوعات: فروع المعرفة وحقولها والخرائط داخلها والمفاهيم على كل خريطة. افتح فرعًا أو ابحث باسم المفهوم (أسماء المفاهيم بالإنجليزية).", gp_ctree_n: "مفهومًا", gp_ctree_search: "ابحث عن مفهوم…", gp_ctree_empty: "لم يُكتب بعد", gp_asm_hint: "اسحب للتدوير · ‹ › للتنقّل",
+    gp_trophy_hint: "مجسّمات STL حقيقية صمّمتها وطبعتها — استخدم ‹ › للتنقّل في المجموعة.", gp_explode: "تفكيك", gp_explode_btn: "فكّها", gp_assemble_btn: "ركّبها", gp_ctree: "شجرة المفاهيم", gp_ctree_lead: "كل مفهوم في خزانة معرفتي حيث تضعه شجرة الموضوعات: فروع المعرفة وحقولها والخرائط داخلها والمفاهيم على كل خريطة. افتح فرعًا أو ابحث باسم المفهوم (أسماء المفاهيم بالإنجليزية).", gp_ctree_n: "مفهومًا", gp_ctree_search: "ابحث عن مفهوم…", gp_ctree_empty: "لم يُكتب بعد", gp_asm_hint: "اسحب للتدوير · ‹ › للتنقّل",
     gp_theory: "النتائج التي أستدعيها", sim_stack: "المحاكيات، ولأي شيء يصلح كلٌّ منها", gp_prints_h: "وفي الواقع",
     gp_edp: "منهجية التصميم الهندسي", gp_showcase: "الآلات، وكيف صُمّمت كلٌّ منها",
     gp_stl_h: "تجميعات صمّمتها — فكّكها", gp_fields: "التخصّصات الستّة التي يستند إليها",

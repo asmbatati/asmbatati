@@ -15,7 +15,7 @@
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, IMG } from "./data.js?v=45";
+import { GALLERY, REPOS, IMG } from "./data.js?v=48";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -32,6 +32,8 @@ const iconFor = c => `img/gal/${c.icon}.webp`;
 const url = (f, base) => (/^(https?:)?\/\//.test(f) || f.startsWith("/")) ? f : base + f;
 
 export function renderGallery(context) { ctx = context; paint(); }
+// Home's featured cards open a category straight away (18 Nov 2026); the router then renders it.
+export function openGalleryCat(id) { activeCat = id; stage = "world"; morphFrom = null; }
 
 /* ══════════ stage machine ══════════ */
 function paint() {
@@ -268,11 +270,14 @@ function assemblyScene(host, list, intro) {
   const nav = el("div", "trophy-nav asm-nav",
     `<button class="trophy-btn trophy-prev" aria-label="Previous">‹</button>
      <label class="asm-explode"><span>${T.gp_explode}</span><input type="range" min="0" max="1" step="0.01" value="0" aria-label="${T.gp_explode}"></label>
+     <button class="asm-toggle" type="button" aria-pressed="false">${T.gp_explode_btn}</button>
      <button class="trophy-btn trophy-next" aria-label="Next">›</button>`);
   host.append(nav); host.append(el("p", "gp-hint center", T.gp_asm_hint));
   if (!sc) return;
   sc.camera.position.set(0, 1.25, 3.6); sc.camera.lookAt(0, 0, 0);
-  const loader = new GLTFLoader(), slider = nav.querySelector("input");
+  const loader = new GLTFLoader(), slider = nav.querySelector("input"), toggle = nav.querySelector(".asm-toggle");
+  // the button (18 Nov 2026) explodes or reassembles in one click; the slider stays for partway
+  const setToggle = open => { toggle.textContent = open ? T.gp_assemble_btn : T.gp_explode_btn; toggle.setAttribute("aria-pressed", String(open)); };
   let current = null, parts = [], idx = 0, rot = 0.6, vel = 0, dragging = false, px = 0, token = 0, ex = 0, exTarget = 0, touched = false;
   const apply = () => parts.forEach(p => p.o.position.set(p.base.x + p.d[0] * ex, p.base.y + p.d[1] * ex, p.base.z + p.d[2] * ex));
   function place(obj) {
@@ -303,14 +308,15 @@ function assemblyScene(host, list, intro) {
     idx = (i + list.length) % list.length;
     const a = list[idx], my = ++token;
     cap.innerHTML = `<h3>${ctx.pick(a, "name")}</h3><p>${ctx.pick(a, "note")}</p><span class="trophy-count">${idx + 1} / ${list.length}</span>`;
-    ex = 0; exTarget = 0; slider.value = 0; touched = false;
+    ex = 0; exTarget = 0; slider.value = 0; touched = false; setToggle(false);
     loader.load(url(a.file, "assets/models/assemblies/"), gltf => {
       if (my !== token) return; place(gltf.scene); apply();
       // show what the slider does once: open part-way, then close again
       if (!ctx.reduced) { exTarget = 0.55; setTimeout(() => { if (my === token && !touched) exTarget = 0; }, 2200); }
     }, undefined, () => { if (my === token) cap.innerHTML += `<p class="gp-hint">(model failed to load)</p>`; });
   }
-  slider.addEventListener("input", () => { touched = true; exTarget = +slider.value; });
+  slider.addEventListener("input", () => { touched = true; exTarget = +slider.value; setToggle(exTarget > 0.5); });
+  toggle.addEventListener("click", () => { touched = true; exTarget = exTarget > 0.5 ? 0 : 1; setToggle(exTarget > 0.5); });
   nav.querySelector(".trophy-prev").addEventListener("click", () => show(idx - 1));
   nav.querySelector(".trophy-next").addEventListener("click", () => show(idx + 1));
   const cv = sc.renderer.domElement; cv.style.touchAction = "pan-y";
@@ -320,7 +326,7 @@ function assemblyScene(host, list, intro) {
   show(0);
   sc.start(() => {
     if (!dragging) { rot += ctx.reduced ? 0 : 0.004 + vel; vel *= 0.95; }
-    if (Math.abs(exTarget - ex) > 0.001) { ex += (exTarget - ex) * (ctx.reduced ? 1 : 0.08); if (!touched) slider.value = ex; apply(); }
+    if (Math.abs(exTarget - ex) > 0.001) { ex += (exTarget - ex) * (ctx.reduced ? 1 : 0.08); if (!touched || document.activeElement !== slider) slider.value = ex; apply(); }
     if (current) current.rotation.y = rot;
   });
 }
