@@ -15,7 +15,7 @@
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, IMG } from "./data.js?v=51";
+import { GALLERY, REPOS, IMG } from "./data.js?v=53";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -309,9 +309,16 @@ function assemblyScene(host, list, intro) {
     // an exported explode that barely separates the parts is stretched until it reads
     const big = Math.max(size.x, size.y, size.z, 1e-6), amp = reach > 0 ? Math.max(1, 0.45 * big / reach) : 1;
     if (amp > 1) { parts.forEach(p => { p.d = p.d.map(v => v * amp); }); reach *= amp; }
-    const maxd = big + reach * 0.6;
-    obj.position.sub(c);
-    const g = new THREE.Group(); g.add(obj); g.scale.setScalar(2.4 / maxd); g.position.y = -0.25;
+    // fit both states (18 Nov 2026): a tall stack like the AgriDrone's ran off the stage, so the
+    // box is measured fully exploded too, and the model is sized and centred on the union of the two
+    parts.forEach(p => p.o.position.set(p.base.x + p.d[0], p.base.y + p.d[1], p.base.z + p.d[2]));
+    obj.updateMatrixWorld(true);
+    const both = new THREE.Box3().setFromObject(obj).union(box);
+    parts.forEach(p => p.o.position.copy(p.base));
+    const bs = new THREE.Vector3(), bc = new THREE.Vector3(); both.getSize(bs); both.getCenter(bc);
+    const maxd = Math.max(bs.x, bs.y, bs.z, 1e-6) * 1.05;
+    obj.position.sub(bc);
+    const g = new THREE.Group(); g.add(obj); g.scale.setScalar(2.4 / maxd); g.position.y = -0.1;
     if (current) sc.root.remove(current);
     current = g; sc.root.add(g);
   }
