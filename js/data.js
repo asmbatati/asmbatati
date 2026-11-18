@@ -88,10 +88,10 @@ export const SITEMAP = [
    ACTIVE_PROJECTS), modeling by the simulation gallery's run id, sites by WEBWORK id.
    Designs is the assembly viewer itself; media ends with the newest posts. */
 export const FEATURED = {
-  // each paper with a picture: its own Fig. 1 where the paper has one, else the research map's plate
+  // each paper with a picture of its own: a figure from the paper or its project
   research: [
-    { q: "ROS 2 in a Nutshell: A Survey", img: "img/research/w960/ros2.webp" },
-    { q: "GNSS-Denied UAV Navigation", img: "img/research/w960/gps-denied.webp" },
+    { q: "ROS 2 in a Nutshell: A Survey", img: "paper-ros2" },   // the survey's taxonomy, from the ros_database repository,
+    { q: "GNSS-Denied UAV Navigation", img: "paper-gnss" },   // the survey's map of outdoor GPS-denied localization,
     { q: "Generative 3D Object Modeling for Robust Robot Manipulation in ROS 2", img: "paper-gen3d" },
     { q: "Geometric Intelligence", img: "paper-geometric" },
     { q: "FLIGHTGEN", img: "paper-flightgen" },
