@@ -82,23 +82,28 @@ export const SITEMAP = [
     desc: "Notes on robotics, research, and building things.", desc_ar: "ملاحظات عن الروبوتات والبحث وبناء الأشياء." },
 ];
 
-/* What Home's "My portfolio" section features before the full map (18 Nov 2026).
-   Each list names items held elsewhere in this file, so a pick is changed here alone:
-   research by the start of the paper's title as PUBS writes it, projects by id (PROJECTS
-   or ACTIVE_PROJECTS), gallery by category id, teaching by course code or workshop title.
-   The blog shows the newest posts in posts/posts.json. */
+/* What Home's "My portfolio" section features before the full map (18 Nov 2026, the owner's
+   list). Each entry names an item held elsewhere in this file, so a pick changes here alone:
+   research by the start of the paper's title as PUBS writes it, projects by id (PROJECTS or
+   ACTIVE_PROJECTS), modeling by the simulation gallery's run id, sites by WEBWORK id.
+   Designs is the assembly viewer itself; media ends with the newest posts. */
 export const FEATURED = {
-  research: ["ROS 2 in a Nutshell: A Survey", "GNSS-Denied UAV Navigation", "Generative 3D Object Modeling for Robust Robot Manipulation in ROS 2"],
-  projects: ["ap-ihunter", "ap-shuttle", "proj-vtol-build"],
-  gallery: [
-    { cat: "design", img: "img/gal/cad.webp", t: "Assemblies that explode", t_ar: "تجميعات تتفكّك",
-      d: "Whole robots and drones from their CAD, pulled apart module by module.", d_ar: "روبوتات وطائرات كاملة من ملفات CAD، تتفكّك وحدةً وحدة." },
-    { cat: "physsim", img: "img/gal/sim.webp", t: "Robots in simulation", t_ar: "روبوتات في المحاكاة",
-      d: "Gazebo, PX4 SITL and RViz runs from my projects and courses.", d_ar: "تجارب Gazebo وPX4 SITL وRViz من مشاريعي ودوراتي." },
-    { cat: "integration", img: "img/gal/robotics.webp", t: "Robotic systems", t_ar: "الأنظمة الروبوتية",
-      d: "Full systems, in 3D and as built.", d_ar: "أنظمة كاملة، مجسّمةً وكما بُنيت." },
+  research: ["ROS 2 in a Nutshell: A Survey", "GNSS-Denied UAV Navigation", "Generative 3D Object Modeling for Robust Robot Manipulation in ROS 2",
+             "Geometric Intelligence", "FLIGHTGEN", "D2DTracker"],
+  projects: ["proj-amir", "proj-vtol-build", "proj-roadlines", "ap-shuttle", "ap-ihunter", "ap-rpw", "ap-gps-denied", "proj-roboeye", "proj-agridrone"],
+  modeling: [
+    { run: "sim-uav-px4" }, { run: "sim-ihunter-mission" }, { run: "sim-construct-rmf" },
+    // no clip of DelibFlow is on the drive yet: its card opens the project's docs
+    { id: "site-delibflow", href: "https://delib-flow.readthedocs.io/en/latest/", name: "DelibFlow — behavior trees for TiAGo", name_ar: "DelibFlow — أشجار السلوك لروبوت TiAGo",
+      kick: "Contribution · arab-meet", kick_ar: "مساهمة · arab-meet",
+      note: "An open behavior-tree framework for the TiAGo mobile manipulator, on BehaviorTree.CPP and Nav2; I am one of its contributors.",
+      note_ar: "إطار مفتوح لأشجار السلوك لروبوت TiAGo المتنقّل ذي الذراع، مبنيّ على BehaviorTree.CPP وNav2؛ وأنا من المساهمين فيه." },
   ],
-  teaching: ["ME 218", "Managing a Fleet of Robots with ROS 2"],
+  sites: ["ros-database", "latex-converter", "khattat3d"],
+  media: [
+    { show: "photos", img: "rob-quad-gym", t: "Selected photos and videos", t_ar: "صور ومقاطع مختارة",
+      d: "The robots I built and the parts I printed, as they really look.", d_ar: "الروبوتات التي بنيتها والقطع التي طبعتها، كما تبدو فعلًا." },
+  ],
   blog: 3,
 };
 
@@ -821,7 +826,7 @@ export const PROJECT_JOURNEYS = {
    money as stated by the owner; `state` is the honest status, including "proposal
    submitted" where nothing is awarded yet. Keep those precise: they are checkable. */
 export const ACTIVE_PROJECTS = [
-  { id: "ap-gps-denied", title: "GPS-Denied UAV Localization", title_ar: "تموضع الطائرات المسيّرة دون GPS",
+  { id: "ap-gps-denied", title: "GPS-Denied UAV Localization", title_ar: "تموضع الطائرات المسيّرة دون GPS", cover: "img/research/w960/gps-denied.webp", kind: "GNSS-denied localization", kind_ar: "تموضع دون أقمار ملاحة",
     blurb: "Localization systems for high-altitude UAV navigation with no GNSS fix — the outdoor counterpart to the indoor VIO work.",
     blurb_ar: "أنظمة تموضع لملاحة الطائرات المسيّرة على ارتفاعات عالية دون إشارة أقمار — النظير الخارجي لعمل التموضع البصري-القصوري الداخلي.",
     lead: "Dr. Muhammad Bilal Kadri (PI)", lead_ar: "د. محمد بلال قادري (الباحث الرئيس)",
@@ -2363,7 +2368,7 @@ export const I18N = {
     researchpg_lead: "The map, the mental model, and every publication — in one place.",
     projpg_kicker: "Projects", projpg_title: "The machines.",
     rs_eb: "Highlights", rs_title: "Research at a glance.", rs_asof: "as of", rs_scholar: "Google Scholar ↗",
-    sm_eb: "Explore", sm_title: "My portfolio", sm_lead: "Explore these next..", ft_research: "Research", ft_projects: "Projects", ft_gallery: "Gallery", ft_teaching: "Teaching", ft_blog: "Blog", ft_all: "All", ft_full: "The full portfolio", ft_course: "Course", ft_workshop: "Workshop", vc_visitors: "visitors", vc_title: "Browsers that have opened this site since",
+    sm_eb: "Explore", sm_title: "My portfolio", sm_lead: "Explore these next..", ft_research: "Featured Research", ft_projects: "Featured Projects", ft_designs: "Featured Designs", ft_modeling: "Featured Modeling", ft_sites: "Featured Sites", ft_media: "Featured Media", ft_all: "All", ft_full: "The full portfolio", ft_post: "Post", ft_visit: "Open the site ↗", ft_designs_lead: "Drag to turn, press Explode, step through with ‹ ›.", pc_doi: "DOI ↗", pc_page: "Project page ↗", pc_list: "In the publications list →", pc_close: "Close", pc_authors: "My role", vc_visitors: "visitors", vc_title: "Browsers that have opened this site since",
     eb_active: "Active", t_active: "What I'm building now.",
     lead_active: "Research running today and proposals submitted — who leads each one, what backs it, and where it stands.",
     eb_finished: "Finished", t_finished: "Built, flown, and shipped.",
@@ -2470,7 +2475,7 @@ export const I18N = {
     researchpg_lead: "الخارطة، والنموذج الذهني، وكل منشور — في مكان واحد.",
     projpg_kicker: "المشاريع", projpg_title: "الآلات.",
     rs_eb: "أهم النقاط", rs_title: "لمحة عامة.", rs_asof: "حتى", rs_scholar: "الباحث العلمي ↗",
-    sm_eb: "استكشف", sm_title: "معرضي", sm_lead: "استكشف موقعي..", ft_research: "الأبحاث", ft_projects: "المشاريع", ft_gallery: "المعرض", ft_teaching: "التدريس", ft_blog: "المدوّنة", ft_all: "الكل", ft_full: "المعرض كاملًا", ft_course: "مقرّر", ft_workshop: "ورشة", vc_visitors: "زائر", vc_title: "المتصفّحات التي فتحت هذا الموقع منذ",
+    sm_eb: "استكشف", sm_title: "معرضي", sm_lead: "استكشف موقعي..", ft_research: "أبحاث مختارة", ft_projects: "مشاريع مختارة", ft_designs: "تصاميم مختارة", ft_modeling: "نمذجة مختارة", ft_sites: "مواقع مختارة", ft_media: "وسائط مختارة", ft_all: "الكل", ft_full: "المعرض كاملًا", ft_post: "تدوينة", ft_visit: "افتح الموقع ↗", ft_designs_lead: "اسحب للتدوير، واضغط «فكّها»، وتنقّل بـ‹ ›.", pc_doi: "DOI ↗", pc_page: "صفحة المشروع ↗", pc_list: "في قائمة المنشورات ←", pc_close: "إغلاق", pc_authors: "دوري", vc_visitors: "زائر", vc_title: "المتصفّحات التي فتحت هذا الموقع منذ",
     eb_active: "جارية", t_active: "ما أبنيه الآن.",
     lead_active: "أبحاث جارية اليوم ومقترحات مُقدَّمة — من يقودها، وما الذي يدعمها، وأين وصلت.",
     eb_finished: "مكتملة", t_finished: "بُنيت وطارت وسُلّمت.",

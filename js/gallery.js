@@ -15,7 +15,7 @@
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, IMG } from "./data.js?v=48";
+import { GALLERY, REPOS, IMG } from "./data.js?v=49";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -34,6 +34,17 @@ const url = (f, base) => (/^(https?:)?\/\//.test(f) || f.startsWith("/")) ? f : 
 export function renderGallery(context) { ctx = context; paint(); }
 // Home's featured cards open a category straight away (18 Nov 2026); the router then renders it.
 export function openGalleryCat(id) { activeCat = id; stage = "world"; morphFrom = null; }
+export function openGalleryHub() { activeCat = null; stage = "hub"; morphFrom = null; }
+// Home's Featured Designs runs the same assembly viewer, with a life of its own: the gallery's
+// kill() never reaches it, and Home stops it when it leaves the page.
+let homeLive = [];
+export function stopHomeAssemblies() { homeLive.forEach(l => { try { l.stop(); } catch {} }); homeLive = []; }
+export function mountHomeAssemblies(host, context) {
+  stopHomeAssemblies();
+  if (!ctx) ctx = context;
+  const keep = live; live = [];
+  try { assemblyScene(host, GALLERY.design.assemblies, null); } finally { homeLive = live; live = keep; }
+}
 
 /* ══════════ stage machine ══════════ */
 function paint() {

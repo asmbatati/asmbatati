@@ -6,8 +6,8 @@
 
 import { PROFILE, STATS, RESEARCH_STATS, SITEMAP, SHOWCASE, EVENTS, PROJECTS, ACTIVE_PROJECTS, JOURNEY, ROBOTS, PRINTS, PATENTS, SKILLS, REPOS, ORGS,
          TEACHING, QUALS, EDUCATION, PUBS, TAXONOMY, ARCH, RESEARCH_MAP, RESEARCH_PLATES, WEBWORK, WEBWORK_GROUPS, WEBWORK_STANDALONE,
-         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES, FEATURED, GALLERY } from "./data.js?v=48";
-import { renderGallery, openGalleryCat } from "./gallery.js?v=48";
+         RESEARCH_NOTE, RESEARCH_NOTE_AR, MINDMAPS, I18N, IMG, PROJECT_JOURNEYS, JOURNEY_STAGES, FEATURED, GALLERY } from "./data.js?v=49";
+import { renderGallery, openGalleryCat, openGalleryHub, mountHomeAssemblies, stopHomeAssemblies } from "./gallery.js?v=49";
 
 const gsap = window.gsap, ST = window.ScrollTrigger;
 gsap.registerPlugin(ST);
@@ -64,7 +64,8 @@ if (!touch && !reduced) {
    put it back, which is why a new page could open at its bottom. */
 const pageScroll = new Map();
 let sectionJump = false;          // a [data-scroll] link is about to scroll Home itself
-let pendingPost = null, pendingPub = null;   // what a featured card on Home opens on arrival
+let pendingPost = null, pendingPub = null, pendingShow = null;   // what a featured card on Home opens on arrival
+let homeAsmOn = false;              // the Home assembly viewer is running
 // a featured card opens its item where it is, never at the page's remembered offset
 const openFrom = (page, before) => { before?.(); sectionJump = true; setTimeout(() => { sectionJump = false; }, 3500); showPage(page); };
 const jumpTo = y => { lenis?.resize?.(); lenis?.scrollTo(y, { immediate: true, force: true }); scrollTo({ top: y, behavior: "instant" }); };
@@ -80,6 +81,9 @@ function switchPage(name) {
   // the blog keeps the post or list it was left on; it is rebuilt only on the first visit
   if (name === "articles" && pendingPost) { const p = pendingPost; pendingPost = null; (revisit ? Promise.resolve() : renderArticles()).then(() => openArticle(p)); }
   else if (name === "articles" && !revisit) renderArticles();
+  if (prev === "home" && name !== "home") { stopHomeAssemblies(); homeAsmOn = false; }
+  if (name === "gallery" && pendingShow) { const s = pendingShow; pendingShow = null; requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (openEmblem !== s) toggleShowcase(s); const p = $(`#em${s[0].toUpperCase()}${s.slice(1)}`); if (p) scrollToSection(p); })); }
   if (name === "research" && pendingPub) { const p = pendingPub; pendingPub = null; requestAnimationFrame(() => requestAnimationFrame(() => showPub(p))); }
   if (name === "gallery") galleryCtx();
   if (name === "gallery") wireFlow();
@@ -324,54 +328,124 @@ function renderSitemap() {
 }
 
 /* ── Featured (Home, 18 Nov 2026) ──
-   A few items from each part of the site, each opening the item itself: a paper's row
-   with its abstract, a project's panel, a gallery category, the teaching page, a post.
-   The picks live in FEATURED (data.js). */
+   Six groups in the owner's order: research (each paper opens a card of its own), projects
+   (their panels and journeys), designs (the assembly viewer itself), modeling (simulation
+   clips that play in place), sites (screenshots, opening the live site) and media (the photo
+   door and the newest posts). The picks live in FEATURED (data.js). */
+const escH = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 function renderFeatured() {
   const host = $("#featured"); if (!host) return;
-  const t = T(), esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const t = T();
+  stopHomeAssemblies(); homeAsmOn = false;
   host.innerHTML = "";
-  const group = (key, page, cards, slot) => {
-    if (!cards.length || !$("#page-" + page)) { slot?.remove(); return; }
-    const g = el("div", "ft-group");
-    g.innerHTML = `<div class="ft-head"><h3>${t["ft_" + key]}</h3><button type="button" class="ft-all">${t.ft_all} →</button></div>`;
-    g.querySelector(".ft-all").addEventListener("click", () => showPage(page));
-    const row = el("div", "ft-row"); cards.forEach(c => row.append(c)); g.append(row);
+  const group = (key, page, items, slot, lead) => {
+    const go = typeof page === "function" ? page : () => showPage(page);
+    if (!items.length) { slot?.remove(); return null; }
+    const g = el("div", "ft-group ft-" + key);
+    g.innerHTML = `<div class="ft-head"><h3>${t["ft_" + key]}</h3><button type="button" class="ft-all">${t.ft_all} →</button></div>${lead ? `<p class="ft-lead">${lead}</p>` : ""}`;
+    g.querySelector(".ft-all").addEventListener("click", go);
+    const row = el("div", "ft-row"); items.forEach(c => row.append(c)); g.append(row);
     slot ? slot.replaceWith(g) : host.append(g);
+    return g;
   };
-  const card = (img, kicker, title, text, onClick, extra = "") => {
+  const inner = (img, kicker, title, text, extra = "") =>
+    `${img ? `<span class="ft-img"><img src="${img}" alt="" loading="lazy"></span>` : ""}
+     <span class="ft-body"><span class="ft-kick">${escH(kicker)}</span><b>${escH(title)}</b>${text ? `<span class="ft-txt">${escH(text)}</span>` : ""}${extra}</span>`;
+  const card = (img, kicker, title, text, onClick, extra) => {
     const c = el("button", "ft-card" + (img ? "" : " ft-text")); c.type = "button";
-    c.innerHTML = `${img ? `<span class="ft-img"><img src="${img}" alt="" loading="lazy"></span>` : ""}
-      <span class="ft-body"><span class="ft-kick">${esc(kicker)}</span><b>${esc(title)}</b>${text ? `<span class="ft-txt">${esc(text)}</span>` : ""}${extra}</span>`;
-    c.addEventListener("click", onClick); return c;
+    c.innerHTML = inner(img, kicker, title, text, extra); c.addEventListener("click", onClick); return c;
   };
-  // research: the paper's own status badge, never a stronger one
+  const link = (img, kicker, title, text, href, extra) => {
+    const a = el("a", "ft-card"); a.href = href; a.target = "_blank"; a.rel = "noopener";
+    a.innerHTML = inner(img, kicker, title, text, extra); return a;
+  };
+
+  // 1. research: the paper's own status badge, never a stronger one
   const pubs = FEATURED.research.map(q => PUBS.find(p => p.title.startsWith(q))).filter(Boolean);
   group("research", "research", pubs.map(p => card(null, `${p.venue.split(",")[0]} · ${p.year}`, p.title, pick(p, "role"),
-    () => openFrom("research", () => { pendingPub = p; }), `<span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span>`)));
+    () => openPaperCard(p), `<span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span>`)));
+
+  // 2. projects
   const projs = FEATURED.projects.map(id => PROJECTS.find(p => p.id === id) || ACTIVE_PROJECTS.find(p => p.id === id)).filter(Boolean);
-  group("projects", "projects", projs.map(p => card(IMG(p.cover || p.id, "w480"), [pick(p, "kind"), p.year].filter(Boolean).join(" · "),
-    pick(p, "title"), "", () => openProject(p))));
-  const catLabel = id => { const c = GALLERY.cats.find(x => x.id === id); return c ? pick(c, "label") : ""; };
-  group("gallery", "gallery", FEATURED.gallery.map(g => card(g.img, catLabel(g.cat), pick(g, "t"), pick(g, "d"),
-    () => openFrom("gallery", () => openGalleryCat(g.cat)))));
-  const teach = FEATURED.teaching.map(k => {
-    const c = TEACHING.courses.find(x => x.code === k); if (c) return [c, t.ft_course];
-    return [TEACHING.workshops.find(x => x.title === k), t.ft_workshop];
-  }).filter(([x]) => x);
-  group("teaching", "teaching", teach.map(([c, kind]) => card(null, `${kind} · ${pick(c, "org")} · ${pick(c, "when")}`,
-    (c.code ? c.code + " · " : "") + pick(c, "title"), pick(c, "note"), () => showPage("teaching"))));
-  // the blog's index is fetched: its group takes its place when the posts land
-  const slot = el("div", "ft-slot"); host.append(slot);
+  group("projects", "projects", projs.map(p => card(IMG(p.cover || p.id, "w480"),
+    [pick(p, "kind") || pick(p, "state"), p.year].filter(Boolean).join(" · "), pick(p, "title"), "", () => openProject(p))));
+
+  // 3. designs: the assembly viewer, started when it comes into view, only while Home shows
+  const dg = el("div", "ft-asm");
+  const g3 = group("designs", () => openFrom("gallery", () => openGalleryCat("design")), [dg], null, t.ft_designs_lead);
+  if (g3) {
+    const io = new IntersectionObserver(es => {
+      if (!es.some(x => x.isIntersecting) || homeAsmOn || !$("#page-home").classList.contains("active") || !dg.isConnected) return;
+      homeAsmOn = true; dg.innerHTML = "";
+      mountHomeAssemblies(dg, { pick, t: T, lang, reduced, lightbox: () => {}, webwork: () => {} });
+      requestAnimationFrame(() => ST.refresh());
+    }, { rootMargin: "200px" });
+    io.observe(dg);
+  }
+
+  // 4. modeling: clips play in place, poster first, nothing loaded until asked
+  const runs = GALLERY.physsim.runs || [];
+  group("modeling", () => openFrom("gallery", () => openGalleryCat("physsim")), FEATURED.modeling.map(m => {
+    if (m.href) return link(IMG(m.id, "w480"), pick(m, "kick"), pick(m, "name"), pick(m, "note"), m.href);
+    const r = runs.find(x => x.id === m.run); if (!r) return null;
+    const c = el("figure", "ft-card ft-vid");
+    c.innerHTML = `<span class="ft-img"><video src="${r.src}" poster="${IMG(r.id, "w960")}" controls muted playsinline preload="none"></video></span>
+      <figcaption class="ft-body"><span class="ft-kick">${escH(t.ft_modeling)}</span><b>${escH(pick(r, "name"))}</b><span class="ft-txt">${escH(pick(r, "note"))}</span></figcaption>`;
+    return c;
+  }).filter(Boolean));
+
+  // 5. sites: a screenshot of each, opening the live site (a contribution says so in its tag)
+  group("sites", () => openFrom("gallery", () => openGalleryCat("software")), FEATURED.sites.map(id => WEBWORK.find(w => w.id === id)).filter(Boolean)
+    .map(w => link(IMG("site-" + w.id, "w480"), pick(w, "tag"), pick(w, "title"), pick(w, "blurb"), w.live, `<span class="ft-go">${t.ft_visit}</span>`)));
+
+  // 6. media: the photo door, then the newest posts, which arrive with the blog's index
+  const media = FEATURED.media.map(m => card(IMG(m.img, "w480"), t.ft_media, pick(m, "t"), pick(m, "d"),
+    () => openFrom("gallery", () => { openGalleryHub(); pendingShow = m.show; })));
+  const mg = group("media", "articles", media);
   loadPosts().then(posts => {
-    if (!slot.isConnected) return;
-    group("blog", "articles", posts.slice(0, FEATURED.blog).map(a => card(a.cover, `${a.date} · ${a.read} ${t.art_min}`, pick(a, "title"), pick(a, "excerpt"),
-      () => openFrom("articles", () => { pendingPost = a; }))), slot);
+    const row = mg?.querySelector(".ft-row"); if (!row || !row.isConnected) return;
+    posts.slice(0, FEATURED.blog).forEach(a => row.append(card(a.cover, `${t.ft_post} · ${a.date} · ${a.read} ${t.art_min}`, pick(a, "title"), pick(a, "excerpt"),
+      () => openFrom("articles", () => { pendingPost = a; }))));
     window.__cursorBind?.(); requestAnimationFrame(() => ST.refresh());
   });
   window.__cursorBind?.();
 }
-// a featured paper: find its row, open the abstract, and bring it into view
+
+/* A featured paper's own card: what it is, where, my role, its abstract, and its links.
+   Built once, filled per paper; Escape, the backdrop or ✕ closes it. */
+function openPaperCard(p) {
+  const t = T();
+  let m = $("#paperCard");
+  if (!m) {
+    m = el("div", "pc-modal"); m.id = "paperCard"; m.setAttribute("role", "dialog"); m.setAttribute("aria-modal", "true");
+    document.body.append(m);
+    m.addEventListener("click", e => { if (e.target === m || e.target.closest(".pc-close")) closePaperCard(); });
+    addEventListener("keydown", e => { if (e.key === "Escape" && m.classList.contains("active")) closePaperCard(); });
+  }
+  const rank = p.rank ? `<span class="pub-rank">${p.rank}${p.impact ? ` · IF ${p.impact}` : ""}</span>` : "";
+  m.innerHTML = `<article class="pc-card" ${lang === "ar" ? 'dir="rtl"' : ""}>
+      <button class="pc-close" type="button" aria-label="${t.pc_close}">✕</button>
+      <span class="ft-kick">${escH(p.type)} · ${escH(p.venue)} · ${escH(p.date || p.year)}</span>
+      <h3 dir="ltr">${escH(p.title)}</h3>
+      <div class="pc-badges"><span class="pub-badge st-${p.status}">${ST_LABEL(p.status)}</span>${rank}<span class="pc-role">${t.pc_authors}: ${escH(pick(p, "role"))}</span></div>
+      <p class="pc-abs">${escH(pick(p, "abstract"))}</p>
+      <div class="pub-tags">${(p.tags || []).map(x => `<span>${escH(x)}</span>`).join("")}</div>
+      <div class="pc-links">
+        ${p.doi ? `<a class="btn btn-primary" href="${p.doi}" target="_blank" rel="noopener">${t.pc_doi}</a>` : ""}
+        ${p.project ? `<a class="btn btn-ghost" href="${p.project}" target="_blank" rel="noopener">${t.pc_page}</a>` : ""}
+        ${p.bibtex ? `<button class="btn btn-ghost pc-bib" type="button">${t.pub_copy}</button>` : ""}
+        <button class="btn btn-ghost pc-list" type="button">${t.pc_list}</button>
+      </div></article>`;
+  m.querySelector(".pc-bib")?.addEventListener("click", e => { navigator.clipboard?.writeText(p.bibtex); e.target.textContent = t.pub_copied; });
+  m.querySelector(".pc-list").addEventListener("click", () => { closePaperCard(); openFrom("research", () => { pendingPub = p; }); });
+  m.classList.add("active"); document.body.style.overflow = "hidden"; lenis?.stop();
+  m.querySelector(".pc-close").focus({ preventScroll: true });
+}
+function closePaperCard() {
+  const m = $("#paperCard"); if (!m) return;
+  m.classList.remove("active"); document.body.style.overflow = ""; lenis?.start();
+}
+// a paper in the list: find its row, open the abstract, and bring it into view
 function showPub(p) {
   const find = () => $$("#pubBody .pub-row").find(r => r.querySelector(".pub-title")?.textContent === p.title);
   let row = find();
@@ -1056,7 +1130,7 @@ function paintVisits() {
    mount the (hidden) editor. Dynamic-imported + best-effort, so a Supabase/CDN
    failure can never break the public site. ── */
 const rerender = () => { applyLang(); requestAnimationFrame(() => ST.refresh()); };
-import("./admin.js?v=48").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
+import("./admin.js?v=49").then(m => { m.initContent(rerender); m.mountAdmin(rerender); }).catch(e => console.warn("[admin] disabled:", e));
 
 /* ════════════ MOTION ════════════ */
 addEventListener("load", () => {
