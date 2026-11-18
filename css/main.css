@@ -1218,6 +1218,10 @@ html[dir="rtl"] .ap-card:hover { border-right-color: var(--gold); }
 .asm-nav { align-items: center; }
 .asm-explode { display: flex; align-items: center; gap: .6rem; color: var(--mid); font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; }
 .asm-explode input { width: min(260px, 46vw); accent-color: var(--gold); }
+.asm-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; margin: 0 0 .8rem; }
+.asm-chip { padding: .35rem .8rem; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--green-1); font-size: .8rem; transition: background .2s, color .2s, border-color .2s; }
+.asm-chip:hover { border-color: var(--green-2); }
+.asm-chip.on { background: var(--green-1); color: #fff; border-color: var(--green-1); }
 .asm-toggle { padding: .55rem 1.1rem; border-radius: 999px; border: 1.5px solid var(--gold); background: var(--snow); color: var(--green-1); font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; transition: background .25s, color .25s; }
 .asm-toggle:hover, .asm-toggle[aria-pressed="true"] { background: var(--gold); color: #fff; }
 @media (max-width: 640px) { .asm-nav { flex-wrap: wrap; justify-content: center; gap: .6rem; } }

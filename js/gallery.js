@@ -15,7 +15,7 @@
 import * as THREE from "three";
 import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
-import { GALLERY, REPOS, IMG } from "./data.js?v=56";
+import { GALLERY, REPOS, IMG } from "./data.js?v=63";
 
 const qs = s => document.querySelector(s);
 const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
@@ -270,12 +270,34 @@ function viewDesign(host) {
   assemblyScene(host, GALLERY.design.assemblies, ctx.pick(GALLERY.design, "assemblies_intro"));
 }
 
+/* The site's palette for the CAD models (css/main.css :root). Light surfaces become warm paper,
+   mid greys a muted sage, darks the deep greens; strongly coloured parts become the accents,
+   warm hues gold, cool hues the mid green, greens the light green. */
+// the assembly files' version: change it whenever a model is replaced, so no browser keeps the old one
+const ASM_V = "20261119b";
+const PAL = c => {
+  const hsl = {}; (c || new THREE.Color(0xcccccc)).getHSL(hsl);
+  if (hsl.s > 0.35 && hsl.l > 0.15 && hsl.l < 0.9) {
+    const h = hsl.h * 360;
+    return h < 70 || h > 330 ? 0xb6803a : h < 170 ? 0x4d8a6a : 0x2f6b4f;
+  }
+  return hsl.l > 0.82 ? 0xece4d4 : hsl.l > 0.6 ? 0xbcc6b8 : hsl.l > 0.38 ? 0x5c6f63 : hsl.l > 0.18 ? 0x21503d : 0x16352a;
+};
+
 /* ── an assembly per step, coloured by module, with an explode slider ──
    Each GLB node carries extras.explode = the part's offset in the exploded model
    (three.js puts it in userData), so the slider moves every part along its own offset. */
 function assemblyScene(host, list, intro) {
   const T = ctx.t();
   if (intro) host.append(el("p", "gp-hint center", intro));
+  // a chip per project (19 Nov 2026): with several versions each, ‹ › alone was a long walk
+  const groups = [...new Map(list.filter(a => a.group).map(a => [a.group, a])).values()];
+  const chips = groups.length > 1 ? el("div", "asm-chips") : null;
+  if (chips) {
+    groups.forEach(g => { const b = el("button", "asm-chip", ctx.pick(g, "group")); b.type = "button"; b.dataset.g = g.group;
+      b.addEventListener("click", () => show(list.findIndex(a => a.group === g.group))); chips.append(b); });
+    host.append(chips);
+  }
   const sc = makeScene(host, Math.min(540, innerWidth * 0.92));
   const cap = el("div", "trophy-cap"); host.append(cap);
   const nav = el("div", "trophy-nav asm-nav",
@@ -291,11 +313,19 @@ function assemblyScene(host, list, intro) {
   const setToggle = open => { toggle.textContent = open ? T.gp_assemble_btn : T.gp_explode_btn; toggle.setAttribute("aria-pressed", String(open)); };
   let current = null, parts = [], idx = 0, rot = 0.6, vel = 0, dragging = false, px = 0, token = 0, ex = 0, exTarget = 0, touched = false;
   const apply = () => parts.forEach(p => p.o.position.set(p.base.x + p.d[0] * ex, p.base.y + p.d[1] * ex, p.base.z + p.d[2] * ex));
-  function place(obj) {
+  function place(obj, cad) {
     parts = [];
     obj.traverse(o => {
-      if (o.isMesh) {
-        // the CAD exports carry positions and colours only: shade them with computed normals
+      if (o.isMesh && cad) {
+        // SolidWorks' own export (19 Nov 2026), smooth normals kept, recoloured in the site's palette
+        // (the owner's ask): each CAD appearance is mapped by its lightness and hue, so the model keeps
+        // its light and dark parts but reads as part of the page; thin skins drawn from both sides
+        const tone = m => { const k = m.clone(); k.color = new THREE.Color(PAL(m.color)); k.map = null;
+          k.metalness = 0.05; k.roughness = 0.6; k.side = THREE.DoubleSide; k.needsUpdate = true; return k; };
+        o.material = Array.isArray(o.material) ? o.material.map(tone) : tone(o.material);
+        if (!o.geometry.attributes.normal) o.geometry.computeVertexNormals();
+      } else if (o.isMesh) {
+        // the older exports carry positions and colours only: shade them with computed normals
         if (!o.geometry.attributes.normal) o.geometry.computeVertexNormals();
         o.material = new THREE.MeshStandardMaterial({ vertexColors: !!o.geometry.attributes.color, color: o.geometry.attributes.color ? 0xffffff : 0x8fb8a0, roughness: 0.55, metalness: 0.08, flatShading: true });
       }
@@ -330,7 +360,7 @@ function assemblyScene(host, list, intro) {
     const bs = new THREE.Vector3(), bc = new THREE.Vector3(); both.getSize(bs); both.getCenter(bc);
     const maxd = Math.max(bs.x, bs.y, bs.z, 1e-6) * 1.05;
     obj.position.sub(bc);
-    const g = new THREE.Group(); g.add(obj); g.scale.setScalar(2.4 / maxd); g.position.y = -0.1;
+    const g = new THREE.Group(); g.add(obj); g.scale.setScalar(2.6 / maxd); g.position.y = -0.1;
     if (current) sc.root.remove(current);
     current = g; sc.root.add(g);
   }
@@ -338,9 +368,10 @@ function assemblyScene(host, list, intro) {
     idx = (i + list.length) % list.length;
     const a = list[idx], my = ++token;
     cap.innerHTML = `<h3>${ctx.pick(a, "name")}</h3><p>${ctx.pick(a, "note")}</p><span class="trophy-count">${idx + 1} / ${list.length}</span>`;
+    chips?.querySelectorAll(".asm-chip").forEach(c => c.classList.toggle("on", c.dataset.g === a.group));
     ex = 0; exTarget = 0; slider.value = 0; touched = false; setToggle(false);
-    loader.load(url(a.file, "assets/models/assemblies/"), gltf => {
-      if (my !== token) return; place(gltf.scene); apply();
+    loader.load(url(a.file, "assets/models/assemblies/") + (a.file.includes("://") ? "" : "?v=" + ASM_V), gltf => {
+      if (my !== token) return; place(gltf.scene, a.look === "cad"); apply();
       // show what the slider does once: open part-way, then close again
       if (!ctx.reduced) { exTarget = 0.55; setTimeout(() => { if (my === token && !touched) exTarget = 0; }, 2200); }
     }, undefined, () => { if (my === token) cap.innerHTML += `<p class="gp-hint">(model failed to load)</p>`; });
